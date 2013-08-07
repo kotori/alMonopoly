@@ -11,3 +11,8 @@
 *.lai
 *.la
 *.a
+
+# Compilation directories
+obj/
+bin/
+etc/
