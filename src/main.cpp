@@ -23,6 +23,7 @@
 #include "property.h"
 #include "player.h"
 
+// Represents the location of the camera (x,y).
 float cameraPosition[2] = { 0, 0 };
 
 //
@@ -226,8 +227,9 @@ void MonopolyGame::reset() {
 }
 
 int MonopolyGame::randomNum(int max) {
-    int rNum = rand() % max + 1;
-    return rNum;
+    //int rNum = rand() % max + 1;
+    //return rNum;
+    return rand() % max + 1;
 }
 
 void MonopolyGame::draw() {
@@ -339,21 +341,26 @@ int MonopolyGame::run() {
             else if(alEvent.timer.source == alFrameTimer)
             {
 		for(int i=0; i<NUM_PLAYERS; i++) {
+			// If this player has more than '0' money.
 			if(playerList[i].get_money() > 0) {
+				// And if this player's turn is now.
 				if(playersTurn == i) {
+				    // Increment the animation index.
 				    int tIndex = playerList[i].get_animationX();
 				    tIndex += al_get_bitmap_width(playerList[i].get_image()) / 3;
 
+				    // If we have reached the end of the image tilesheet, reset the X index.
 				    if(playerList[i].get_animationX() >= al_get_bitmap_width(playerList[i].get_image())) {
 				    	playerList[i].set_animationX(0);
 				    }
 				}
+				// Otherwise, set the animation index to the second position.
 				else {
 				    playerList[i].set_animationX(32);
 				}
 		 
 				// This should be set to the direction of the character, where directions equal:
-				//  DOWN, LEFT, RIGHT, UP
+				//  0 - DOWN, 1 - LEFT, 2 - RIGHT, 3 - UP
 				playerList[i].set_animationY(playerList[i].get_direction());
 			}
 		}
@@ -415,6 +422,8 @@ int main(int argc, char **argv) {
 
     // Cleanup when we are done.
     monopoly->halt();
+
+    delete monopoly;
 
     return 0;
 }
