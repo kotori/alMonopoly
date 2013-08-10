@@ -1,3 +1,19 @@
+/*
+* Copyright (C) 2013 Kotori <https://github.com/kotori>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -22,11 +38,11 @@ public:
     int get_location();
     void set_location(int location);
 
-    int get_x();
-    void set_x(int x);
+    float get_x();
+    void set_x(float x);
 
-    int get_y();
-    void set_y(int y);
+    float get_y();
+    void set_y(float y);
 
     int get_animationX();
     void set_animationX(int sourceX);
@@ -47,8 +63,8 @@ private:
     int _money;		/*!< Player's accumulated money. */
     int _score;		/*!< Player's score. */
     int _location;	/*!< Player's current location on the gameboard. */
-    int _x;
-    int _y;
+    float _x;
+    float _y;
     int _sourceX;
     int _sourceY;
 };

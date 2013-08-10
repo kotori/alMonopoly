@@ -1,3 +1,19 @@
+/*
+* Copyright (C) 2013 Kotori <https://github.com/kotori>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include <allegro5/allegro.h>
 
@@ -44,19 +60,19 @@ void MonopolyPlayer::set_location(int location) {
     _location = location;
 }
 
-int MonopolyPlayer::get_x() {
+float MonopolyPlayer::get_x() {
     return _x;
 }
 
-void MonopolyPlayer::set_x(int x) {
+void MonopolyPlayer::set_x(float x) {
     _x = x;
 }
 
-int MonopolyPlayer::get_y() {
+float MonopolyPlayer::get_y() {
     return _y;
 }
 
-void MonopolyPlayer::set_y(int y) {
+void MonopolyPlayer::set_y(float y) {
     _y = y;
 }
 

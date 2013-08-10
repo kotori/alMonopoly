@@ -1,14 +1,18 @@
 /*
-	monopoly turn structure
-
-	1.) <BUY/SELL/TRADE PHASE>
-	2.) <ROLL PHASE>
-	3.) Move according to roll
-	4.) Action according to new space.
-	5.) If passed go, collect $200.00
-	6.) If roll from step2, was a double, go back to step 1.
-	7.) <BUY/SELL/TRADE PHASE>
-	8.) End Turn
+* Copyright (C) 2013 Kotori <https://github.com/kotori>
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream>
@@ -64,7 +68,7 @@ private:
 
     // Actual game objects.
     int playersTurn; 		/*!< Current player's turn. */
-    int numPlayers;			/*!< Number of players. */
+    int numPlayers;		/*!< Number of players. */
 
     GameMode activeGameMode;
 
@@ -89,13 +93,16 @@ MonopolyGame::~MonopolyGame() {
 
 void cameraUpdate(float *cameraPosition, float x, float y, int width, int height)
 {
-    cameraPosition[0] = -(WINDOW_WIDTH / 2) + (x + width / 2);
-    cameraPosition[1] = -(WINDOW_HEIGHT / 2) + (y + height / 2);
+    cameraPosition[X_POS] = -(WINDOW_WIDTH / 2) + (x + width / 2);
+    cameraPosition[Y_POS] = -(WINDOW_HEIGHT / 2) + (y + height / 2);
  
-    if(cameraPosition[0] < 0)
-        cameraPosition[0] = 0;
-    if(cameraPosition[1] < 0)
-        cameraPosition[1] = 0;
+    if(cameraPosition[X_POS] < 0) {
+        cameraPosition[X_POS] = 0;
+    }
+
+    if(cameraPosition[Y_POS] < 0) {
+        cameraPosition[Y_POS] = 0;
+    }
 }
 
 int MonopolyGame::buildPropertyList() {
@@ -257,7 +264,7 @@ int MonopolyGame::init() {
 
     srand((unsigned)time(0));
 
-    activeGameMode = EASY;
+    activeGameMode = GameMode::EASY;
 
     // Now begin initializing the Allegro library.
     if(!al_init()) {
@@ -331,15 +338,18 @@ int MonopolyGame::run() {
             exitGame = true;
         }
 
+	// Process any timed events that have been triggered.
         else if(alEvent.type == ALLEGRO_EVENT_TIMER)
         {
             if(alEvent.timer.source == alTimer)
             {
+		// We will update the camera position only if the timer has been triggered.
 		cameraUpdate(cameraPosition, playerList[playersTurn].get_x(), playerList[playersTurn].get_y(), 32, 32);
             }
 
             else if(alEvent.timer.source == alFrameTimer)
             {
+		// Every frame timer instance we will update the 
 		for(int i=0; i<NUM_PLAYERS; i++) {
 			// If this player has more than '0' money.
 			if(playerList[i].get_money() > 0) {
@@ -365,6 +375,7 @@ int MonopolyGame::run() {
 			}
 		}
             }
+	    // Since the screen has been updated, we want to flag the screen to be redrawn.
             redrawScreen = true;
         }
 
