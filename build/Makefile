@@ -25,7 +25,6 @@ BinDir=../bin/
 CC=clang++
 RM=rm -f
 DIR_GUARD=@mkdir -p $(@D)
-COMPRESSOR=upx
 
 ## DO NOT EDIT ANYTHING UNDER THIS LINE!!!!! ##
 Objects=$(Sources:.cpp=.o)
@@ -44,7 +43,7 @@ $(ObjectDir)%.o: $(SourceDir)%.cpp
 	$(CC) $(CFlags) $< -o $@
 
 install:
-	$(COMPRESSOR) $(CExecutable)
+	ln -v -f -s ../etc ../bin/
 
 clean:
 	@echo "Cleaning $(CObjects) and $(CExecutable)"
