@@ -71,6 +71,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set RENT
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -79,6 +80,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set PURCHASE PRICE
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "price", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -87,6 +89,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set MORTGAGE PRICE
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "mortgage", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -95,6 +98,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set PRICE PER HOUSE
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -103,6 +107,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set PRICE PER HOTEL
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_hotel", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -111,6 +116,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set RENT FOR HOTEL
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_hotel", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -119,6 +125,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set RENT FOR 1 HOUSE
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_1_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -127,6 +134,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set RENT FOR 2 HOUSES
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_2_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -135,6 +143,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set RENT FOR 3 HOUSES
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_3_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -143,6 +152,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set RENT FOR 4 HOUSES
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_4_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -151,6 +161,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set x location.
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "x", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -159,6 +170,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
         // Set y location.
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "y", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -167,6 +179,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
         	fprintf(stderr, "SQL QUERY ERROR\n");
+        	return -1;
         }
         
         // Finally we will set the property Type.
@@ -193,6 +206,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
         	fprintf(stderr, "SQL QUERY ERROR\n");
+        	return -1;
         }
         
         fprintf(stderr, "Built Property: %s [ID: %i] \n", propertyList[propertyCount].get_name().c_str(), propertyList[propertyCount].get_id());
