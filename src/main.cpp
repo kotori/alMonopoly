@@ -59,13 +59,15 @@ private:
     MonopolyPlayer playerList[NUM_PLAYERS];
 
     // Allegro5 objects.
-    ALLEGRO_DISPLAY		*alDisplayDevice;
+    ALLEGRO_DISPLAY			*alDisplayDevice;
     ALLEGRO_EVENT_QUEUE		*alEventQueue;
-    ALLEGRO_TIMER		*alTimer;
-    ALLEGRO_TIMER		*alFrameTimer;
+    ALLEGRO_TIMER			*alTimer;
+    ALLEGRO_TIMER			*alFrameTimer;
     ALLEGRO_DISPLAY_MODE	alDisplayData;
     ALLEGRO_KEYBOARD_STATE 	alKeyState;
     ALLEGRO_TRANSFORM		alCameraTransform;
+
+    ALLEGRO_BITMAP 			*alBoardImage;
 
     // Actual game objects.
     int playersTurn; 		/*!< Current player's turn. */
@@ -86,6 +88,7 @@ MonopolyGame::MonopolyGame() {
     alEventQueue = NULL;
     alTimer = NULL;
     alFrameTimer = NULL;
+    alBoardImage = NULL;
 }
 
 MonopolyGame::~MonopolyGame() {
@@ -224,6 +227,7 @@ void MonopolyGame::reset() {
     for(int playerCounter=0; playerCounter<NUM_PLAYERS; playerCounter++) {
         playerList[playerCounter].set_location(0);
         playerList[playerCounter].set_score(0);
+
         if(activeGameMode == GameMode::EASY) {
             playerList[playerCounter].set_money(3500);
         }
@@ -245,12 +249,27 @@ int MonopolyGame::randomNum(int max) {
 void MonopolyGame::draw() {
     // Drawing logic goes here...
 
+	al_draw_bitmap(alBoardImage, 0, 0, NULL);
+
 
     al_flip_display();
     al_clear_to_color(al_map_rgb(0, 0, 0));
 }
 
 int MonopolyGame::loadResources() {
+
+	// Normalize the paths.
+	ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);
+	al_append_path_component(path, "etc");
+	al_change_directory(al_path_cstr(path, '/'));  // change the working directory
+	al_destroy_path(path);
+
+	std::string sFileName = "board.jpg";
+	alBoardImage = al_load_bitmap(sFileName.c_str());
+	if(!alBoardImage) {
+		fprintf(stderr, "Failed loading Board Bitmap: %s\n", sFileName.c_str());
+		return -1;
+	}
 
     if(buildPropertyList())
     {
@@ -294,6 +313,8 @@ int MonopolyGame::init() {
         return -1;
     }
 
+    al_init_image_addon();
+
     al_init_font_addon(); // Initialize the font addon.
     al_init_ttf_addon(); // Initialize the ttf (True Type Font) addon.
 
@@ -320,7 +341,6 @@ int MonopolyGame::init() {
     al_register_event_source(alEventQueue, al_get_timer_event_source(alTimer));
     al_register_event_source(alEventQueue, al_get_timer_event_source(alFrameTimer));
     al_register_event_source(alEventQueue, al_get_keyboard_event_source());
-    al_register_event_source(alEventQueue, al_get_mouse_event_source());
 
     al_hide_mouse_cursor(alDisplayDevice);
 
@@ -344,6 +364,11 @@ int MonopolyGame::run() {
         {
             exitGame = true;
         }
+        else if( al_key_down( &alKeyState, ALLEGRO_KEY_ESCAPE ) )
+        {
+        	exitGame = true;
+        }
+
 	    // Process any timed events that have been triggered.
         else if( alEvent.type == ALLEGRO_EVENT_TIMER )
         {
@@ -407,6 +432,10 @@ void MonopolyGame::halt() {
         al_destroy_display(alDisplayDevice);
     }
 
+    if(alBoardImage) {
+    	al_destroy_bitmap(alBoardImage);
+    }
+
     if(alTimer) {
         al_destroy_timer(alTimer);
     }
@@ -432,6 +461,7 @@ int main(int argc, char **argv) {
 
     // Load Resources
     if(monopoly->loadResources()) {
+    	monopoly->halt();
         return -1;
     }
 
