@@ -28,40 +28,40 @@
 #define DB_PROPERTY_TABLE	"landing"
 
 enum GameMode {
-	EASY,
-	NORMAL,
-	DIFFICULT
+    EASY,
+    NORMAL,
+    DIFFICULT
 };
 
 enum Direction {
-	DOWN,
-	LEFT,
-	RIGHT,
-	UP
+    DOWN,
+    LEFT,
+    RIGHT,
+    UP
 };
 
 enum TurnState {
-	NULL_STATE,
-	PRE_TURN,
-	ROLL_PHASE,
-	MOVE_PHASE,
-	REACT_PHASE,
-	POST_TURN,
-	TRADING
+    NULL_STATE,
+    PRE_TURN,
+    ROLL_PHASE,
+    MOVE_PHASE,
+    REACT_PHASE,
+    POST_TURN,
+    TRADING
 };
 
 enum Positions {
-	X_POS = 0,
-	Y_POS = 1
+    X_POS = 0,
+    Y_POS = 1
 };
 
 enum PropertyType {
-	TYPE_NULL = 1,
-	TYPE_RAILROAD = 2,
-	TYPE_UTILITY = 3,
-	TYPE_PROPERTY = 4,
-	TYPE_CARD = 5,
-	TYPE_TAX = 6
+    TYPE_NULL = 1,
+    TYPE_RAILROAD = 2,
+    TYPE_UTILITY = 3,
+    TYPE_PROPERTY = 4,
+    TYPE_CARD = 5,
+    TYPE_TAX = 6
 };
 
 

@@ -45,11 +45,11 @@ private:
     void handleTurn(int playerId);
     void handleMove();
     void reset();
-    
+
     void drawText(int x, int y, const char *msg, ...);
 
     void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
-    
+
     Database sqlConn;
 
     int buildPropertyList(); /*!< Populates the propertyList. */

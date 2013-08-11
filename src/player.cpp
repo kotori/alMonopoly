@@ -21,7 +21,7 @@
 #include "player.h"
 
 MonopolyPlayer::MonopolyPlayer() {
-	_moveSpeed = 5;
+    _moveSpeed = 5;
 }
 
 MonopolyPlayer::~MonopolyPlayer() {
@@ -29,11 +29,11 @@ MonopolyPlayer::~MonopolyPlayer() {
 }
 
 bool MonopolyPlayer::get_passedGo() {
-	return _passedGo;
+    return _passedGo;
 }
 
 void MonopolyPlayer::set_passedGo(bool passedGo) {
-	_passedGo = passedGo;
+    _passedGo = passedGo;
 }
 
 int MonopolyPlayer::get_id() {
@@ -117,19 +117,19 @@ void MonopolyPlayer::set_direction(Direction dir) {
 }
 
 void MonopolyPlayer::move(Direction dir) {
-	_dir = dir;
-	switch(_dir) {
-		case DOWN:
-			_y += _moveSpeed;
-			break;
-		case UP:
-			_y -= _moveSpeed;
-			break;
-		case RIGHT:
-			_x += _moveSpeed;
-			break;
-		case LEFT:
-			_x -= _moveSpeed;
-			break;
-	}
+    _dir = dir;
+    switch(_dir) {
+    case DOWN:
+        _y += _moveSpeed;
+        break;
+    case UP:
+        _y -= _moveSpeed;
+        break;
+    case RIGHT:
+        _x += _moveSpeed;
+        break;
+    case LEFT:
+        _x -= _moveSpeed;
+        break;
+    }
 }

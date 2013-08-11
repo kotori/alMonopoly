@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
     // Load Resources
     if(monopoly->loadResources()) {
-    	monopoly->halt();
+        monopoly->halt();
         return -1;
     }
 

@@ -21,11 +21,11 @@ MonopolyGame::MonopolyGame() {
     alEventQueue = NULL;
     alTimer = NULL;
     alFrameTimer = NULL;
-    
+
     for(int fontCounter=0; fontCounter<3; fontCounter++) {
-    	fontCollection[fontCounter] = NULL;
+        fontCollection[fontCounter] = NULL;
     }
-    	
+
     alBoardImage = NULL;
 }
 
@@ -37,7 +37,7 @@ void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int wid
 {
     cameraPosition[Positions::X_POS] = -(WINDOW_WIDTH / 2) + (x + width / 2);
     cameraPosition[Positions::Y_POS] = -(WINDOW_HEIGHT / 2) + (y + height / 2);
- 
+
     if(cameraPosition[Positions::X_POS] < 0) {
         cameraPosition[Positions::X_POS] = 0;
     }
@@ -175,40 +175,40 @@ int MonopolyGame::buildPropertyList() {
         // Set y location.
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "y", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-        	propertyList[propertyCount].set_y(tempNum);
+            propertyList[propertyCount].set_y(tempNum);
         }
         else {
-        	fprintf(stderr, "SQL QUERY ERROR\n");
-        	return -1;
+            fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
-        
+
         // Finally we will set the property Type.
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "type", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-        	switch(tempNum) {
-        		case TYPE_RAILROAD:
-        			propertyList[propertyCount].set_propertyType(TYPE_RAILROAD);
-        			break;
-        		case TYPE_UTILITY:
-        			propertyList[propertyCount].set_propertyType(TYPE_UTILITY);
-        			break;
-        		case TYPE_PROPERTY:
-        			propertyList[propertyCount].set_propertyType(TYPE_PROPERTY);
-        			break;
-        		case TYPE_CARD:
-        			propertyList[propertyCount].set_propertyType(TYPE_CARD);
-        			break;
-        		case TYPE_TAX:
-        			propertyList[propertyCount].set_propertyType(TYPE_TAX);
-        			break;
-        			
-        	}
+            switch(tempNum) {
+            case TYPE_RAILROAD:
+                propertyList[propertyCount].set_propertyType(TYPE_RAILROAD);
+                break;
+            case TYPE_UTILITY:
+                propertyList[propertyCount].set_propertyType(TYPE_UTILITY);
+                break;
+            case TYPE_PROPERTY:
+                propertyList[propertyCount].set_propertyType(TYPE_PROPERTY);
+                break;
+            case TYPE_CARD:
+                propertyList[propertyCount].set_propertyType(TYPE_CARD);
+                break;
+            case TYPE_TAX:
+                propertyList[propertyCount].set_propertyType(TYPE_TAX);
+                break;
+
+            }
         }
         else {
-        	fprintf(stderr, "SQL QUERY ERROR\n");
-        	return -1;
+            fprintf(stderr, "SQL QUERY ERROR\n");
+            return -1;
         }
-        
+
         fprintf(stderr, "Built Property: %s [ID: %i] \n", propertyList[propertyCount].get_name().c_str(), propertyList[propertyCount].get_id());
     }
     return 0;
@@ -241,72 +241,72 @@ int MonopolyGame::randomNum(int max) {
 }
 
 void MonopolyGame::drawText(int x, int y, const char *msg, ...) {
-	
-	char buffer[256];
-	va_list ap;
 
-	va_start( ap, msg );
-	vsprintf( buffer, msg, ap );
-	va_end( ap );
-	
-	al_draw_text(
-			fontCollection[0],
-			al_map_rgb( 0, 0, 0 ),
-			x+2,
-			y+2,
-			NULL,
-			buffer );
-	
-	al_draw_text(
-		fontCollection[0],
-		al_map_rgb( 255, 255, 255 ),
-		x,
-		y,
-		NULL,
-		buffer );
+    char buffer[256];
+    va_list ap;
+
+    va_start( ap, msg );
+    vsprintf( buffer, msg, ap );
+    va_end( ap );
+
+    al_draw_text(
+        fontCollection[0],
+        al_map_rgb( 0, 0, 0 ),
+        x+2,
+        y+2,
+        NULL,
+        buffer );
+
+    al_draw_text(
+        fontCollection[0],
+        al_map_rgb( 255, 255, 255 ),
+        x,
+        y,
+        NULL,
+        buffer );
 }
 
 void MonopolyGame::draw() {
     // Drawing logic goes here...
 
-	al_draw_bitmap( alBoardImage, 0, 0, NULL );
-	
-	drawText( 0, 0, "Current Player: %i", playersTurn );
-	drawText( 0, 32, "Current Player's Money: $%i", playerList[playersTurn].get_money() );
-	
+    al_draw_bitmap( alBoardImage, 0, 0, NULL );
+
+    drawText( 0, 0, "Current Player: %i", playersTurn );
+    drawText( 0, 32, "Current Player's Money: $%i", playerList[playersTurn].get_money() );
+
     al_flip_display();
     al_clear_to_color( al_map_rgb( 0, 0, 0 ) );
 }
 
 int MonopolyGame::loadResources() {
 
-	// Normalize the paths.
-	ALLEGRO_PATH *path = al_get_standard_path( ALLEGRO_RESOURCES_PATH );
-	al_append_path_component( path, "etc" );
-	al_change_directory( al_path_cstr( path, '/' ) );  // change the working directory
-	al_destroy_path( path );
+    // Normalize the paths.
+    ALLEGRO_PATH *path = al_get_standard_path( ALLEGRO_RESOURCES_PATH );
+    al_append_path_component( path, "etc" );
+    al_change_directory( al_path_cstr( path, '/' ) );  // change the working directory
+    al_destroy_path( path );
 
-	// Load the board's bitmap
-	std::string sFileName = "board.jpg";
-	alBoardImage = al_load_bitmap( sFileName.c_str() );
-	if( !alBoardImage ) {
-		fprintf( stderr, "Failed loading Board Bitmap: %s\n", sFileName.c_str() );
-		return -1;
-	}
-	
-	// Load the font set.
-	sFileName = "DejaVuSans.ttf";
-	int initialSize = 24;
-	for( int fontCounter=0; fontCounter<3; fontCounter++ ) {
-		fontCollection[fontCounter] = al_load_font( sFileName.c_str(), initialSize, 0 );
-		initialSize += 10;
-		if( !fontCollection[fontCounter] ) {
-			fprintf( stderr, "Failed loading Font: %s\n", sFileName.c_str() );
-			return -1;
-		}
-	}
+    // Load the board's bitmap
+    std::string sFileName = "board.jpg";
+    alBoardImage = al_load_bitmap( sFileName.c_str() );
+    if( !alBoardImage ) {
+        fprintf( stderr, "Failed loading Board Bitmap: %s\n", sFileName.c_str() );
+        return -1;
+    }
 
-	// Finally we will pull the property list from the database.
+    // Load the font set.
+    sFileName = "DejaVuSans.ttf";
+    int initialSize = 24;
+    for( int fontCounter=0; fontCounter<3; fontCounter++ ) {
+        fontCollection[fontCounter] = al_load_font( sFileName.c_str(), initialSize, 0 );
+        initialSize += 10;
+        if( !fontCollection[fontCounter] ) {
+            fprintf( stderr, "Failed loading Font: %s\n", sFileName.c_str() );
+            return -1;
+        }
+    }
+
+    // Finally we will pull the property list from the database.
     if( buildPropertyList() )
     {
         fprintf( stderr, "Failure building Property List, Please ensure the database is available!\n" );
@@ -404,45 +404,45 @@ int MonopolyGame::run() {
         }
         else if( al_key_down( &alKeyState, ALLEGRO_KEY_ESCAPE ) )
         {
-        	exitGame = true;
+            exitGame = true;
         }
 
-	    // Process any timed events that have been triggered.
+        // Process any timed events that have been triggered.
         else if( alEvent.type == ALLEGRO_EVENT_TIMER )
         {
             if( alEvent.timer.source == alTimer )
             {
-            	// We will update the camera position only if the timer has been triggered.
-            	cameraUpdate( cameraPosition, playerList[playersTurn].get_x(), playerList[playersTurn].get_y(), 32, 32 );
+                // We will update the camera position only if the timer has been triggered.
+                cameraUpdate( cameraPosition, playerList[playersTurn].get_x(), playerList[playersTurn].get_y(), 32, 32 );
             }
 
             else if( alEvent.timer.source == alFrameTimer )
             {
-				// Every frame timer instance we will update the
-				for( int i=0; i<NUM_PLAYERS; i++ ) {
-					// If this player has more than '0' money.
-					if( playerList[i].get_money() > 0 ) {
-						// And if this player's turn is now.
-						if( playersTurn == i ) {
-							// Increment the animation index.
-							int tIndex = playerList[i].get_animationX();
-							tIndex += al_get_bitmap_width( playerList[i].get_image() ) / 3;
+                // Every frame timer instance we will update the
+                for( int i=0; i<NUM_PLAYERS; i++ ) {
+                    // If this player has more than '0' money.
+                    if( playerList[i].get_money() > 0 ) {
+                        // And if this player's turn is now.
+                        if( playersTurn == i ) {
+                            // Increment the animation index.
+                            int tIndex = playerList[i].get_animationX();
+                            tIndex += al_get_bitmap_width( playerList[i].get_image() ) / 3;
 
-							// If we have reached the end of the image tilesheet, reset the X index.
-							if( playerList[i].get_animationX() >= al_get_bitmap_width( playerList[i].get_image() ) ) {
-								playerList[i].set_animationX( 0 );
-							}
-						}
-						// Otherwise, set the animation index to the second position.
-						else {
-							playerList[i].set_animationX( 32 );
-						}
+                            // If we have reached the end of the image tilesheet, reset the X index.
+                            if( playerList[i].get_animationX() >= al_get_bitmap_width( playerList[i].get_image() ) ) {
+                                playerList[i].set_animationX( 0 );
+                            }
+                        }
+                        // Otherwise, set the animation index to the second position.
+                        else {
+                            playerList[i].set_animationX( 32 );
+                        }
 
-						// This should be set to the direction of the character, where directions equal:
-						//  0 - DOWN, 1 - LEFT, 2 - RIGHT, 3 - UP
-						playerList[i].set_animationY( playerList[i].get_direction() );
-					}
-				}
+                        // This should be set to the direction of the character, where directions equal:
+                        //  0 - DOWN, 1 - LEFT, 2 - RIGHT, 3 - UP
+                        playerList[i].set_animationY( playerList[i].get_direction() );
+                    }
+                }
             }
             // Since the screen has been updated, we want to flag the screen to be redrawn.
             redrawScreen = true;
@@ -461,27 +461,27 @@ int MonopolyGame::run() {
 }
 
 void MonopolyGame::handleMove() {
-	//
+    //
 }
 
 void MonopolyGame::handleTurn(int playerId) {
-	// Handle current state.
-	switch(turnState) {
-		case NULL_STATE:
-			break;
-		case PRE_TURN:
-			break;
-		case ROLL_PHASE:
-			break;
-		case MOVE_PHASE:
-			break;
-		case REACT_PHASE:
-			break;
-		case POST_TURN:
-			break;
-		case TRADING:
-			break;
-	}
+    // Handle current state.
+    switch(turnState) {
+    case NULL_STATE:
+        break;
+    case PRE_TURN:
+        break;
+    case ROLL_PHASE:
+        break;
+    case MOVE_PHASE:
+        break;
+    case REACT_PHASE:
+        break;
+    case POST_TURN:
+        break;
+    case TRADING:
+        break;
+    }
 }
 
 void MonopolyGame::halt() {
@@ -495,13 +495,13 @@ void MonopolyGame::halt() {
     }
 
     if(alBoardImage) {
-    	al_destroy_bitmap(alBoardImage);
+        al_destroy_bitmap(alBoardImage);
     }
-    
+
     for(int fontCounter=0; fontCounter<3; fontCounter++) {
-    	if(fontCollection[fontCounter]) {
-    		al_destroy_font(fontCollection[fontCounter]);
-    	}
+        if(fontCollection[fontCounter]) {
+            al_destroy_font(fontCollection[fontCounter]);
+        }
     }
 
     if(alTimer) {
