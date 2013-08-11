@@ -26,6 +26,9 @@ public:
     MonopolyPlayer();
     ~MonopolyPlayer();
 
+    bool get_passedGo();
+    void set_passedGo(bool passedGo);
+
     int get_id();
     void set_id(int id);
 
@@ -59,6 +62,7 @@ public:
 private:
     ALLEGRO_BITMAP *_image;
     Direction _dir;
+    bool _passedGo; /*!< Flag for handling if this player has completed 1 pass around the board. */
     int _id;		/*!< Player's unique ID. */
     int _money;		/*!< Player's accumulated money. */
     int _score;		/*!< Player's score. */

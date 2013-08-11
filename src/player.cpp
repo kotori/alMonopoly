@@ -28,6 +28,14 @@ MonopolyPlayer::~MonopolyPlayer() {
     // Empty
 }
 
+bool MonopolyPlayer::get_passedGo() {
+	return _passedGo;
+}
+
+void MonopolyPlayer::set_passedGo(bool passedGo) {
+	_passedGo = passedGo;
+}
+
 int MonopolyPlayer::get_id() {
     return _id;
 }

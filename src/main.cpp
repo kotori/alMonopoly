@@ -48,6 +48,7 @@ public:
 
 private:
     void draw();
+    void handleTurn(int playerId);
     void reset();
 
     Database sqlConn;
@@ -112,123 +113,125 @@ int MonopolyGame::buildPropertyList() {
 
     fprintf(stderr, "Preparing to build properties...\n");
 
-    for( int i=0; i<MAX_PROPERTIES; i++ ) {
+    for( int propertyCount=0; propertyCount<MAX_PROPERTIES; propertyCount++ ) {
         // Set NAME
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "name", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "name", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectStr(tempString, tempQuery.c_str())) {
-            propertyList[i].set_name(tempString);
+            propertyList[propertyCount].set_name(tempString);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
             return -1;
         }
 	// Set ID
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "id", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "id", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_id(tempNum);
+            propertyList[propertyCount].set_id(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set RENT
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_rent(tempNum);
+            propertyList[propertyCount].set_rent(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set PURCHASE PRICE
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "price", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "price", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_rent(tempNum);
+            propertyList[propertyCount].set_rent(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set MORTGAGE PRICE
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "mortgage", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "mortgage", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_mortgagePrice(tempNum);
+            propertyList[propertyCount].set_mortgagePrice(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set PRICE PER HOUSE
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_house", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_pricePerHouse(tempNum);
+            propertyList[propertyCount].set_pricePerHouse(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set PRICE PER HOTEL
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_hotel", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_hotel", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_pricePerHotel(tempNum);
+            propertyList[propertyCount].set_pricePerHotel(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set RENT FOR HOTEL
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_hotel", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_hotel", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_rentHotel(tempNum);
+            propertyList[propertyCount].set_rentHotel(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set RENT FOR 1 HOUSE
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_1_house", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_1_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_rent1House(tempNum);
+            propertyList[propertyCount].set_rent1House(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set RENT FOR 2 HOUSES
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_2_house", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_2_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_rent2House(tempNum);
+            propertyList[propertyCount].set_rent2House(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set RENT FOR 3 HOUSES
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_3_house", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_3_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_rent3House(tempNum);
+            propertyList[propertyCount].set_rent3House(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
         // Set RENT FOR 4 HOUSES
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_4_house", DB_PROPERTY_TABLE, "id", i+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_4_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
-            propertyList[i].set_rent4House(tempNum);
+            propertyList[propertyCount].set_rent4House(tempNum);
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
 
-        fprintf(stderr, "Built Property: %s [ID: %i] \n", propertyList[i].get_name().c_str(), propertyList[i].get_id());
+        fprintf(stderr, "Built Property: %s [ID: %i] \n", propertyList[propertyCount].get_name().c_str(), propertyList[propertyCount].get_id());
     }
     return 0;
 }
 
+// This should be called everytime the game is reset.
 void MonopolyGame::reset() {
     playersTurn = 0;
-    for(int i=0; i<NUM_PLAYERS; i++) {
-        playerList[i].set_location(0);
-        playerList[i].set_score(0);
-        if(activeGameMode == EASY) {
-            playerList[i].set_money(3500);
+
+    for(int playerCounter=0; playerCounter<NUM_PLAYERS; playerCounter++) {
+        playerList[playerCounter].set_location(0);
+        playerList[playerCounter].set_score(0);
+        if(activeGameMode == GameMode::EASY) {
+            playerList[playerCounter].set_money(3500);
         }
-        else if(activeGameMode == NORMAL) {
-            playerList[i].set_money(2500);
+        else if(activeGameMode == GameMode::NORMAL) {
+            playerList[playerCounter].set_money(2500);
         }
-        else if(activeGameMode == DIFFICULT) {
-            playerList[i].set_money(1500);
+        else if(activeGameMode == GameMode::DIFFICULT) {
+            playerList[playerCounter].set_money(1500);
         }
     }
 }
@@ -241,6 +244,7 @@ int MonopolyGame::randomNum(int max) {
 
 void MonopolyGame::draw() {
     // Drawing logic goes here...
+
 
     al_flip_display();
     al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -316,6 +320,9 @@ int MonopolyGame::init() {
     al_register_event_source(alEventQueue, al_get_timer_event_source(alTimer));
     al_register_event_source(alEventQueue, al_get_timer_event_source(alFrameTimer));
     al_register_event_source(alEventQueue, al_get_keyboard_event_source());
+    al_register_event_source(alEventQueue, al_get_mouse_event_source());
+
+    al_hide_mouse_cursor(alDisplayDevice);
 
     return 0;
 }
@@ -324,62 +331,61 @@ int MonopolyGame::run() {
 
     al_flip_display();
 
-    al_start_timer(alTimer);
-    al_start_timer(alFrameTimer);
+    al_start_timer( alTimer );
+    al_start_timer( alFrameTimer );
 
-    while(!exitGame)
+    while( !exitGame )
     {
         ALLEGRO_EVENT alEvent;
-        al_wait_for_event(alEventQueue, &alEvent);
-        al_get_keyboard_state(&alKeyState);
+        al_wait_for_event( alEventQueue, &alEvent );
+        al_get_keyboard_state( &alKeyState );
 
-        if(alEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+        if( alEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE )
         {
             exitGame = true;
         }
-
-	// Process any timed events that have been triggered.
-        else if(alEvent.type == ALLEGRO_EVENT_TIMER)
+	    // Process any timed events that have been triggered.
+        else if( alEvent.type == ALLEGRO_EVENT_TIMER )
         {
-            if(alEvent.timer.source == alTimer)
+            if( alEvent.timer.source == alTimer )
             {
-		// We will update the camera position only if the timer has been triggered.
-		cameraUpdate(cameraPosition, playerList[playersTurn].get_x(), playerList[playersTurn].get_y(), 32, 32);
+            	// We will update the camera position only if the timer has been triggered.
+            	cameraUpdate( cameraPosition, playerList[playersTurn].get_x(), playerList[playersTurn].get_y(), 32, 32 );
             }
 
-            else if(alEvent.timer.source == alFrameTimer)
+            else if( alEvent.timer.source == alFrameTimer )
             {
-		// Every frame timer instance we will update the 
-		for(int i=0; i<NUM_PLAYERS; i++) {
-			// If this player has more than '0' money.
-			if(playerList[i].get_money() > 0) {
-				// And if this player's turn is now.
-				if(playersTurn == i) {
-				    // Increment the animation index.
-				    int tIndex = playerList[i].get_animationX();
-				    tIndex += al_get_bitmap_width(playerList[i].get_image()) / 3;
+				// Every frame timer instance we will update the
+				for( int i=0; i<NUM_PLAYERS; i++ ) {
+					// If this player has more than '0' money.
+					if( playerList[i].get_money() > 0 ) {
+						// And if this player's turn is now.
+						if( playersTurn == i ) {
+							// Increment the animation index.
+							int tIndex = playerList[i].get_animationX();
+							tIndex += al_get_bitmap_width( playerList[i].get_image() ) / 3;
 
-				    // If we have reached the end of the image tilesheet, reset the X index.
-				    if(playerList[i].get_animationX() >= al_get_bitmap_width(playerList[i].get_image())) {
-				    	playerList[i].set_animationX(0);
-				    }
+							// If we have reached the end of the image tilesheet, reset the X index.
+							if( playerList[i].get_animationX() >= al_get_bitmap_width( playerList[i].get_image() ) ) {
+								playerList[i].set_animationX( 0 );
+							}
+						}
+						// Otherwise, set the animation index to the second position.
+						else {
+							playerList[i].set_animationX( 32 );
+						}
+
+						// This should be set to the direction of the character, where directions equal:
+						//  0 - DOWN, 1 - LEFT, 2 - RIGHT, 3 - UP
+						playerList[i].set_animationY( playerList[i].get_direction() );
+					}
 				}
-				// Otherwise, set the animation index to the second position.
-				else {
-				    playerList[i].set_animationX(32);
-				}
-		 
-				// This should be set to the direction of the character, where directions equal:
-				//  0 - DOWN, 1 - LEFT, 2 - RIGHT, 3 - UP
-				playerList[i].set_animationY(playerList[i].get_direction());
-			}
-		}
             }
-	    // Since the screen has been updated, we want to flag the screen to be redrawn.
+            // Since the screen has been updated, we want to flag the screen to be redrawn.
             redrawScreen = true;
         }
 
-        if(redrawScreen) {
+        if( redrawScreen ) {
             redrawScreen = false;
             draw();
         }
@@ -387,10 +393,14 @@ int MonopolyGame::run() {
     return 0;
 }
 
+void MonopolyGame::handleTurn(int playerId) {
+	//
+}
+
 void MonopolyGame::halt() {
 
-    for(int i=0; i<MAX_PROPERTIES; i++) {
-        propertyList[i].cleanup();
+    for(int propertyCount=0; propertyCount<MAX_PROPERTIES; propertyCount++) {
+        propertyList[propertyCount].cleanup();
     }
 
     if(alDisplayDevice) {
