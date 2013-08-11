@@ -43,6 +43,7 @@ public:
 private:
     void draw();
     void handleTurn(int playerId);
+    void handleMove();
     void reset();
     
     void drawText(int x, int y, const char *msg, ...);
@@ -73,6 +74,7 @@ private:
     int numPlayers;		/*!< Number of players. */
 
     GameMode activeGameMode;
+    TurnState turnState;
 
     int doublesRollCounter; /*!< Keeps track the number of times a double was rolled. */
 

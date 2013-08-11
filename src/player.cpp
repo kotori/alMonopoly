@@ -21,7 +21,7 @@
 #include "player.h"
 
 MonopolyPlayer::MonopolyPlayer() {
-    // Empty
+	_moveSpeed = 5;
 }
 
 MonopolyPlayer::~MonopolyPlayer() {
@@ -116,3 +116,20 @@ void MonopolyPlayer::set_direction(Direction dir) {
     _dir = dir;
 }
 
+void MonopolyPlayer::move(Direction dir) {
+	_dir = dir;
+	switch(_dir) {
+		case DOWN:
+			_y += _moveSpeed;
+			break;
+		case UP:
+			_y -= _moveSpeed;
+			break;
+		case RIGHT:
+			_x += _moveSpeed;
+			break;
+		case LEFT:
+			_x -= _moveSpeed;
+			break;
+	}
+}

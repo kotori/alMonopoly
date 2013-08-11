@@ -18,6 +18,8 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
+#include "common.h"
+
 //
 // MONOPOLY PROPERTY CLASS
 //
@@ -29,6 +31,9 @@ public:
 
     void set_isOwned(bool owned);
     bool get_isOwned();
+
+    void set_propertyType(PropertyType newType);
+    PropertyType get_propertyType();
 
     void set_id(int id);
     int get_id();
@@ -69,11 +74,18 @@ public:
     void set_rentHotel(int money);
     int get_rentHotel();
 
+    void set_x(int x);
+    int get_x();
+
+    void set_y(int y);
+    int get_y();
+
     void cleanup();
 
 private:
 
     bool _owned;                        /*!< Property's ownership flag, false if not owned. */
+    PropertyType _typeOfProperty;
     int _id;                            /*!< Property's unique ID code. */
     std::string _name;                  /*!< Property's name as a std::string. */
     int _purchasePrice;                 /*!< Property's initial purchase price. */
@@ -87,6 +99,8 @@ private:
     int _rent3House;                    /*!< Rental price for 3 houses. */
     int _rent4House;                    /*!< Rental price for 4 houses. */
     int _rentHotel;                     /*!< Rental price for 1 hotel. */
+    int _x;
+    int _y;
 };
 
 #endif // PROPERTY_H

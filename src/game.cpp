@@ -64,7 +64,7 @@ int MonopolyGame::buildPropertyList() {
             fprintf(stderr, "SQL QUERY ERROR\n");
             return -1;
         }
-	// Set ID
+        // Set ID
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "id", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_id(tempNum);
@@ -152,7 +152,49 @@ int MonopolyGame::buildPropertyList() {
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
         }
-
+        // Set x location.
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "x", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
+            propertyList[propertyCount].set_x(tempNum);
+        }
+        else {
+            fprintf(stderr, "SQL QUERY ERROR\n");
+        }
+        // Set y location.
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "y", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
+        	propertyList[propertyCount].set_y(tempNum);
+        }
+        else {
+        	fprintf(stderr, "SQL QUERY ERROR\n");
+        }
+        
+        // Finally we will set the property Type.
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "type", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
+        	switch(tempNum) {
+        		case TYPE_RAILROAD:
+        			propertyList[propertyCount].set_propertyType(TYPE_RAILROAD);
+        			break;
+        		case TYPE_UTILITY:
+        			propertyList[propertyCount].set_propertyType(TYPE_UTILITY);
+        			break;
+        		case TYPE_PROPERTY:
+        			propertyList[propertyCount].set_propertyType(TYPE_PROPERTY);
+        			break;
+        		case TYPE_CARD:
+        			propertyList[propertyCount].set_propertyType(TYPE_CARD);
+        			break;
+        		case TYPE_TAX:
+        			propertyList[propertyCount].set_propertyType(TYPE_TAX);
+        			break;
+        			
+        	}
+        }
+        else {
+        	fprintf(stderr, "SQL QUERY ERROR\n");
+        }
+        
         fprintf(stderr, "Built Property: %s [ID: %i] \n", propertyList[propertyCount].get_name().c_str(), propertyList[propertyCount].get_id());
     }
     return 0;
@@ -268,6 +310,7 @@ int MonopolyGame::init() {
     srand((unsigned)time(0));
 
     activeGameMode = GameMode::EASY;
+    turnState = TurnState::NULL_STATE;
 
     // Now begin initializing the Allegro library.
     if(!al_init()) {
@@ -403,8 +446,28 @@ int MonopolyGame::run() {
     return 0;
 }
 
-void MonopolyGame::handleTurn(int playerId) {
+void MonopolyGame::handleMove() {
 	//
+}
+
+void MonopolyGame::handleTurn(int playerId) {
+	// Handle current state.
+	switch(turnState) {
+		case NULL_STATE:
+			break;
+		case PRE_TURN:
+			break;
+		case ROLL_PHASE:
+			break;
+		case MOVE_PHASE:
+			break;
+		case REACT_PHASE:
+			break;
+		case POST_TURN:
+			break;
+		case TRADING:
+			break;
+	}
 }
 
 void MonopolyGame::halt() {

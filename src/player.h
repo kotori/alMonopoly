@@ -59,7 +59,11 @@ public:
     Direction get_direction();
     void set_direction(Direction dir);
 
+    void move(Direction dir);
+
 private:
+    int _moveSpeed;
+
     ALLEGRO_BITMAP *_image;
     Direction _dir;
     bool _passedGo; /*!< Flag for handling if this player has completed 1 pass around the board. */

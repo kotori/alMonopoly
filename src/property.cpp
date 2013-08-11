@@ -64,6 +64,14 @@ bool MonopolyProperty::get_isOwned() {
     return _owned;
 }
 
+void MonopolyProperty::set_propertyType(PropertyType newType) {
+	_typeOfProperty = newType;
+}
+
+PropertyType MonopolyProperty::get_propertyType() {
+	return _typeOfProperty;
+}
+
 void MonopolyProperty::set_id(int id) {
     _id = id;
 }
@@ -166,4 +174,20 @@ void MonopolyProperty::set_rentHotel(int money) {
 
 int MonopolyProperty::get_rentHotel() {
     return _rentHotel;
+}
+
+void MonopolyProperty::set_x(int x) {
+	_x = x;
+}
+
+int MonopolyProperty::get_x() {
+	return _x;
+}
+
+void MonopolyProperty::set_y(int y) {
+	_y = y;
+}
+
+int MonopolyProperty::get_y() {
+	return _y;
 }
