@@ -21,11 +21,33 @@
 #include "player.h"
 
 MonopolyPlayer::MonopolyPlayer() {
-    _moveSpeed = 5;
+	// Set some default values for our private member variables.
+	//  These will be set appropriately later.
+	_playerType = PlayerType::COMPUTER;
+	_moveSpeed = 5;
+	_isMoving = false;
+	_image = NULL;
+	_dir = DOWN;
+	_passedGo = false;
+	_id = 0;
+	_money = 0;
+	_score = 0;
+	_location = 0;
+	_x = 0;
+	_y = 0;
+	_sourceX = 0;
+	_sourceY = 0;
+        _moveSpeed = 5;
 }
 
 MonopolyPlayer::~MonopolyPlayer() {
     // Empty
+}
+
+void MonopolyPlayer::cleanup() {
+	if(_image) {
+		al_destroy_bitmap(_image);
+	}
 }
 
 bool MonopolyPlayer::get_passedGo() {
@@ -116,6 +138,26 @@ void MonopolyPlayer::set_direction(Direction dir) {
     _dir = dir;
 }
 
+bool MonopolyPlayer::get_isMoving() {
+    return _isMoving;
+}
+
+void MonopolyPlayer::set_isMoving(bool moving) {
+    _isMoving = moving;
+}
+
+void MonopolyPlayer::animationFrameLogic() {
+	if(_isMoving)
+		_sourceX += al_get_bitmap_width(_image) / 3;
+	else
+		_sourceX = 32;
+
+	if(_sourceX >= al_get_bitmap_width(_image))
+		_sourceX = 0;
+
+	_sourceY = _dir;
+}
+
 void MonopolyPlayer::move(Direction dir) {
     _dir = dir;
     switch(_dir) {
@@ -133,3 +175,10 @@ void MonopolyPlayer::move(Direction dir) {
         break;
     }
 }
+
+void MonopolyPlayer::draw() {
+	// Create an allegro bitmap reprenting our player's image on the animation index.
+	ALLEGRO_BITMAP *subBitmap = al_create_sub_bitmap( _image, _sourceX, _sourceY * 32, 32, 32 );
+	al_draw_bitmap( subBitmap, _x, _y, NULL );
+}
+

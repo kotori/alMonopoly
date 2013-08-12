@@ -33,6 +33,11 @@ enum GameMode {
     DIFFICULT
 };
 
+enum PlayerType {
+    COMPUTER = 0,
+    PLAYER = 1
+};
+
 enum Direction {
     DOWN,
     LEFT,
@@ -41,13 +46,14 @@ enum Direction {
 };
 
 enum TurnState {
-    NULL_STATE,
-    PRE_TURN,
-    ROLL_PHASE,
-    MOVE_PHASE,
-    REACT_PHASE,
-    POST_TURN,
-    TRADING
+	NULL_STATE,
+	PRE_GAME,
+	PRE_TURN,
+	ROLL_PHASE,
+	MOVE_PHASE,
+	REACT_PHASE,
+	POST_TURN,
+	TRADING
 };
 
 enum Positions {
@@ -64,6 +70,4 @@ enum PropertyType {
     TYPE_TAX = 6
 };
 
-
 #endif // COMMON_H
-

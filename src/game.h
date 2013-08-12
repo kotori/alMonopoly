@@ -41,18 +41,29 @@ public:
     int randomNum(int max);
 
 private:
+
+    struct alCamera {
+    	float cameraPosition[2];
+    	ALLEGRO_TRANSFORM alCameraTransform;
+    }alCamera;
+
     void draw();
-    void handleTurn(int playerId);
+
+    void handleTurn();
+
     void handleMove();
+
     void reset();
 
-    void drawText(int x, int y, const char *msg, ...);
+    void drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ...);
+    void drawTextCen(ALLEGRO_COLOR col, int x, int y, const char *msg, ...);
 
     void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
 
-    Database sqlConn;
+    Database sqlConn; /*!< SQLite3 connection. */
 
     int buildPropertyList(); /*!< Populates the propertyList. */
+
     MonopolyProperty propertyList[MAX_PROPERTIES]; /*!< Maximum number of properties. */
 
     MonopolyPlayer playerList[NUM_PLAYERS];
@@ -64,7 +75,6 @@ private:
     ALLEGRO_TIMER			*alFrameTimer;
     ALLEGRO_DISPLAY_MODE	alDisplayData;
     ALLEGRO_KEYBOARD_STATE 	alKeyState;
-    ALLEGRO_TRANSFORM		alCameraTransform;
     ALLEGRO_FONT			*fontCollection[3];
 
     ALLEGRO_BITMAP 			*alBoardImage;

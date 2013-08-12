@@ -12,9 +12,6 @@
 #include "player.h"
 #include "game.h"
 
-// Represents the location of the camera (x,y).
-float cameraPosition[2] = { 0, 0 };
-
 MonopolyGame::MonopolyGame() {
     // Nullfiy
     alDisplayDevice = NULL;
@@ -22,11 +19,14 @@ MonopolyGame::MonopolyGame() {
     alTimer = NULL;
     alFrameTimer = NULL;
 
-    for(int fontCounter=0; fontCounter<3; fontCounter++) {
-        fontCollection[fontCounter] = NULL;
+    for(int fCount = 0; fCount < 3; fCount++) {
+    	fontCollection[fCount] = NULL;
     }
 
     alBoardImage = NULL;
+
+    alCamera.cameraPosition[Positions::X_POS] = 0;
+    alCamera.cameraPosition[Positions::Y_POS] = 0;
 }
 
 MonopolyGame::~MonopolyGame() {
@@ -170,7 +170,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
-            return -1;
+            //return -1;
         }
         // Set y location.
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "y", DB_PROPERTY_TABLE, "id", propertyCount+1);
@@ -179,7 +179,7 @@ int MonopolyGame::buildPropertyList() {
         }
         else {
             fprintf(stderr, "SQL QUERY ERROR\n");
-            return -1;
+            //return -1;
         }
 
         // Finally we will set the property Type.
@@ -218,64 +218,122 @@ int MonopolyGame::buildPropertyList() {
 void MonopolyGame::reset() {
     playersTurn = 0;
 
-    for(int playerCounter=0; playerCounter<NUM_PLAYERS; playerCounter++) {
-        playerList[playerCounter].set_location(0);
-        playerList[playerCounter].set_score(0);
+    for(int pCount = 0; pCount < NUM_PLAYERS; pCount++) {
+        playerList[pCount].set_location(0);
+        playerList[pCount].set_score(0);
 
         if(activeGameMode == GameMode::EASY) {
-            playerList[playerCounter].set_money(3500);
+            playerList[pCount].set_money(3500);
         }
         else if(activeGameMode == GameMode::NORMAL) {
-            playerList[playerCounter].set_money(2500);
+            playerList[pCount].set_money(2500);
         }
         else if(activeGameMode == GameMode::DIFFICULT) {
-            playerList[playerCounter].set_money(1500);
+            playerList[pCount].set_money(1500);
         }
     }
 }
 
 int MonopolyGame::randomNum(int max) {
-    //int rNum = rand() % max + 1;
-    //return rNum;
     return rand() % max + 1;
 }
 
-void MonopolyGame::drawText(int x, int y, const char *msg, ...) {
+void MonopolyGame::drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ...) {
 
-    char buffer[256];
-    va_list ap;
+	char buffer[256];
+	va_list ap;
 
-    va_start( ap, msg );
-    vsprintf( buffer, msg, ap );
-    va_end( ap );
+	va_start( ap, msg );
+	vsprintf( buffer, msg, ap );
+	va_end( ap );
 
-    al_draw_text(
-        fontCollection[0],
-        al_map_rgb( 0, 0, 0 ),
-        x+2,
-        y+2,
-        NULL,
-        buffer );
+	al_draw_text(
+			fontCollection[0],
+			al_map_rgb( 0, 0, 0 ),
+			x+2,
+			y+2,
+			NULL,
+			buffer );
 
-    al_draw_text(
-        fontCollection[0],
-        al_map_rgb( 255, 255, 255 ),
-        x,
-        y,
-        NULL,
-        buffer );
+	al_draw_text(
+		fontCollection[0],
+		col,
+		x,
+		y,
+		NULL,
+		buffer );
+}
+
+void MonopolyGame::drawTextCen(ALLEGRO_COLOR col, int x, int y, const char *msg, ...) {
+
+	char buffer[256];
+	va_list ap;
+
+	va_start( ap, msg );
+	vsprintf( buffer, msg, ap );
+	va_end( ap );
+
+	al_draw_text(
+			fontCollection[0],
+			al_map_rgb( 0, 0, 0 ),
+			x+2,
+			y+2,
+			ALLEGRO_ALIGN_CENTRE,
+			buffer );
+
+	al_draw_text(
+		fontCollection[0],
+		col,
+		x,
+		y,
+		ALLEGRO_ALIGN_CENTRE,
+		buffer );
 }
 
 void MonopolyGame::draw() {
-    // Drawing logic goes here...
 
-    al_draw_bitmap( alBoardImage, 0, 0, NULL );
+	// Based upon the current turnstate we will display different things.
+	switch(turnState) {
+		case NULL_STATE:
+			drawTextCen( al_map_rgb( 255, 0, 0 ), WINDOW_WIDTH/2, WINDOW_HEIGHT/2, "MONOPOLY!" );
+			break;
+		case PRE_GAME:
+			// This is where I need to implement a 'menu class' for user input.
+			// enum MenuSelection { PRE_GAME_MENU = 0, IN_GAME_MENU = 1, POST_GAME_MENU = 2 };
+			//  menu[PRE_GAME_MENU].draw();
+			// Later a logic portion will need to be added as well.
+			// menu[PRE_GAME_MENU].doLogic();
+			break;
+		case PRE_TURN:
+		case ROLL_PHASE:
+		case MOVE_PHASE:
+		case REACT_PHASE:
+		case POST_TURN:
+			// Draw the board first.
+			al_draw_bitmap( alBoardImage, 0, 0, NULL );
 
-    drawText( 0, 0, "Current Player: %i", playersTurn );
-    drawText( 0, 32, "Current Player's Money: $%i", playerList[playersTurn].get_money() );
+			// Next Draw each of the player's.
+			//  This should be fine tuned later to only draw 'alive' players.
+			for( int playerCounter = 0; playerCounter < numPlayers; playerCounter++) {
+				playerList[playersTurn].draw();
+			}
+			break;
+		case TRADING:
+			// TODO: implement trading.
+			break;
+	}
 
-    al_flip_display();
-    al_clear_to_color( al_map_rgb( 0, 0, 0 ) );
+	//
+	// Print some debugging info.
+	//
+	drawText( al_map_rgb( 255, 255, 255 ), 0, 0, "Num. of Players: %i", numPlayers );
+	drawText( al_map_rgb( 255, 255, 255 ), 0, 32, "Current Player: %i", playersTurn );
+	drawText( al_map_rgb( 255, 255, 255 ), 0, 64, "Current Player's Money: $%i", playerList[playersTurn].get_money() );
+
+	// Next, we flip the display to make the changes visible,
+	//  and clear the background before we print again.
+	al_flip_display();
+	al_clear_to_color( al_map_rgb( 255, 255, 255 ) );
 }
 
 int MonopolyGame::loadResources() {
@@ -382,6 +440,9 @@ int MonopolyGame::init() {
 
     al_hide_mouse_cursor(alDisplayDevice);
 
+    alCamera.cameraPosition[Positions::X_POS] = 0;
+    alCamera.cameraPosition[Positions::Y_POS] = 0;
+
     return 0;
 }
 
@@ -412,44 +473,31 @@ int MonopolyGame::run() {
         {
             if( alEvent.timer.source == alTimer )
             {
-                // We will update the camera position only if the timer has been triggered.
-                cameraUpdate( cameraPosition, playerList[playersTurn].get_x(), playerList[playersTurn].get_y(), 32, 32 );
+            	// We will update the camera position only if the timer has been triggered.
+            	cameraUpdate( alCamera.cameraPosition, playerList[playersTurn].get_x(), playerList[playersTurn].get_y(), 32, 32 );
             }
 
             else if( alEvent.timer.source == alFrameTimer )
             {
-                // Every frame timer instance we will update the
-                for( int i=0; i<NUM_PLAYERS; i++ ) {
-                    // If this player has more than '0' money.
-                    if( playerList[i].get_money() > 0 ) {
-                        // And if this player's turn is now.
-                        if( playersTurn == i ) {
-                            // Increment the animation index.
-                            int tIndex = playerList[i].get_animationX();
-                            tIndex += al_get_bitmap_width( playerList[i].get_image() ) / 3;
-
-                            // If we have reached the end of the image tilesheet, reset the X index.
-                            if( playerList[i].get_animationX() >= al_get_bitmap_width( playerList[i].get_image() ) ) {
-                                playerList[i].set_animationX( 0 );
-                            }
-                        }
-                        // Otherwise, set the animation index to the second position.
-                        else {
-                            playerList[i].set_animationX( 32 );
-                        }
-
-                        // This should be set to the direction of the character, where directions equal:
-                        //  0 - DOWN, 1 - LEFT, 2 - RIGHT, 3 - UP
-                        playerList[i].set_animationY( playerList[i].get_direction() );
-                    }
-                }
+				for( int pCounter = 0; pCounter < NUM_PLAYERS; pCounter++ ) {
+					// If this player has more than '0' money.
+					if( playerList[pCounter].get_money() > 0 ) {
+						// For each player, update the image we will display this frame.
+						playerList[pCounter].animationFrameLogic();
+					}
+				}
             }
             // Since the screen has been updated, we want to flag the screen to be redrawn.
             redrawScreen = true;
 
-            al_identity_transform( &alCameraTransform );
-            al_translate_transform( &alCameraTransform, -cameraPosition[Positions::X_POS], -cameraPosition[Positions::Y_POS] );
-            al_use_transform( &alCameraTransform );
+            // Do some camera transform magic.
+            al_identity_transform( &alCamera.alCameraTransform );
+
+            al_translate_transform( &alCamera.alCameraTransform,
+            		-alCamera.cameraPosition[Positions::X_POS],
+            		-alCamera.cameraPosition[Positions::Y_POS] );
+
+            al_use_transform( &alCamera.alCameraTransform );
         }
 
         if( redrawScreen ) {
@@ -464,30 +512,37 @@ void MonopolyGame::handleMove() {
     //
 }
 
-void MonopolyGame::handleTurn(int playerId) {
-    // Handle current state.
-    switch(turnState) {
-    case NULL_STATE:
-        break;
-    case PRE_TURN:
-        break;
-    case ROLL_PHASE:
-        break;
-    case MOVE_PHASE:
-        break;
-    case REACT_PHASE:
-        break;
-    case POST_TURN:
-        break;
-    case TRADING:
-        break;
-    }
+void MonopolyGame::handleTurn() {
+	// Handle current state.
+	switch(turnState) {
+		case NULL_STATE:
+			break;
+		case PRE_GAME:
+			// menu[PRE_GAME_MENU].doLogic();
+			break;
+		case PRE_TURN:
+			break;
+		case ROLL_PHASE:
+			break;
+		case MOVE_PHASE:
+			break;
+		case REACT_PHASE:
+			break;
+		case POST_TURN:
+			break;
+		case TRADING:
+			break;
+	}
 }
 
 void MonopolyGame::halt() {
 
-    for(int propertyCount=0; propertyCount<MAX_PROPERTIES; propertyCount++) {
-        propertyList[propertyCount].cleanup();
+    for(int pCount = 0; pCount < MAX_PROPERTIES; pCount++) {
+        propertyList[pCount].cleanup();
+    }
+
+    for(int pCount = 0; pCount < NUM_PLAYERS; pCount++) {
+    	playerList[pCount].cleanup();
     }
 
     if(alDisplayDevice) {
@@ -498,10 +553,10 @@ void MonopolyGame::halt() {
         al_destroy_bitmap(alBoardImage);
     }
 
-    for(int fontCounter=0; fontCounter<3; fontCounter++) {
-        if(fontCollection[fontCounter]) {
-            al_destroy_font(fontCollection[fontCounter]);
-        }
+    for(int fCount = 0; fCount < 3; fCount++) {
+    	if(fontCollection[fCount]) {
+    		al_destroy_font(fontCollection[fCount]);
+    	}
     }
 
     if(alTimer) {

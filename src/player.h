@@ -59,22 +59,34 @@ public:
     Direction get_direction();
     void set_direction(Direction dir);
 
+    void set_isMoving(bool moving);
+    bool get_isMoving();
+
+    void animationFrameLogic();
     void move(Direction dir);
 
-private:
-    int _moveSpeed;
+    void cleanup();
 
-    ALLEGRO_BITMAP *_image;
-    Direction _dir;
+    void draw();
+
+private:
+
+    int _moveSpeed; /*!< Rate of movement. */
+    bool _isMoving; /*!< Flag for handling movement. */
+
+    ALLEGRO_BITMAP *_image; /*!< Bitmap tilesheet image representing the player. */
+    Direction _dir;	/*!< Represents the direction this player is facing. */
     bool _passedGo; /*!< Flag for handling if this player has completed 1 pass around the board. */
     int _id;		/*!< Player's unique ID. */
     int _money;		/*!< Player's accumulated money. */
     int _score;		/*!< Player's score. */
     int _location;	/*!< Player's current location on the gameboard. */
-    float _x;
-    float _y;
-    int _sourceX;
-    int _sourceY;
+    float _x;		/*!< Player's x-axis location. */
+    float _y;		/*!< Player's y-axis location. */
+    int _sourceX;	/*!< Player's x-axis location in the animation map. */
+    int _sourceY;	/*!< Player's y-axis location in the animation map. */
+
+    PlayerType _playerType; /*!< Represents if this player is played by the CPU. */
 };
 
 #endif // PLAYER_H
