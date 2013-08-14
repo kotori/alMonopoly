@@ -15,6 +15,13 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*! \file common.h
+    \brief Common header file
+
+    This header provides several global variables/enumerations. This includes
+     The screen resolution, number of players, max FPS, etc.
+*/
+
 #ifndef COMMON_H
 #define COMMON_H
 
