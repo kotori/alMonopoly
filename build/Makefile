@@ -45,6 +45,9 @@ $(ObjectDir)%.o: $(SourceDir)%.cpp
 install:
 	ln -v -f -s ../etc ../bin/
 
+docs:
+	doxygen doxygen.doxy
+
 clean:
 	@echo "Cleaning $(CObjects) and $(CExecutable)"
 	@$(RM) $(CObjects)

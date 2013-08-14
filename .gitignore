@@ -15,6 +15,7 @@
 # Compilation directories
 obj/
 bin/
+docs/
 
 .*
 !/.gitignore
