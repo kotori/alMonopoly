@@ -52,3 +52,5 @@ clean:
 	@echo "Cleaning $(CObjects) and $(CExecutable)"
 	@$(RM) $(CObjects)
 	@$(RM) $(CExecutable)
+	@echo "Now cleaning documentation. To regenerate type 'make docs'"
+	@$(RM) ../docs/*
