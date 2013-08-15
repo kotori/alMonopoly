@@ -15,6 +15,13 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*! \file game.h
+    \brief Game class header file.
+
+    This header provides a class responsible for managing nearly every aspect of gameplay.
+     This includes, start, stop, draw, load, and clean up of the game's resources.
+*/
+
 #ifndef GAME_H
 #define GAME_H
 

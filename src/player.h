@@ -15,12 +15,16 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*! \file player.h
+    \brief Player class header file.
+
+    This header provides an interface for building a character to play with or against.
+     This includes the player's image, x/y coords, and various activity flags.
+*/
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
-//
-// MONOPOLY PLAYER CLASS
-//
 class MonopolyPlayer {
 public:
     MonopolyPlayer();

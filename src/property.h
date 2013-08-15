@@ -15,14 +15,18 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*! \file property.h
+    \brief Property class header file.
+
+    This header allows for an easy way to rapidly build properties. Inside the Game class we
+     actually populate this class's objects with contents from a SQLite3 database.
+*/
+
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
 #include "common.h"
 
-//
-// MONOPOLY PROPERTY CLASS
-//
 class MonopolyProperty {
 public:
     MonopolyProperty();
