@@ -27,6 +27,11 @@
 
 #include "common.h"
 
+/*! \class MonopolyProperty
+    \brief Property class
+    This class is used to build up a single property.
+*/
+
 class MonopolyProperty {
 public:
     MonopolyProperty();

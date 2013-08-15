@@ -25,6 +25,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+/*! \class MonopolyPlayer
+    \brief Player class
+    This class is used to build up a player.
+*/
+
 class MonopolyPlayer {
 public:
     MonopolyPlayer();
