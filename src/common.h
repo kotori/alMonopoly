@@ -43,7 +43,7 @@ enum GameMode {
     DIFFICULT	/*!< Hard difficulty game. */
 };
 
-/*! \enum layerType
+/*! \enum PlayerType
     \brief List of possible player types.
 */
 enum PlayerType {
