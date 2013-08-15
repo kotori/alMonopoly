@@ -51,11 +51,14 @@ enum PlayerType {
     PLAYER = 1		/*!< Human player. */
 };
 
+/*! \enum Direction
+    \brief List of possible directions a player can face.
+*/
 enum Direction {
-    DOWN,
-    LEFT,
-    RIGHT,
-    UP
+    DOWN,		/*!< Facing down (0). */
+    LEFT,		/*!< Facing left (1). */
+    RIGHT,		/*!< Facing right (2). */
+    UP			/*!< Facing up (3). */
 };
 
 enum TurnState {
