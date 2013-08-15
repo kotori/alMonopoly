@@ -34,15 +34,21 @@
 
 #define DB_PROPERTY_TABLE	"landing"
 
+/*! \enum GameMode
+    \brief List of possible game modes.
+*/
 enum GameMode {
-    EASY,
-    NORMAL,
-    DIFFICULT
+    EASY,	/*!< Easy difficulty game. */
+    NORMAL,	/*!< Normal difficulty game. */
+    DIFFICULT	/*!< Hard difficulty game. */
 };
 
+/*! \enum layerType
+    \brief List of possible player types.
+*/
 enum PlayerType {
-    COMPUTER = 0,
-    PLAYER = 1
+    COMPUTER = 0,	/*!< Computer controlled player. */
+    PLAYER = 1		/*!< Human player. */
 };
 
 enum Direction {
