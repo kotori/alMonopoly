@@ -47,7 +47,7 @@ public:
     */
     Database();
 
-    /*! \fn Database(char *loc)
+    /*! \fn Database(std::string loc)
         \brief Database class constructor. With override.
         \param loc string representing the location of the SQLite3 database on the filesystem.
 
