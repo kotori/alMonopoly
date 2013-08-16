@@ -25,13 +25,39 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+/*! \def WINDOW_WIDTH
+    \brief Global containing the maximum size of the window's width.
+*/
 #define WINDOW_WIDTH	800
+
+/*! \def WINDOW_HEIGHT
+    \brief Global containing the maximum size of the window's height.
+*/
 #define WINDOW_HEIGHT	600
+
+/*! \def MAX_FPS
+    \brief Global containing the maximum number of frames per second.
+*/
 #define MAX_FPS		60.0
+
+/*! \def MAX_FRAME_FPS
+    \brief Global containing the maximum number of frames per second for animations.
+*/
 #define MAX_FRAME_FPS	15.0
+
+/*! \def MAX_PROPERTIES
+    \brief Global containing the maximum number of properties to load from our database.
+*/
 #define MAX_PROPERTIES	40
+
+/*! \def NUM_PLAYERS
+    \brief Global containing the maximum number of players to initialize.
+*/
 #define NUM_PLAYERS	2
 
+/*! \def DB_PROPERTY_TABLE
+    \brief Global containing the location/name of the SQLite3 database that will be loaded.
+*/
 #define DB_PROPERTY_TABLE	"landing"
 
 /*! \enum GameMode
