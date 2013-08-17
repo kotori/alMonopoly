@@ -51,15 +51,37 @@ bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr
 	
 	// First ensure this player owns this property.
 	if( prop.get_ownedBy() == plyr.get_id() ) {
-		// Give the player the mortgage value of the property.
-		plyr.set_money( prop.get_mortgagePrice() );
-		// Mark the property as mortgaged.
-		prop.set_isMortgaged( true );
-		// Relinquish ownership of this property.
-		prop.set_ownedBy( 0 );
-		success = true;
+		switch( prop.get_propertyValue() ) {
+			case PropertyValue::VAL_NULL:
+				// Null type, do nothing.
+				break;
+			case PropertyValue::VAL_OWNED_SET:
+				// Give the player the mortgage value of the property.
+				plyr.set_money( prop.get_mortgagePrice() );
+				// Mark the property as mortgaged.
+				prop.set_isMortgaged( true );
+				// Change the value of this property.
+				prop.set_propertyValue( PropertyValue::VAL_OWNED );
+				success = true;
+				break;
+			case PropertyValue::VAL_OWNED:
+				// Give the player the mortgage value of the property.
+				plyr.set_money( prop.get_mortgagePrice() );
+				// Mark the property as mortgaged.
+				prop.set_isMortgaged( true );
+				// Relinquish ownership of this property.
+				prop.set_ownedBy( 0 );
+				success = true;
+				break;
+			case PropertyValue::VAL_1_HOUSE:
+			case PropertyValue::VAL_2_HOUSE:
+			case PropertyValue::VAL_3_HOUSE:
+			case PropertyValue::VAL_4_HOUSE:
+			case PropertyValue::VAL_1_HOTEL:
+				//
+				break;
+		}
 	}
-	
 	return success;
 }
 

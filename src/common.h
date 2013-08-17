@@ -124,4 +124,18 @@ enum PropertyType {
     TYPE_TAX = 6	/*!< This is an tax property type. */
 };
 
+/*! \enum PropertyValue
+    \brief List of possible property value types.
+*/
+enum PropertyValue {
+    VAL_NULL = 0,		/*!< Null, unowned property. */
+    VAL_OWNED = 1,		/*!< Owned property, not a complete set. */
+    VAL_OWNED_SET = 2,	/*!< Owned property, complete set. */
+    VAL_1_HOUSE = 3,	/*!< Improved property, with 1 house. */
+    VAL_2_HOUSE = 4,	/*!< Improved property, with 2 houses. */
+    VAL_3_HOUSE = 5,	/*!< Improved property, with 3 houses. */
+    VAL_4_HOUSE = 6,	/*!< Improved property, with 4 houses. */
+    VAL_1_HOTEL = 7		/*!< Improved property, with 1 hotel. */
+};
+
 #endif // COMMON_H

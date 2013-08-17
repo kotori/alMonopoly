@@ -50,6 +50,9 @@ public:
     void set_propertyType(PropertyType newType);
     PropertyType get_propertyType();
 
+    void set_propertyValue(PropertyValue newValue);
+    PropertyValue get_propertyValue();
+
     void set_id(int id);
     int get_id();
 
@@ -102,6 +105,7 @@ private:
     bool _owned;                        /*!< Property's ownership flag, false if not owned. */
     int _ownedBy;						/*!< Property's player owner id. */
     bool _isMortgaged;					/*!< Property's mortgaged flag. */
+    PropertyValue _valueOfProperty;		/*!< Property's current value. */
     PropertyType _typeOfProperty;		/*!< Property's type. \see PropertyType. */
     int _id;                            /*!< Property's unique ID code. */
     std::string _name;                  /*!< Property's name as a std::string. */
