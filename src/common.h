@@ -64,9 +64,9 @@
     \brief List of possible game modes.
 */
 enum GameMode {
-    EASY,	/*!< Easy difficulty game. */
-    NORMAL,	/*!< Normal difficulty game. */
-    DIFFICULT	/*!< Hard difficulty game. */
+    EASY = 0,		/*!< Easy difficulty game. */
+    NORMAL = 1,		/*!< Normal difficulty game. */
+    DIFFICULT = 2	/*!< Hard difficulty game. */
 };
 
 /*! \enum PlayerType
@@ -81,35 +81,47 @@ enum PlayerType {
     \brief List of possible directions a player can face.
 */
 enum Direction {
-    DOWN,		/*!< Facing down (0). */
-    LEFT,		/*!< Facing left (1). */
-    RIGHT,		/*!< Facing right (2). */
-    UP			/*!< Facing up (3). */
+    DOWN = 0,		/*!< Facing down. */
+    LEFT = 1,		/*!< Facing left. */
+    RIGHT = 2,		/*!< Facing right. */
+    UP = 3		/*!< Facing up. */
 };
 
+/*! \enum TurnState
+    \brief List of states the game can be in.
+*/
 enum TurnState {
-	NULL_STATE,
-	PRE_GAME,
-	PRE_TURN,
-	ROLL_PHASE,
-	MOVE_PHASE,
-	REACT_PHASE,
-	POST_TURN,
-	TRADING
+	NULL_STATE = 0,	/*!< NULL state, this is used on startup. */
+	PRE_GAME = 1,	/*!< Pre-Game state, used just after startup. */
+	PRE_TURN = 2,	/*!< Pre-turn state, any actions that should be player before the active player's roll. */
+	ROLL_PHASE = 3,	/*!< Rolling state, at this time we should display the rolling interface. */
+	MOVE_PHASE = 4,	/*!< Movement phase, this is called in response to a dice roll or card event. */
+	REACT_PHASE = 5,/*!< Reaction phase, this is called in response to a movement or card event. */	
+	POST_TURN = 6,	/*!< Post turn state, this is called for any post-turn cleanup events. */
+	TRADING = 7	/*!< Trading state, this is called in response to a Player bid to trade. */
 };
 
+/*! \enum Positions
+    \brief List of possible axis positions.
+*/
 enum Positions {
-    X_POS = 0,
-    Y_POS = 1
+    X_POS = 0,	/*!< X-axis position. */
+    Y_POS = 1	/*!< Y-axis position. */
 };
 
+/*! \enum PropertyType
+    \brief List of possible property types.
+
+    Property's are 'spaces' on around the board. Each space can be represented by
+     one of these types.
+*/
 enum PropertyType {
-    TYPE_NULL = 1,
-    TYPE_RAILROAD = 2,
-    TYPE_UTILITY = 3,
-    TYPE_PROPERTY = 4,
-    TYPE_CARD = 5,
-    TYPE_TAX = 6
+    TYPE_NULL = 1,	/*!< Null property type. */
+    TYPE_RAILROAD = 2,	/*!< Railroad property type. */
+    TYPE_UTILITY = 3,	/*!< Utility property type. */
+    TYPE_PROPERTY = 4,	/*!< Property than can be sold then built upon. */
+    TYPE_CARD = 5,	/*!< This is an event card property. */
+    TYPE_TAX = 6	/*!< This is an tax property type. */
 };
 
 #endif // COMMON_H
