@@ -47,6 +47,53 @@ void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int wid
     }
 }
 
+bool MonopolyGame::purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod) {
+	
+	bool success = false;
+	
+	// If the property is not already owned.
+	if( !prop.get_isOwned() ) {
+		int pMoney = plyr.get_money();
+
+		// Now we will check if this property is mortgaged and work with that price.
+		if( prop.get_isMortgaged() ) {
+			int cost = prop.get_mortgagePrice() - priceMod;
+			if( pMoney > cost ) {
+				plyr.set_money( pMoney - cost );
+				prop.set_isOwned( true );
+				prop.set_isMortgaged( true );
+				prop.set_ownedBy( plyr.get_id() );
+				fprintf( stderr, "Player #: %i has purchased property: %s", plyr.get_id(), prop.get_name().c_str() );
+				success = true;
+			}
+			else {
+				// Oops, this player can't afford this property.
+				fprintf( stderr, "Player #: %i Cannot afford property: %s", plyr.get_id(), prop.get_name().c_str() );
+				success = false;
+			}
+		}
+		else {
+			// Now that we've determined the property is not owned or mortgaged, we will use the full price.
+			int cost = prop.get_purchasePrice() - priceMod;
+			if( pMoney > cost ) {
+				plyr.set_money( pMoney - cost );
+				prop.set_isOwned( true );
+				prop.set_isMortgaged( true );
+				prop.set_ownedBy( plyr.get_id() );
+				fprintf( stderr, "Player #: %i has purchased property: %s", plyr.get_id(), prop.get_name().c_str() );
+				success = true;
+			}
+			else {
+				// Oops, this player can't afford this property.
+				fprintf( stderr, "Player #: %i Cannot afford property: %s", plyr.get_id(), prop.get_name().c_str() );
+				success = false;
+			}
+		}
+	}
+	// The property has not been sold.
+	return success;
+}
+
 int MonopolyGame::buildPropertyList() {
     std::string tempQuery = "";
     std::string tempString = "";

@@ -59,6 +59,15 @@ private:
     	ALLEGRO_TRANSFORM alCameraTransform;
     }alCamera;
 
+    /*! \fn bool purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod)
+        \brief Routine for handling the sale of a property.
+
+        This function will first check if the property is already owned, if not, it will then
+         figure the purchase price minus the passed modifier. This final cost if subtracted from
+         the player's money and the owned flag is set to true. True is returned on success, false on failure.
+     */
+    bool purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod);
+
     void draw();
 
     void handleTurn();

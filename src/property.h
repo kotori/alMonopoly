@@ -41,6 +41,12 @@ public:
     void set_isOwned(bool owned);
     bool get_isOwned();
 
+    void set_ownedBy(int ownedBy);
+    int get_ownedBy();
+
+    void set_isMortgaged(bool isMortgaged);
+    bool get_isMortgaged();
+
     void set_propertyType(PropertyType newType);
     PropertyType get_propertyType();
 
@@ -94,7 +100,9 @@ public:
 private:
 
     bool _owned;                        /*!< Property's ownership flag, false if not owned. */
-    PropertyType _typeOfProperty;
+    int _ownedBy;						/*!< Property's player owner id. */
+    bool _isMortgaged;					/*!< Property's mortgaged flag. */
+    PropertyType _typeOfProperty;		/*!< Property's type. \see PropertyType. */
     int _id;                            /*!< Property's unique ID code. */
     std::string _name;                  /*!< Property's name as a std::string. */
     int _purchasePrice;                 /*!< Property's initial purchase price. */
@@ -108,8 +116,8 @@ private:
     int _rent3House;                    /*!< Rental price for 3 houses. */
     int _rent4House;                    /*!< Rental price for 4 houses. */
     int _rentHotel;                     /*!< Rental price for 1 hotel. */
-    int _x;
-    int _y;
+    int _x;								/*!< Property's x-axis location. */
+    int _y;								/*!< Property's y-axis location. */
 };
 
 #endif // PROPERTY_H

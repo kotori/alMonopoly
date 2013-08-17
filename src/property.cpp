@@ -31,6 +31,7 @@ MonopolyProperty::MonopolyProperty(std::string name, int id, int purchasePrice, 
 
     _image = NULL;
     _owned = false;
+    _ownedBy = 0;
 
     _name = name;
     _id = id;
@@ -62,6 +63,22 @@ void MonopolyProperty::set_isOwned(bool owned) {
 
 bool MonopolyProperty::get_isOwned() {
     return _owned;
+}
+
+void MonopolyProperty::set_ownedBy(int ownedBy) {
+	_ownedBy = ownedBy;
+}
+
+int MonopolyProperty::get_ownedBy() {
+	return _ownedBy;
+}
+
+void MonopolyProperty::set_isMortgaged(bool isMortgaged) {
+	_isMortgaged = isMortgaged;
+}
+
+bool MonopolyProperty::get_isMortgaged() {
+	return _isMortgaged;
 }
 
 void MonopolyProperty::set_propertyType(PropertyType newType) {
