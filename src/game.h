@@ -54,10 +54,22 @@ public:
 
 private:
 
+    /*! \struct alCamera
+        \brief Structure representing the viewable area of the screen.
+     */
     struct alCamera {
-    	float cameraPosition[2];
-    	ALLEGRO_TRANSFORM alCameraTransform;
+    	float cameraPosition[2]; /*!< X/Y axis position of the camera. */
+    	ALLEGRO_TRANSFORM alCameraTransform; /*!< Allegro5 transform flag. */
     }alCamera;
+
+    /*! \fn bool mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr)
+        \brief Routine for handling the mortgaging of a property.
+
+        This function will handle the mortgaging of a property. First we check ownership.
+         If this passes then the property's mortgage value is added to the player's cash supply
+         and the mortgage and ownership flags are changed.
+    */
+    bool mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr);
 
     /*! \fn bool purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod)
         \brief Routine for handling the sale of a property.
@@ -65,7 +77,7 @@ private:
         This function will first check if the property is already owned, if not, it will then
          figure the purchase price minus the passed modifier. This final cost if subtracted from
          the player's money and the owned flag is set to true. True is returned on success, false on failure.
-     */
+    */
     bool purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod);
 
     void draw();

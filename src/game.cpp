@@ -33,8 +33,7 @@ MonopolyGame::~MonopolyGame() {
     // Empty
 }
 
-void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int width, int height)
-{
+void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int width, int height) {
     cameraPosition[Positions::X_POS] = -(WINDOW_WIDTH / 2) + (x + width / 2);
     cameraPosition[Positions::Y_POS] = -(WINDOW_HEIGHT / 2) + (y + height / 2);
 
@@ -45,6 +44,23 @@ void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int wid
     if(cameraPosition[Positions::Y_POS] < 0) {
         cameraPosition[Positions::Y_POS] = 0;
     }
+}
+
+bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr) {
+	bool success = false;
+	
+	// First ensure this player owns this property.
+	if( prop.get_ownedBy == plyr.get_id() ) {
+		// Give the player the mortgage value of the property.
+		plyr.set_money( prop.get_mortgagePrice() );
+		// Mark the property as mortgaged.
+		prop.set_isMortgaged( true );
+		// Relinquish ownership of this property.
+		prop.set_ownedBy( 0 );
+		success = true;
+	}
+	
+	return success;
 }
 
 bool MonopolyGame::purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod) {
