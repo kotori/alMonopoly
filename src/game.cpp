@@ -50,7 +50,7 @@ bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr
 	bool success = false;
 	
 	// First ensure this player owns this property.
-	if( prop.get_ownedBy == plyr.get_id() ) {
+	if( prop.get_ownedBy() == plyr.get_id() ) {
 		// Give the player the mortgage value of the property.
 		plyr.set_money( prop.get_mortgagePrice() );
 		// Mark the property as mortgaged.
