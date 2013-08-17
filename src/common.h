@@ -56,9 +56,14 @@
 #define NUM_PLAYERS	2
 
 /*! \def DB_PROPERTY_TABLE
-    \brief Global containing the location/name of the SQLite3 database that will be loaded.
+    \brief Global containing the name of the property table.
 */
 #define DB_PROPERTY_TABLE	"landing"
+
+/*! \def DB_GROUP_TABLE
+    \brief Global containing the name of the property group sets table.
+*/
+#define DB_GROUP_TABLE		"sets"
 
 /*! \enum GameMode
     \brief List of possible game modes.

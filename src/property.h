@@ -47,6 +47,12 @@ public:
     void set_isMortgaged(bool isMortgaged);
     bool get_isMortgaged();
 
+    void set_group(int group);
+    int get_group();
+
+    void set_groupName(std::string groupName);
+    std::string get_groupName();
+
     void set_propertyType(PropertyType newType);
     PropertyType get_propertyType();
 
@@ -104,6 +110,8 @@ private:
 
     bool _owned;                        /*!< Property's ownership flag, false if not owned. */
     int _ownedBy;						/*!< Property's player owner id. */
+    int _group;							/*!< Property's color group. */
+    std::string _groupName;				/*!< Property's color group name. */
     bool _isMortgaged;					/*!< Property's mortgaged flag. */
     PropertyValue _valueOfProperty;		/*!< Property's current value. */
     PropertyType _typeOfProperty;		/*!< Property's type. \see PropertyType. */

@@ -47,11 +47,23 @@ void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int wid
 }
 
 bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr) {
+	// TODO: This needs to be wrapped into a property management class.
+	// 		  There is too much grouping that needs to be done.
 	bool success = false;
+	int numPropertiesInSet = 0;
+	std::string tempQuery = "";
+	
+	tempQuery = sqlConn.Format( "SELECT COUNT(*) FROM %s WHERE %s = %i", DB_PROPERTY_TABLE, "set_id", prop.get_group() );
+	if(sqlConn.SelectInt(numPropertiesInSet, tempQuery.c_str())) {
+		fprintf(stderr, "SQL QUERY ERROR\n");
+		return -1;
+	}
 	
 	// First ensure this player owns this property.
 	if( prop.get_ownedBy() == plyr.get_id() ) {
+		
 		switch( prop.get_propertyValue() ) {
+		
 			case PropertyValue::VAL_NULL:
 				// Null type, do nothing.
 				break;
@@ -267,7 +279,7 @@ int MonopolyGame::buildPropertyList() {
             //return -1;
         }
 
-        // Finally we will set the property Type.
+        // Set the property Type.
         tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "type", DB_PROPERTY_TABLE, "id", propertyCount+1);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             switch(tempNum) {
@@ -293,6 +305,27 @@ int MonopolyGame::buildPropertyList() {
             fprintf(stderr, "SQL QUERY ERROR\n");
             return -1;
         }
+        
+        
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "set_id", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
+        	propertyList[propertyCount].set_group(tempNum);
+        }
+        else {
+        	fprintf(stderr, "SQL QUERY ERROR\n");
+        	return -1;
+        }
+        
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "set_id", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        if(!sqlConn.SelectStr(tempString, tempQuery.c_str())) {
+           	propertyList[propertyCount].set_groupName(tempString);
+        }
+        else {
+        	fprintf(stderr, "SQL QUERY ERROR\n");
+        	return -1;
+        }
+        
+        
 
         fprintf(stderr, "Built Property: %s [ID: %i] \n", propertyList[propertyCount].get_name().c_str(), propertyList[propertyCount].get_id());
     }
@@ -333,12 +366,12 @@ void MonopolyGame::drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ..
 	va_end( ap );
 
 	al_draw_text(
-			fontCollection[0],
-			al_map_rgb( 0, 0, 0 ),
-			x+2,
-			y+2,
-			NULL,
-			buffer );
+		fontCollection[0],
+		al_map_rgb( 0, 0, 0 ),
+		x+2,
+		y+2,
+		NULL,
+		buffer );
 
 	al_draw_text(
 		fontCollection[0],

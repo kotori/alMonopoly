@@ -42,14 +42,48 @@
 class MonopolyGame {
 
 public:
+
+	/*! \fn MonopolyGame()
+        \brief Class constructor.
+	*/
     MonopolyGame();
+
+    /*! \fn ~MonopolyGame()
+		\brief Class destructor.
+	*/
     ~MonopolyGame();
 
+    /*! \fn int init()
+		\brief Initialize the Allegro requirements.
+		\return 0 on success, anything else on failure.
+	*/
     int init();
-    int loadResources(); /*!< Ensure's all gfx & sfx resources are loaded. */
+
+    /*! \fn int loadResources()
+		\brief Load gfx/sfx resources.
+		\return 0 on success, anything else on failure.
+	*/
+    int loadResources();
+
+    /*! \fn int run()
+		\brief Start the game loop.
+		\return 0 on success, anything else on failure.
+
+		This loop will continue to run until the exit condition is met.
+		 The exit condition is MonopolyGame::exitGame.
+	*/
     int run();
+
+    /*! \fn void halt()
+		\brief Cleanup the game's resources.
+	*/
     void halt();
 
+    /*! \fn int randomNum(int max)
+		\brief Generate a random number.
+		\param max Integer representing the ceiling for generation.
+		\return A random integer between 1 and \b max.
+	*/
     int randomNum(int max);
 
 private:
@@ -60,10 +94,13 @@ private:
     struct alCamera {
     	float cameraPosition[2]; /*!< X/Y axis position of the camera. */
     	ALLEGRO_TRANSFORM alCameraTransform; /*!< Allegro5 transform flag. */
-    }alCamera;
+    }alCamera; /*!< Camera instance. */
 
     /*! \fn bool mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr)
         \brief Routine for handling the mortgaging of a property.
+        \param prop Property to be purchased.
+        \param plyr Player wishing to purchase the property.
+        \return true on success, false on failure.
 
         This function will handle the mortgaging of a property. First we check ownership.
          If this passes then the property's mortgage value is added to the player's cash supply
@@ -73,6 +110,10 @@ private:
 
     /*! \fn bool purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod)
         \brief Routine for handling the sale of a property.
+        \param prop Property to be purchased.
+        \param plyr Player wishing to purchase the property.
+        \param priceMod Any price bonsues this player might get when purchasing.
+        \return true on success, false on failure.
 
         This function will first check if the property is already owned, if not, it will then
          figure the purchase price minus the passed modifier. This final cost if subtracted from
@@ -80,6 +121,11 @@ private:
     */
     bool purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod);
 
+    /*! \fn void draw()
+        \brief Redrawn the screen.
+
+        Called once per frame to refresh the screen with updates. \see MAX_FPS
+     */
     void draw();
 
     void handleTurn();

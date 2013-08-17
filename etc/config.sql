@@ -107,9 +107,15 @@ INSERT INTO `landing` VALUES (NULL, "Luxury Tax", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 INSERT INTO `landing` VALUES (NULL, "Boardwalk", 400, 200, 200, 200, 50, 200, 600, 1400, 1700, 2000, 4, 8);
 
 
+-- Print the contents of sets
+.schema sets
+SELECT * FROM `sets`;
+
 -- Print the contents of types
+.schema types
 SELECT * FROM `types`;
 
 -- Print the contents of landing
+.schema landing
 SELECT * FROM  `landing` ;
 
