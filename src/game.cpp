@@ -52,11 +52,36 @@ bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr
 	bool success = false;
 	int numPropertiesInSet = 0;
 	std::string tempQuery = "";
-	
+
 	tempQuery = sqlConn.Format( "SELECT COUNT(*) FROM %s WHERE %s = %i", DB_PROPERTY_TABLE, "set_id", prop.get_group() );
-	if(sqlConn.SelectInt(numPropertiesInSet, tempQuery.c_str())) {
-		fprintf(stderr, "SQL QUERY ERROR\n");
-		return -1;
+	if( sqlConn.SelectInt( numPropertiesInSet, tempQuery.c_str() ) ) {
+		fprintf( stderr, "SQL QUERY ERROR: %s\n", tempQuery.c_str() );
+	}
+	
+	// Build a list of the friendly properties.
+	int friendlyProperties[numPropertiesInSet];
+	for( int pCount=0; pCount < numPropertiesInSet; pCount++ ) {
+		if( pCount == 0 ) {
+			friendlyProperties[pCount] = prop.get_id();
+		}
+		else if(pCount == 1){
+			tempQuery = sqlConn.Format( "SELECT %s FROM %s WHERE %s = %i AND %s != %i LIMIT 1", 
+				"id", DB_PROPERTY_TABLE, "set_id", prop.get_group(), "id", prop.get_id() );
+			fprintf( stderr, "Executing: %s\n", tempQuery.c_str() );
+			int tNum = 0;
+			if( sqlConn.SelectInt( tNum, tempQuery.c_str() ) ) {
+				friendlyProperties[pCount] = tNum;
+			}
+		}
+		else {
+			tempQuery = sqlConn.Format( "SELECT %s FROM %s WHERE %s = %i AND %s != %i AND %s != %i LIMIT 1", 
+				"id", DB_PROPERTY_TABLE, "set_id", prop.get_group(), "id", prop.get_id(), "id", friendlyProperties[1]);
+			fprintf( stderr, "Executing: %s\n", tempQuery.c_str() );
+			int tNum = 0;
+			if( sqlConn.SelectInt( tNum, tempQuery.c_str() ) ) {
+				friendlyProperties[pCount] = tNum;
+			}
+		}
 	}
 	
 	// First ensure this player owns this property.
@@ -67,15 +92,6 @@ bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr
 			case PropertyValue::VAL_NULL:
 				// Null type, do nothing.
 				break;
-			case PropertyValue::VAL_OWNED_SET:
-				// Give the player the mortgage value of the property.
-				plyr.set_money( prop.get_mortgagePrice() );
-				// Mark the property as mortgaged.
-				prop.set_isMortgaged( true );
-				// Change the value of this property.
-				prop.set_propertyValue( PropertyValue::VAL_OWNED );
-				success = true;
-				break;
 			case PropertyValue::VAL_OWNED:
 				// Give the player the mortgage value of the property.
 				plyr.set_money( prop.get_mortgagePrice() );
@@ -85,12 +101,69 @@ bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr
 				prop.set_ownedBy( 0 );
 				success = true;
 				break;
+			case PropertyValue::VAL_OWNED_SET:
+				// Give the player the mortgage value of the property.
+				plyr.set_money( prop.get_mortgagePrice() );
+				// Mark the property as mortgaged.
+				prop.set_isMortgaged( true );
+				// Change the value of this property.
+				prop.set_propertyValue( PropertyValue::VAL_OWNED );
+				success = true;
+				break;
 			case PropertyValue::VAL_1_HOUSE:
+				for( int pCount = 0; pCount < numPropertiesInSet; pCount++ ) {
+					// Give the player the mortgage value of the property.
+					int activeProperty = friendlyProperties[pCount];
+					int val = propertyList[activeProperty].get_pricePerHouse();
+					// Give the player the mortgage value of the property.
+					plyr.set_money( val );
+					// Change the value of this property.
+					propertyList[activeProperty].set_propertyValue( PropertyValue::VAL_OWNED_SET );
+				}
+				break;
 			case PropertyValue::VAL_2_HOUSE:
+				for( int pCount = 0; pCount < numPropertiesInSet; pCount++ ) {
+					// Give the player the mortgage value of the property.
+					int activeProperty = friendlyProperties[pCount];
+					int val = propertyList[activeProperty].get_pricePerHouse();
+					// Give the player the mortgage value of the property.
+					plyr.set_money( val );
+					// Change the value of this property.
+					propertyList[activeProperty].set_propertyValue( PropertyValue::VAL_1_HOUSE );
+				}
+				break;
 			case PropertyValue::VAL_3_HOUSE:
+				for( int pCount = 0; pCount < numPropertiesInSet; pCount++ ) {
+					// Give the player the mortgage value of the property.
+					int activeProperty = friendlyProperties[pCount];
+					int val = propertyList[activeProperty].get_pricePerHouse();
+					// Give the player the mortgage value of the property.
+					plyr.set_money( val );
+					// Change the value of this property.
+					propertyList[activeProperty].set_propertyValue( PropertyValue::VAL_2_HOUSE );
+				}
+				break;
 			case PropertyValue::VAL_4_HOUSE:
+				for( int pCount = 0; pCount < numPropertiesInSet; pCount++ ) {
+					// Give the player the mortgage value of the property.
+					int activeProperty = friendlyProperties[pCount];
+					int val = propertyList[activeProperty].get_pricePerHouse();
+					// Give the player the mortgage value of the property.
+					plyr.set_money( val );
+					// Change the value of this property.
+					propertyList[activeProperty].set_propertyValue( PropertyValue::VAL_3_HOUSE );
+				}
+				break;
 			case PropertyValue::VAL_1_HOTEL:
-				//
+				for( int pCount = 0; pCount < numPropertiesInSet; pCount++ ) {
+					// Give the player the mortgage value of the property.
+					int activeProperty = friendlyProperties[pCount];
+					int val = propertyList[activeProperty].get_pricePerHotel();
+					// Give the player the mortgage value of the property.
+					plyr.set_money( val );
+					// Change the value of this property.
+					propertyList[activeProperty].set_propertyValue( PropertyValue::VAL_4_HOUSE );
+				}
 				break;
 		}
 	}
