@@ -34,14 +34,43 @@
 
 class MonopolyProperty {
 public:
+	/*! \fn MonopolyProperty()
+        \brief Class constructor.
+	*/
     MonopolyProperty();
+
+    /*! \fn MonopolyProperty(std::string name, int id, int purchasePrice, int mortgageValue, int pricePerHouse, int pricePerHotel, int rental, int rent1House, int rent2House, int rent3House, int rent4House, int rentHotel)
+        \brief Class constructor w/ overrides
+	*/
     MonopolyProperty(std::string name, int id, int purchasePrice, int mortgageValue, int pricePerHouse, int pricePerHotel, int rental, int rent1House, int rent2House, int rent3House, int rent4House, int rentHotel);
+
+	/*! \fn ~MonopolyProperty()
+        \brief Class destructor.
+	*/
     ~MonopolyProperty();
 
+	/*! \fn void set_isOwned(bool owned)
+        \brief Set the ownership flag for this property.
+        \param owned Boolean variable, true represents owned, false is no owner.
+	*/
     void set_isOwned(bool owned);
+
+	/*! \fn bool get_isOwned()
+        \brief Get the ownership flag for this property.
+        \return true if this property is owned, false if this property has no owner.
+	*/
     bool get_isOwned();
 
+	/*! \fn void set_ownedBy(int ownedBy)
+        \brief Set the ownership id for this property.
+        \param ownedBy Integer representing a player object. \see MonopolyPlayer::get_id()
+	*/
     void set_ownedBy(int ownedBy);
+
+	/*! \fn int get_ownedBy()
+        \brief Get the ownership id for this property.
+        \return Integer representing a player object.
+	*/
     int get_ownedBy();
 
     void set_isMortgaged(bool isMortgaged);
@@ -104,6 +133,12 @@ public:
     void set_y(int y);
     int get_y();
 
+	/*! \fn void cleanup()
+        \brief Release any resources that this object has stored.
+
+        This function will release from memory anything built/stored with Allegro.
+        This is mainly the ALLEGRO_BITMAP objects.
+	*/
     void cleanup();
 
 private:

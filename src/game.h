@@ -128,15 +128,49 @@ private:
      */
     void draw();
 
+    /*! \fn void handleTurn()
+        \brief Perform the necessary routines to get a player through one complete turn.
+     */
     void handleTurn();
 
+    /*! \fn void void handleMove()
+        \brief Handle moving a player's icon around the board.
+
+        This function will either be called in response to a dice roll or a card draw.
+     */
     void handleMove();
 
+    /*! \fn void reset()
+        \brief Completely reset the game back to its initial values.
+     */
     void reset();
 
+    /*! \fn void drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ...)
+        \brief Print a formatted message on the screen.
+        \param col ALLEGRO_COLOR representing the text's foreground color.
+        \param x Begin writing the text at this X-axis location.
+        \param y Begin writing the text at this Y-axis location.
+        \param msg Formatted string representing the message to be displayed.
+     */
     void drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ...);
+
+    /*! \fn void drawTextCen(ALLEGRO_COLOR col, int x, int y, const char *msg, ...)
+        \brief Print a formatted message centered on the screen.
+        \param col ALLEGRO_COLOR representing the text's foreground color.
+        \param x Begin writing the text at this X-axis location.
+        \param y Begin writing the text at this Y-axis location.
+        \param msg Formatted string representing the message to be displayed.
+     */
     void drawTextCen(ALLEGRO_COLOR col, int x, int y, const char *msg, ...);
 
+    /*! \fn void cameraUpdate(float *cameraPosition, float x, float y, int width, int height)
+        \brief Update the camera's position on the screen.
+        \param cameraPosition Float integer array representing the location of the camera.
+        \param x X-axis location of the active player to center the camera on.
+        \param y Y-axis location of the active player to center the camera on.
+        \param width Active player's bitmap image width.
+        \param height Active player's bitmap image height.
+     */
     void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
 
     Database sqlConn; /*!< SQLite3 connection. */

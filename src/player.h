@@ -32,7 +32,15 @@
 
 class MonopolyPlayer {
 public:
+
+	/*! \fn MonopolyPlayer()
+        \brief Class constructor.
+	*/
     MonopolyPlayer();
+
+	/*! \fn ~MonopolyPlayer()
+        \brief Class destructor.
+	*/
     ~MonopolyPlayer();
 
     bool get_passedGo();

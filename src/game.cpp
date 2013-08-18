@@ -655,10 +655,12 @@ int MonopolyGame::init() {
 
 int MonopolyGame::run() {
 
-    al_flip_display();
-
+    // Start the timer's so that revisions are properly drawn.
     al_start_timer( alTimer );
     al_start_timer( alFrameTimer );
+
+	// Perform the first display update.
+    al_flip_display();
 
     while( !exitGame )
     {
@@ -666,12 +668,16 @@ int MonopolyGame::run() {
         al_wait_for_event( alEventQueue, &alEvent );
         al_get_keyboard_state( &alKeyState );
 
+        // If the user clicks the window's 'close (X)' button.
         if( alEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE )
         {
+        	// Exit the game.
             exitGame = true;
         }
+        // Or if the user hits the 'ESC' key.
         else if( al_key_down( &alKeyState, ALLEGRO_KEY_ESCAPE ) )
         {
+        	// Exit the game.
             exitGame = true;
         }
 
@@ -700,10 +706,12 @@ int MonopolyGame::run() {
             // Do some camera transform magic.
             al_identity_transform( &alCamera.alCameraTransform );
 
+            // Adjust the camera so that it is centered over our player's position.
             al_translate_transform( &alCamera.alCameraTransform,
             		-alCamera.cameraPosition[Positions::X_POS],
             		-alCamera.cameraPosition[Positions::Y_POS] );
 
+            // Push the camera's changes.
             al_use_transform( &alCamera.alCameraTransform );
         }
 
