@@ -15,37 +15,49 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*! \file menu.h
+    \brief Menu class header file.
+
+    This header provides a wrapper around creating quick text-based menus.
+*/
+
+#ifndef MENU_H
+#define MENU_H
+
 #include <iostream>
 
-#include "game.h"
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_font.h>
 
-int main(int argc, char **argv) {
+#include "database.h"
 
-    // Create new instance of the MonopolyGame object.
-    MonopolyGame *monopoly = new MonopolyGame();
+class MonopolyMenu {
 
-    // Initialize the Allegro routines
-    if(monopoly->init()) {
-        return -1;
-    }
+public:
+    MonopolyMenu();
+    ~MonopolyMenu();
 
-    // Load Resources
-    if(monopoly->loadResources()) {
-        monopoly->halt();
-        return -1;
-    }
+    void draw();
 
-    // Run the game loop until the exit condition is met.
-    if(monopoly->run()) {
-        monopoly->halt();
-        return -1;
-    }
+    void set_id(int id);
+    int get_id();
 
-    // Cleanup when we are done.
-    monopoly->halt();
+    void set_selection(int sel);
+    int get_selection();
 
-    delete monopoly;
+    int build(int menu_id);
 
-    return 0;
-}
+    void cleanup();
+
+private:
+
+    Database sqlConn;
+    int _id;
+    int _selection;
+    int _entryCount;
+    ALLEGRO_FONT *_fontFile;
+    std::vector <MonopolyMenuEntry> _entries;
+};
+
+#endif // MENU_H
 

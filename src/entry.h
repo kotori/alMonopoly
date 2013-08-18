@@ -15,37 +15,37 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
+/*! \file entry.h
+    \brief Menu entry class header file.
 
-#include "game.h"
+    This header provides the entry object which when grouped together can be drawn as a menu.
+*/
 
-int main(int argc, char **argv) {
+#ifndef ENTRY_H
+#define ENTRY_H
 
-    // Create new instance of the MonopolyGame object.
-    MonopolyGame *monopoly = new MonopolyGame();
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_font.h>
 
-    // Initialize the Allegro routines
-    if(monopoly->init()) {
-        return -1;
-    }
+class MonopolyMenuEntry {
 
-    // Load Resources
-    if(monopoly->loadResources()) {
-        monopoly->halt();
-        return -1;
-    }
+public:
+    MonopolyMenuEntry();
+    ~MonopolyMenuEntry();
 
-    // Run the game loop until the exit condition is met.
-    if(monopoly->run()) {
-        monopoly->halt();
-        return -1;
-    }
+    void set_text(std::string text);
+    std::string get_text();
 
-    // Cleanup when we are done.
-    monopoly->halt();
+    void draw(ALLEGRO_FONT *f);
 
-    delete monopoly;
+private:
 
-    return 0;
-}
+    std::string _text;
+    int _id;
+    float _x;
+    float _y;
+    bool _isSelected;
+};
+
+#endif // ENTRY_H
 
