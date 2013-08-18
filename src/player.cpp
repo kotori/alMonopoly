@@ -179,6 +179,6 @@ void MonopolyPlayer::move(Direction dir) {
 void MonopolyPlayer::draw() {
 	// Create an allegro bitmap reprenting our player's image on the animation index.
 	ALLEGRO_BITMAP *subBitmap = al_create_sub_bitmap( _image, _sourceX, _sourceY * 32, 32, 32 );
-	al_draw_bitmap( subBitmap, _x, _y, NULL );
+	al_draw_bitmap( subBitmap, _x, _y, 0 );
 }
 

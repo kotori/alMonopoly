@@ -21,6 +21,8 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 
 #include "common.h"
 #include "database.h"
@@ -29,12 +31,13 @@
 #include "game.h"
 
 MonopolyGame::MonopolyGame() {
-    // Nullfiy
+    // Nullfiy the Allegro objects.
     alDisplayDevice = NULL;
     alEventQueue = NULL;
     alTimer = NULL;
     alFrameTimer = NULL;
 
+    // Nullify each font in the font collection.
     for(int fCount = 0; fCount < 3; fCount++) {
     	fontCollection[fCount] = NULL;
     }
@@ -454,6 +457,7 @@ void MonopolyGame::drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ..
 	vsprintf( buffer, msg, ap );
 	va_end( ap );
 
+	// First print the shadow, which is slightly off-centered.
 	al_draw_text(
 		fontCollection[0],
 		al_map_rgb( 0, 0, 0 ),
@@ -462,6 +466,7 @@ void MonopolyGame::drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ..
 		NULL,
 		buffer );
 
+	// Finally we print the foreground text.
 	al_draw_text(
 		fontCollection[0],
 		col,
@@ -480,6 +485,7 @@ void MonopolyGame::drawTextCen(ALLEGRO_COLOR col, int x, int y, const char *msg,
 	vsprintf( buffer, msg, ap );
 	va_end( ap );
 
+	// First print the shadow, which is slightly off-centered.
 	al_draw_text(
 			fontCollection[0],
 			al_map_rgb( 0, 0, 0 ),
@@ -488,6 +494,7 @@ void MonopolyGame::drawTextCen(ALLEGRO_COLOR col, int x, int y, const char *msg,
 			ALLEGRO_ALIGN_CENTRE,
 			buffer );
 
+	// Finally we print the foreground text.
 	al_draw_text(
 		fontCollection[0],
 		col,
@@ -517,7 +524,7 @@ void MonopolyGame::draw() {
 		case REACT_PHASE:
 		case POST_TURN:
 			// Draw the board first.
-			al_draw_bitmap( alBoardImage, 0, 0, NULL );
+			al_draw_bitmap( alBoardImage, 0, 0, 0 );
 
 			// Next Draw each of the player's.
 			//  This should be fine tuned later to only draw 'alive' players.
@@ -561,6 +568,7 @@ int MonopolyGame::loadResources() {
 
     // Load the font set.
     sFileName = "DejaVuSans.ttf";
+    // Start building the fonts from 24pt.
     int initialSize = 24;
     for( int fontCounter=0; fontCounter<3; fontCounter++ ) {
         fontCollection[fontCounter] = al_load_font( sFileName.c_str(), initialSize, 0 );
@@ -586,6 +594,7 @@ int MonopolyGame::init() {
     // First set the main loop exit condition to false.
     exitGame = false;
 
+    // Seed the random number generator.
     srand((unsigned)time(0));
 
     activeGameMode = GameMode::EASY;
@@ -615,13 +624,12 @@ int MonopolyGame::init() {
         return -1;
     }
 
-    al_init_image_addon();
+    al_init_image_addon(); // Initialize the image addon.
 
     al_init_font_addon(); // Initialize the font addon.
     al_init_ttf_addon(); // Initialize the ttf (True Type Font) addon.
 
-    al_set_new_display_flags(ALLEGRO_OPENGL);
-    // Gets the biggest resolution supported.
+    // Setup the display device in windowed mode.
     al_set_new_display_flags(ALLEGRO_WINDOWED);
     alDisplayDevice = al_create_display(WINDOW_WIDTH, WINDOW_HEIGHT);
     if(!alDisplayDevice) {
@@ -631,6 +639,7 @@ int MonopolyGame::init() {
         return -1;
     }
 
+    // Create an event queue. This is where timed events, etc are pulled from.
     alEventQueue = al_create_event_queue();
     if(!alEventQueue) {
         fprintf(stderr, "Failed to create Event Queue!\n");
@@ -640,13 +649,16 @@ int MonopolyGame::init() {
         return -1;
     }
 
+    // Register an event source per input.
     al_register_event_source(alEventQueue, al_get_display_event_source(alDisplayDevice));
     al_register_event_source(alEventQueue, al_get_timer_event_source(alTimer));
     al_register_event_source(alEventQueue, al_get_timer_event_source(alFrameTimer));
     al_register_event_source(alEventQueue, al_get_keyboard_event_source());
 
+    // Ensure the mouse cursor is not visible.
     al_hide_mouse_cursor(alDisplayDevice);
 
+    // Set some default values for the camera.
     alCamera.cameraPosition[Positions::X_POS] = 0;
     alCamera.cameraPosition[Positions::Y_POS] = 0;
 
@@ -658,6 +670,7 @@ int MonopolyGame::run() {
     // Start the timer's so that revisions are properly drawn.
     al_start_timer( alTimer );
     al_start_timer( alFrameTimer );
+    fprintf(stderr, "Current turnstate: %i\n", turnState );
 
 	// Perform the first display update.
     al_flip_display();
@@ -752,36 +765,44 @@ void MonopolyGame::handleTurn() {
 
 void MonopolyGame::halt() {
 
+	// Cleanup all properties.
     for(int pCount = 0; pCount < MAX_PROPERTIES; pCount++) {
         propertyList[pCount].cleanup();
     }
 
+    // Cleanup all players.
     for(int pCount = 0; pCount < NUM_PLAYERS; pCount++) {
     	playerList[pCount].cleanup();
     }
 
+    // Free the display device.
     if(alDisplayDevice) {
         al_destroy_display(alDisplayDevice);
     }
 
+    // Free the board image bitmap.
     if(alBoardImage) {
         al_destroy_bitmap(alBoardImage);
     }
 
+    // Free the loaded fonts.
     for(int fCount = 0; fCount < 3; fCount++) {
     	if(fontCollection[fCount]) {
     		al_destroy_font(fontCollection[fCount]);
     	}
     }
 
+    // Free the FPS timer.
     if(alTimer) {
         al_destroy_timer(alTimer);
     }
 
+    // Free the frame timer.
     if(alFrameTimer) {
         al_destroy_timer(alFrameTimer);
     }
 
+    // Finally we will free the event queue.
     if(alEventQueue) {
         al_destroy_event_queue(alEventQueue);
     }
