@@ -24,11 +24,9 @@ SQLite3 C++ Wrapper Header. Contains the framework for the Database class.
 #ifndef DATABASE_H
 #define DATABASE_H
 
-// Default location of the database
-extern std::string DEFAULT_LOC;
+extern std::string DEFAULT_LOC; /*!< String representing the path to the db file. */
 
-// Turn off/on logging
-#define ACTIVE_LOGGING false
+#define ACTIVE_LOGGING false /*!< Logging flag switch. */
 
 #include <sqlite3.h>
 
@@ -137,11 +135,11 @@ private:
     */
     bool Open();
 
-    bool is_open_;
-    bool log_enabled_;
-    std::string db_loc_;
-    sqlite3 *db_;
-    sqlite3_stmt *stmt_;
+    bool is_open_;			/*!< Database is open flag, true if open, false if closed. */
+    bool log_enabled_;		/*!< Logging flag, true if enabled, false is disabled. */
+    std::string db_loc_;	/*!< Internal variable for storing the location of the db. */
+    sqlite3 *db_;			/*!< SQLite3 database connection handle. */
+    sqlite3_stmt *stmt_;	/*!< SQLite3 statement handle. */
 };
 
 #endif // DATABASE_H

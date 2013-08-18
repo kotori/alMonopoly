@@ -141,29 +141,33 @@ private:
 
     Database sqlConn; /*!< SQLite3 connection. */
 
-    int buildPropertyList(); /*!< Populates the propertyList. */
+    /*! \fn int buildPropertyList()
+        \brief Build the property list.
+        \return 0 on success, anything else on failure.
+
+        This function is called to populate the property list from database entries.
+     */
+    int buildPropertyList();
 
     MonopolyProperty propertyList[MAX_PROPERTIES]; /*!< Maximum number of properties. */
 
-    MonopolyPlayer playerList[NUM_PLAYERS];
+    MonopolyPlayer playerList[NUM_PLAYERS];		/*!< Group of player objects. */
 
-    // Allegro5 objects.
-    ALLEGRO_DISPLAY			*alDisplayDevice;
-    ALLEGRO_EVENT_QUEUE		*alEventQueue;
-    ALLEGRO_TIMER			*alTimer;
-    ALLEGRO_TIMER			*alFrameTimer;
-    ALLEGRO_DISPLAY_MODE	alDisplayData;
-    ALLEGRO_KEYBOARD_STATE 	alKeyState;
-    ALLEGRO_FONT			*fontCollection[3];
+    ALLEGRO_DISPLAY			*alDisplayDevice;	/*!< Allegro display device. */
+    ALLEGRO_EVENT_QUEUE		*alEventQueue;		/*!< Allegro event queue. */
+    ALLEGRO_TIMER			*alTimer;			/*!< Allegro FPS timer. */
+    ALLEGRO_TIMER			*alFrameTimer;		/*!< Allegro Animation FPS timer. */
+    ALLEGRO_DISPLAY_MODE	alDisplayData;		/*!< Allegro display data. */
+    ALLEGRO_KEYBOARD_STATE 	alKeyState;			/*!< Current state of the keyboard. */
+    ALLEGRO_FONT			*fontCollection[3];	/*!< Collection of Allegro FONTs. */
 
-    ALLEGRO_BITMAP 			*alBoardImage;
+    ALLEGRO_BITMAP 			*alBoardImage;	/*!< Allegro BITMAP representing the game board. */
 
-    // Actual game objects.
     int playersTurn; 		/*!< Current player's turn. */
     int numPlayers;		/*!< Number of players. */
 
-    GameMode activeGameMode;
-    TurnState turnState;
+    GameMode activeGameMode;	/*!< Tracks the active game mode. */
+    TurnState turnState;		/*!< Tracks the current turn state. */
 
     int doublesRollCounter; /*!< Keeps track the number of times a double was rolled. */
 
