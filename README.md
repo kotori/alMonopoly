@@ -1,10 +1,12 @@
 alMonopoly
 ==========
+
 Monopoly clone using the Allegro5 library.
 
 
 Requirements
 ============
+
 - Allegro5
 - SQLite3
 - Doxygen*
@@ -12,6 +14,7 @@ Requirements
 
 Setup
 =====
-$ make 
-$ make docs
-$ make install
+
+	$ make 
+	$ make docs
+	$ make install
