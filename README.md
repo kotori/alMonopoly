@@ -14,7 +14,7 @@ Requirements
 
 Setup
 =====
-
-	$ make 
+	$ cd ${PROJECT_DIR}/build
+	$ make
 	$ make docs
 	$ make install
