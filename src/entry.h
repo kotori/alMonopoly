@@ -30,21 +30,41 @@
 class MonopolyMenuEntry {
 
 public:
+    /*! \fn MonopolyMenuEntry()
+	\brief Class constructor.
+    */
     MonopolyMenuEntry();
+
+    /*! \fn ~MonopolyMenuEntry()
+	\brief Class destructor.
+    */
     ~MonopolyMenuEntry();
 
+    /*! \fn void set_text(std::string text)
+	\brief Set the text value of this menu entry.
+        \param text std::string representing this entry's text.
+    */
     void set_text(std::string text);
+
+    /*! \fn  std::string get_text()
+	\brief Get the text value of this menu entry.
+        \return std::string value representing this entry's text.
+    */
     std::string get_text();
 
+    /*! \fn void draw(ALLEGRO_FONT *f)
+	\brief Draw this entry to the screen using the passed font file.
+        \param f ALLEGRO_FONT pointer to use to print the text to the screen.
+    */
     void draw(ALLEGRO_FONT *f);
 
 private:
 
-    std::string _text;
-    int _id;
-    float _x;
-    float _y;
-    bool _isSelected;
+    std::string _text;	/*!< std::string value representing this entries text. */
+    int _id;		/*!< This entry's unique ID code. */
+    float _x;		/*!< X position of this entry. */
+    float _y;		/*!< Y position of this entry. */
+    bool _isSelected;	/*!< Selection flag. */
 };
 
 #endif // ENTRY_H

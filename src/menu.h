@@ -31,12 +31,29 @@
 
 #include "database.h"
 
+/*! \class MonopolyMenu
+    \brief Menu class for providing a simple GUI
+
+    This header provides a means for rapidly building a simple gui out of database entries.
+*/
 class MonopolyMenu {
 
 public:
+
+    /*! \fn MonopolyMenu()
+	\brief Menu class constructor.
+    */
     MonopolyMenu();
+
+    /*! \fn ~MonopolyMenu()
+	\brief Menu class destructor.
+    */
     ~MonopolyMenu();
 
+    /*! \fn void draw()
+	\brief Routine to print this menu to the screen. This function will handle
+          printing a colored font depending on the selected menu entry.
+    */
     void draw();
 
     void set_id(int id);
@@ -45,18 +62,26 @@ public:
     void set_selection(int sel);
     int get_selection();
 
+    /*! \fn int build(int menu_id)
+	\brief The build() routine will take a list of database entries and build a complete menu
+	\param menu_id This is a menu's unique ID code. No other menu should share this code.
+	\return 0 on success, anything else on failure.
+    */
     int build(int menu_id);
 
+    /*! \fn void cleanup()
+	\brief Release any stored resources.
+    */
     void cleanup();
 
 private:
 
-    Database sqlConn;
-    int _id;
-    int _selection;
-    int _entryCount;
-    ALLEGRO_FONT *_fontFile;
-    std::vector <MonopolyMenuEntry> _entries;
+    Database sqlConn; /*!< SQLite3 database connection handle. */
+    int _id; /*!< Menu's unique ID. */				
+    int _selection; /*!< Menu entry that is currently selected. */
+    int _entryCount; /*!< Number of entries in this menu. */
+    ALLEGRO_FONT *_fontFile; /*!< Font to use when drawing this menu. */
+    std::vector <MonopolyMenuEntry> _entries; /*!< Group of entries that make us this menu. */
 };
 
 #endif // MENU_H
