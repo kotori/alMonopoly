@@ -56,10 +56,28 @@ public:
     */
     void draw();
 
+    /*! \fn void set_id(int id)
+	\brief Set this menu's unique ID.
+	\param id integer representing this menu's ID code.
+    */
     void set_id(int id);
+
+    /*! \fn int get_id()
+	\brief Set this menu's unique ID.
+	\return Integer representing this menu's ID code.
+    */
     int get_id();
 
+    /*! \fn void set_selection(int sel)
+	\brief Set this menu's currently selected entry.
+	\param sel integer representing this menu's currently selected entry.
+    */
     void set_selection(int sel);
+
+    /*! \fn int get_selection()
+	\brief Get this menu's currently selected entry.
+	\return Integer representing this menu's currently selected entry.
+    */
     int get_selection();
 
     /*! \fn int build(int menu_id)

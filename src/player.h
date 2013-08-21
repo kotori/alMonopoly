@@ -33,17 +33,26 @@
 class MonopolyPlayer {
 public:
 
-	/*! \fn MonopolyPlayer()
+    /*! \fn MonopolyPlayer()
         \brief Class constructor.
-	*/
+    */
     MonopolyPlayer();
 
-	/*! \fn ~MonopolyPlayer()
+    /*! \fn ~MonopolyPlayer()
         \brief Class destructor.
-	*/
+    */
     ~MonopolyPlayer();
 
+    /*! \fn bool get_passedGo()
+        \brief Get true or false based on if this player has just passed GO.
+        \return True if the player passed GO, false if not.
+    */
     bool get_passedGo();
+
+    /*! \fn void set_passedGo(bool passedGo)
+        \brief Set true or false based on if this player has just passed GO.
+        \param passedGo True if the player passed GO, false if not.
+    */
     void set_passedGo(bool passedGo);
 
     int get_id();
@@ -79,11 +88,25 @@ public:
     void set_isMoving(bool moving);
     bool get_isMoving();
 
+    /*! \fn void animationFrameLogic()
+        \brief Perform any logic routines, such as updating the image to display from a tilesheet.
+    */
     void animationFrameLogic();
+
+    /*! \fn void move(Direction dir)
+        \brief Move the player in the chosen direction.
+	\param dir This value represents which direction the player is facing. Pulled from the Direction enum in common.h
+    */
     void move(Direction dir);
 
+    /*! \fn void cleanup()
+        \brief Release any stored resources.
+    */
     void cleanup();
 
+    /*! \fn void draw()
+        \brief Draw this player to the screen.
+    */
     void draw();
 
 private:
