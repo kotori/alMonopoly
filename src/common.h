@@ -55,6 +55,11 @@
 */
 #define NUM_PLAYERS	2
 
+/*! \def MAX_FONTS
+    \brief Global containing the maximum number of font copies to make.
+*/
+#define MAX_FONTS 3
+
 /*! \def DB_PROPERTY_TABLE
     \brief Global containing the name of the property table.
 */

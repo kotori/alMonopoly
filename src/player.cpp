@@ -24,7 +24,7 @@ MonopolyPlayer::MonopolyPlayer() {
 	// Set some default values for our private member variables.
 	//  These will be set appropriately later.
 	_playerType = PlayerType::COMPUTER;
-	_moveSpeed = 5;
+	_moveSpeed = 5.0;
 	_isMoving = false;
 	_image = NULL;
 	_dir = DOWN;
@@ -37,7 +37,7 @@ MonopolyPlayer::MonopolyPlayer() {
 	_y = 0;
 	_sourceX = 0;
 	_sourceY = 0;
-        _moveSpeed = 5;
+	_moveSpeed = 5;
 }
 
 MonopolyPlayer::~MonopolyPlayer() {
@@ -146,15 +146,19 @@ void MonopolyPlayer::set_isMoving(bool moving) {
     _isMoving = moving;
 }
 
-void MonopolyPlayer::animationFrameLogic() {
+void MonopolyPlayer::animationLogic() {
+	// If the player is moving, then increment the x value to the next frame.
 	if(_isMoving)
 		_sourceX += al_get_bitmap_width(_image) / 3;
 	else
 		_sourceX = 32;
 
+	// Ensure the x value isn't outside the width of the image.
+	//  If it is, reset it to 0.
 	if(_sourceX >= al_get_bitmap_width(_image))
 		_sourceX = 0;
 
+	// The y value is based upon the direction of the player.
 	_sourceY = _dir;
 }
 
@@ -182,3 +186,6 @@ void MonopolyPlayer::draw() {
 	al_draw_bitmap( subBitmap, _x, _y, 0 );
 }
 
+void MonopolyPlayer::draw(int x, int y) {
+	al_draw_bitmap( _image, x, y, 0 );
+}

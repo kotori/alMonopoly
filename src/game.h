@@ -38,7 +38,6 @@
     \brief Game class
     This class is used manage the various other classes as well as the Allegro library.
 */
-
 class MonopolyGame {
 
 public:

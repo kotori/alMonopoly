@@ -186,10 +186,10 @@ public:
     */
     void set_isMoving(bool moving);
 
-    /*! \fn void animationFrameLogic()
+    /*! \fn void animationLogic()
         \brief Perform any logic routines, such as updating the image to display from a tilesheet.
     */
-    void animationFrameLogic();
+    void animationLogic();
 
     /*! \fn void move(Direction dir)
         \brief Move the player in the chosen direction.
@@ -207,9 +207,16 @@ public:
     */
     void draw();
 
+    /*! \fn void draw(int x, int y)
+    	\brief Draw this player to the screen at the specified coordinates.
+    	\param x Integer X-axis coordinate.
+    	\param y Integer Y-axis coordinate.
+     */
+    void draw(int x, int y);
+
 private:
 
-    int _moveSpeed; /*!< Rate of movement. */
+    float _moveSpeed; /*!< Rate of movement. */
     bool _isMoving; /*!< Flag for handling movement. */
 
     ALLEGRO_BITMAP *_image; /*!< Bitmap tilesheet image representing the player. */

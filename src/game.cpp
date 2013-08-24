@@ -36,14 +36,14 @@ MonopolyGame::MonopolyGame() {
     alEventQueue = NULL;
     alTimer = NULL;
     alFrameTimer = NULL;
+    alBoardImage = NULL;
 
     // Nullify each font in the font collection.
-    for(int fCount = 0; fCount < 3; fCount++) {
+    for(int fCount = 0; fCount < MAX_FONTS; fCount++) {
     	fontCollection[fCount] = NULL;
     }
 
-    alBoardImage = NULL;
-
+    // Reset the camera position.
     alCamera.cameraPosition[Positions::X_POS] = 0;
     alCamera.cameraPosition[Positions::Y_POS] = 0;
 }
@@ -53,25 +53,28 @@ MonopolyGame::~MonopolyGame() {
 }
 
 void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int width, int height) {
+	// Set the camera's x and y axis to be centered around the passed x and y values.
     cameraPosition[Positions::X_POS] = -(WINDOW_WIDTH / 2) + (x + width / 2);
     cameraPosition[Positions::Y_POS] = -(WINDOW_HEIGHT / 2) + (y + height / 2);
 
+    // If the camera's x position is less than 0 reset the position.
     if(cameraPosition[Positions::X_POS] < 0) {
         cameraPosition[Positions::X_POS] = 0;
     }
-
+    // If the camera's y position is less than 0 reset the position.
     if(cameraPosition[Positions::Y_POS] < 0) {
         cameraPosition[Positions::Y_POS] = 0;
     }
 }
 
 bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr) {
-	// TODO: This needs to be wrapped into a property management class.
-	// 		  There is too much grouping that needs to be done.
+	// Keep track of errors.
 	bool success = false;
+	// Set the number of properties in this set.
 	int numPropertiesInSet = 0;
-	std::string tempQuery = "";
 
+	std::string tempQuery = "";
+	// Select the number of properties that are in the same color group as the passed property.
 	tempQuery = sqlConn.Format( "SELECT COUNT(*) FROM %s WHERE %s = %i", DB_PROPERTY_TABLE, "set_id", prop.get_group() );
 	if( sqlConn.SelectInt( numPropertiesInSet, tempQuery.c_str() ) ) {
 		fprintf( stderr, "SQL QUERY ERROR: %s\n", tempQuery.c_str() );
@@ -190,11 +193,12 @@ bool MonopolyGame::mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr
 }
 
 bool MonopolyGame::purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod) {
-	
+	// Keep track of errors.
 	bool success = false;
 	
 	// If the property is not already owned.
 	if( !prop.get_isOwned() ) {
+		// Keep track of the player's money.
 		int pMoney = plyr.get_money();
 
 		// Now we will check if this property is mortgaged and work with that price.
@@ -232,6 +236,9 @@ bool MonopolyGame::purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr
 			}
 		}
 	}
+	else {
+		fprintf( stderr, "Player: %i already owns this property!\n", plyr.get_id() );
+	}
 	// The property has not been sold.
 	return success;
 }
@@ -243,9 +250,14 @@ int MonopolyGame::buildPropertyList() {
 
     fprintf(stderr, "Preparing to build properties...\n");
 
-    for( int propertyCount=0; propertyCount<MAX_PROPERTIES; propertyCount++ ) {
+    // Since the entries in the database are offset use this variable to store that new offset.
+    int tCounter = 0;
+    int offset = 1;
+    // Extract attributes for each property in the database.
+    for( int propertyCount = 0; propertyCount < MAX_PROPERTIES; propertyCount++ ) {
+    	tCounter = propertyCount + offset;
         // Set NAME
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "name", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "name", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectStr(tempString, tempQuery.c_str())) {
             propertyList[propertyCount].set_name(tempString);
         }
@@ -254,7 +266,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set ID
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "id", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "id", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_id(tempNum);
         }
@@ -263,7 +275,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set RENT
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_rent(tempNum);
         }
@@ -272,7 +284,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set PURCHASE PRICE
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "price", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "price", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_rent(tempNum);
         }
@@ -281,7 +293,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set MORTGAGE PRICE
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "mortgage", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "mortgage", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_mortgagePrice(tempNum);
         }
@@ -290,7 +302,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set PRICE PER HOUSE
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_house", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_pricePerHouse(tempNum);
         }
@@ -299,7 +311,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set PRICE PER HOTEL
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_hotel", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "per_hotel", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_pricePerHotel(tempNum);
         }
@@ -308,7 +320,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set RENT FOR HOTEL
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_hotel", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_hotel", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_rentHotel(tempNum);
         }
@@ -317,7 +329,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set RENT FOR 1 HOUSE
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_1_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_1_house", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_rent1House(tempNum);
         }
@@ -326,7 +338,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set RENT FOR 2 HOUSES
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_2_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_2_house", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_rent2House(tempNum);
         }
@@ -335,7 +347,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set RENT FOR 3 HOUSES
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_3_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_3_house", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_rent3House(tempNum);
         }
@@ -344,7 +356,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set RENT FOR 4 HOUSES
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_4_house", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "rent_4_house", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_rent4House(tempNum);
         }
@@ -353,7 +365,7 @@ int MonopolyGame::buildPropertyList() {
             return -1;
         }
         // Set x location.
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "x", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "x", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_x(tempNum);
         }
@@ -362,7 +374,7 @@ int MonopolyGame::buildPropertyList() {
             //return -1;
         }
         // Set y location.
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "y", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "y", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             propertyList[propertyCount].set_y(tempNum);
         }
@@ -372,7 +384,7 @@ int MonopolyGame::buildPropertyList() {
         }
 
         // Set the property Type.
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "type", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "type", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
             switch(tempNum) {
             case TYPE_RAILROAD:
@@ -399,7 +411,7 @@ int MonopolyGame::buildPropertyList() {
         }
         
         
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "set_id", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "set_id", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectInt(tempNum, tempQuery.c_str())) {
         	propertyList[propertyCount].set_group(tempNum);
         }
@@ -408,7 +420,7 @@ int MonopolyGame::buildPropertyList() {
         	return -1;
         }
         
-        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "set_id", DB_PROPERTY_TABLE, "id", propertyCount+1);
+        tempQuery = sqlConn.Format("SELECT %s FROM %s WHERE %s = %i", "set_id", DB_PROPERTY_TABLE, "id", tCounter);
         if(!sqlConn.SelectStr(tempString, tempQuery.c_str())) {
            	propertyList[propertyCount].set_groupName(tempString);
         }
@@ -426,8 +438,12 @@ int MonopolyGame::buildPropertyList() {
 
 // This should be called everytime the game is reset.
 void MonopolyGame::reset() {
+
+	fprintf( stderr, "Resetting Game.\n");
+
     playersTurn = 0;
 
+    // Reset each player attribute.
     for(int pCount = 0; pCount < NUM_PLAYERS; pCount++) {
         playerList[pCount].set_location(0);
         playerList[pCount].set_score(0);
@@ -441,6 +457,13 @@ void MonopolyGame::reset() {
         else if(activeGameMode == GameMode::DIFFICULT) {
             playerList[pCount].set_money(1500);
         }
+    }
+
+    // Reset each property attribute.
+    for(int pCount = 0; pCount < MAX_PROPERTIES; pCount++) {
+    	propertyList[pCount].set_isMortgaged(false);
+    	propertyList[pCount].set_isOwned(false);
+    	propertyList[pCount].set_ownedBy(0);
     }
 }
 
@@ -458,11 +481,12 @@ void MonopolyGame::drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ..
 	va_end( ap );
 
 	// First print the shadow, which is slightly off-centered.
+	int offset = 2;
 	al_draw_text(
 		fontCollection[0],
 		al_map_rgb( 0, 0, 0 ),
-		x+2,
-		y+2,
+		x + offset,
+		y + offset,
 		NULL,
 		buffer );
 
@@ -486,13 +510,14 @@ void MonopolyGame::drawTextCen(ALLEGRO_COLOR col, int x, int y, const char *msg,
 	va_end( ap );
 
 	// First print the shadow, which is slightly off-centered.
+	int offset = 2;
 	al_draw_text(
-			fontCollection[0],
-			al_map_rgb( 0, 0, 0 ),
-			x+2,
-			y+2,
-			ALLEGRO_ALIGN_CENTRE,
-			buffer );
+		fontCollection[0],
+		al_map_rgb( 0, 0, 0 ),
+		x + offset,
+		y + offset,
+		ALLEGRO_ALIGN_CENTRE,
+		buffer );
 
 	// Finally we print the foreground text.
 	al_draw_text(
@@ -509,7 +534,7 @@ void MonopolyGame::draw() {
 	// Based upon the current turnstate we will display different things.
 	switch(turnState) {
 		case NULL_STATE:
-			drawTextCen( al_map_rgb( 255, 0, 0 ), WINDOW_WIDTH/2, WINDOW_HEIGHT/2, "MONOPOLY!" );
+			drawTextCen( al_map_rgb( 255, 0, 0 ), WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, "MONOPOLY!" );
 			break;
 		case PRE_GAME:
 			// This is where I need to implement a 'menu class' for user input.
@@ -528,7 +553,7 @@ void MonopolyGame::draw() {
 
 			// Next Draw each of the player's.
 			//  This should be fine tuned later to only draw 'alive' players.
-			for( int playerCounter = 0; playerCounter < numPlayers; playerCounter++) {
+			for( int playerCounter = 0; playerCounter < numPlayers; playerCounter++ ) {
 				playerList[playersTurn].draw();
 			}
 			break;
@@ -540,9 +565,9 @@ void MonopolyGame::draw() {
 	//
 	// Print some debugging info.
 	//
-	drawText( al_map_rgb( 255, 255, 255 ), 0, 0, "Num. of Players: %i", numPlayers );
-	drawText( al_map_rgb( 255, 255, 255 ), 0, 32, "Current Player: %i", playersTurn );
-	drawText( al_map_rgb( 255, 255, 255 ), 0, 64, "Current Player's Money: $%i", playerList[playersTurn].get_money() );
+	drawText( al_map_rgb( 0, 200, 240 ), 0, 0, "Num. of Players: %i", numPlayers );
+	drawText( al_map_rgb( 0, 200, 240 ), 0, 32, "Current Player: %i", playersTurn );
+	drawText( al_map_rgb( 0, 200, 240 ), 0, 64, "Current Player's Money: $%i", playerList[playersTurn].get_money() );
 
 	// Next, we flip the display to make the changes visible,
 	//  and clear the background before we print again.
@@ -570,7 +595,7 @@ int MonopolyGame::loadResources() {
     sFileName = "DejaVuSans.ttf";
     // Start building the fonts from 24pt.
     int initialSize = 24;
-    for( int fontCounter=0; fontCounter<3; fontCounter++ ) {
+    for( int fontCounter = 0; fontCounter < MAX_FONTS; fontCounter++ ) {
         fontCollection[fontCounter] = al_load_font( sFileName.c_str(), initialSize, 0 );
         initialSize += 10;
         if( !fontCollection[fontCounter] ) {
@@ -667,6 +692,9 @@ int MonopolyGame::init() {
 
 int MonopolyGame::run() {
 
+	// Reset the game's run data.
+	reset();
+
     // Start the timer's so that revisions are properly drawn.
     al_start_timer( alTimer );
     al_start_timer( alFrameTimer );
@@ -700,7 +728,10 @@ int MonopolyGame::run() {
             if( alEvent.timer.source == alTimer )
             {
             	// We will update the camera position only if the timer has been triggered.
-            	cameraUpdate( alCamera.cameraPosition, playerList[playersTurn].get_x(), playerList[playersTurn].get_y(), 32, 32 );
+            	cameraUpdate( alCamera.cameraPosition, // X and Y location of the camera.
+            		playerList[playersTurn].get_x(), // Player's x position.
+            		playerList[playersTurn].get_y(), // Player's y position.
+            		32, 32 ); // Width and height of player's image.
             }
 
             else if( alEvent.timer.source == alFrameTimer )
@@ -709,7 +740,7 @@ int MonopolyGame::run() {
 					// If this player has more than '0' money.
 					if( playerList[pCounter].get_money() > 0 ) {
 						// For each player, update the image we will display this frame.
-						playerList[pCounter].animationFrameLogic();
+						playerList[pCounter].animationLogic();
 					}
 				}
             }
@@ -721,8 +752,8 @@ int MonopolyGame::run() {
 
             // Adjust the camera so that it is centered over our player's position.
             al_translate_transform( &alCamera.alCameraTransform,
-            		-alCamera.cameraPosition[Positions::X_POS],
-            		-alCamera.cameraPosition[Positions::Y_POS] );
+            	-alCamera.cameraPosition[Positions::X_POS],
+            	-alCamera.cameraPosition[Positions::Y_POS] );
 
             // Push the camera's changes.
             al_use_transform( &alCamera.alCameraTransform );
@@ -786,7 +817,7 @@ void MonopolyGame::halt() {
     }
 
     // Free the loaded fonts.
-    for(int fCount = 0; fCount < 3; fCount++) {
+    for(int fCount = 0; fCount < MAX_FONTS; fCount++) {
     	if(fontCollection[fCount]) {
     		al_destroy_font(fontCollection[fCount]);
     	}
