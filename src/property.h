@@ -73,64 +73,244 @@ public:
 	*/
     int get_ownedBy();
 
+    /*! \fn void set_isMortgaged(bool isMortgaged)
+        \brief Set true or false based on if this property has been mortgaged.
+        \param isMortgaged True if the property is mortgaged. False if not.
+    */
     void set_isMortgaged(bool isMortgaged);
+
+    /*! \fn bool get_isMortgaged()
+        \brief Get true or false based on if this property has been mortgaged.
+        \return True if the property is mortgaged. False if not.
+    */
     bool get_isMortgaged();
 
+    /*! \fn void set_group(int group)
+        \brief Set this property's group id.
+        \param group Integer representing this property's group.
+    */
     void set_group(int group);
+
+    /*! \fn int get_group()
+        \brief Get this property's group id.
+        \return Integer representing this property's group.
+    */
     int get_group();
 
+    /*! \fn void set_groupName(std::string groupName)
+        \brief Set this property group's name.
+        \param groupName std::string representing this property group's name.
+    */
     void set_groupName(std::string groupName);
+
+    /*! \fn std::string get_groupName()
+        \brief Get this property group's name.
+        \return std::string representing this property group's name.
+    */
     std::string get_groupName();
 
+    /*! \fn void set_propertyType(PropertyType newType)
+        \brief Set this property's type enumerator.
+        \param newType PropertyType enumerator.
+    */
     void set_propertyType(PropertyType newType);
+
+    /*! \fn PropertyType get_propertyType()
+        \brief Get this property's type enumerator.
+        \return PropertyType enumerator.
+    */
     PropertyType get_propertyType();
 
+    /*! \fn void set_propertyValue(PropertyValue newValue)
+        \brief Set this property's value enumerator.
+        \param newValue PropertyValue value enumerator.
+    */
     void set_propertyValue(PropertyValue newValue);
+
+    /*! \fn PropertyValue get_propertyValue()
+        \brief Get this property's type enumerator.
+        \return PropertyValue value enumerator.
+    */
     PropertyValue get_propertyValue();
 
+    /*! \fn void set_id(int id)
+        \brief Set this property's unique ID.
+        \param id Integer representing this property's ID.
+    */
     void set_id(int id);
+
+    /*! \fn int get_id()
+        \brief Get this property's unique ID.
+        \return Integer representing this property's ID.
+    */
     int get_id();
 
+    /*! \fn void set_name(std::string name)
+        \brief Set this property's name.
+        \param name std::string representing this property's name.
+    */
     void set_name(std::string name);
+
+    /*! \fn std::string get_name()
+        \brief Set this property's name.
+        \return A std::string representing this property's name.
+    */
     std::string get_name();
 
+    /*! \fn void set_purchasePrice(int money)
+        \brief Set this property's purchase price.
+        \param money Integer representing this property's value.
+    */
     void set_purchasePrice(int money);
+
+    /*! \fn int get_purchasePrice()
+        \brief Get this property's purchase price.
+        \return Integer representing this property's value.
+    */
     int get_purchasePrice();
 
+    /*! \fn void set_mortgagePrice(int money)
+        \brief Set this property's mortgage price.
+        \param money Integer representing this property's mortgage value.
+    */
     void set_mortgagePrice(int money);
+
+    /*! \fn int get_mortgagePrice()
+        \brief Get this property's mortgage price.
+        \return Integer representing this property's mortgage value.
+    */
     int get_mortgagePrice();
 
+    /*! \fn void set_pricePerHouse(int money)
+        \brief Set the price to purchase a house on this property.
+        \param money Integer representing the price for one house.
+    */
     void set_pricePerHouse(int money);
+
+    /*! \fn int get_pricePerHouse()
+        \brief Get the price to purchase a house on this property.
+        \return Integer representing the price for one house.
+    */
     int get_pricePerHouse();
 
+    /*! \fn void set_pricePerHotel(int money)
+        \brief Set the price to purchase a hotel on this property.
+        \param money Integer representing the price for one hotel.
+    */
     void set_pricePerHotel(int money);
+
+    /*! \fn int get_pricePerHotel()
+        \brief Get the price to purchase a hotel on this property.
+        \return Integer representing the price for one hotel.
+    */
     int get_pricePerHotel();
 
+    /*! \fn void set_image(ALLEGRO_BITMAP *image)
+        \brief Set this property's image.
+        \param image ALLEGRO_BITMAP pointer representing this property's image.
+    */
     void set_image(ALLEGRO_BITMAP *image);
+
+    /*! \fn ALLEGRO_BITMAP *get_image()
+        \brief Get this property's image.
+        \return ALLEGRO_BITMAP pointer representing this property's image.
+    */
     ALLEGRO_BITMAP *get_image();
 
+    /*! \fn void set_rent(int money)
+        \brief Set the rent of this property if its undeveloped.
+        \param money Integer representing the rent of this property.
+    */
     void set_rent(int money);
+
+    /*! \fn int get_rent()
+        \brief Get the rent of this property if its undeveloped.
+        \return Integer Integer representing the rent of this property.
+    */
     int get_rent();
 
+    /*! \fn void set_rent1House(int money)
+        \brief Set the rent of this property if it has one house on it.
+        \param money Integer representing the rent of this property.
+    */
     void set_rent1House(int money);
+
+    /*! \fn int get_rent1House()
+        \brief Get the rent of this property if it has one house on it.
+        \return Integer representing the rent of this property.
+    */
     int get_rent1House();
 
+    /*! \fn void set_rent2House(int money)
+        \brief Set the rent of this property if it has two houses on it.
+        \param money Integer representing the rent of this property.
+    */
     void set_rent2House(int money);
+
+    /*! \fn int get_rent2House()
+        \brief Get the rent of this property if it has two houses on it.
+        \return Integer representing the rent of this property.
+    */
     int get_rent2House();
 
+    /*! \fn void set_rent3House(int money)
+        \brief Set the rent of this property if it has three houses on it.
+        \param money Integer representing the rent of this property.
+    */
     void set_rent3House(int money);
+
+    /*! \fn int get_rent3House()
+        \brief Get the rent of this property if it has three houses on it.
+        \return Integer representing the rent of this property.
+    */
     int get_rent3House();
 
+    /*! \fn void set_rent4House(int money)
+        \brief Set the rent of this property if it has four houses on it.
+        \param money Integer representing the rent of this property.
+    */
     void set_rent4House(int money);
+
+    /*! \fn int get_rent4House()
+        \brief Get the rent of this property if it has four houses on it.
+        \return Integer representing the rent of this property.
+    */
     int get_rent4House();
 
+    /*! \fn void set_rentHotel(int money)
+        \brief Set the rent of this property if it has one hotel on it.
+        \param money Integer representing the rent of this property.
+    */
     void set_rentHotel(int money);
+
+    /*! \fn int get_rentHotel()
+        \brief Get the rent of this property if it has one hotel on it.
+        \return Integer representing the rent of this property.
+    */
     int get_rentHotel();
 
+    /*! \fn void set_x(int x)
+        \brief Set the property's X coordinate location.
+        \param x Integer representing this property's location.
+    */
     void set_x(int x);
+
+    /*! \fn int get_x()
+        \brief Get the property's X coordinate location.
+        \return Integer representing this property's location.
+    */
     int get_x();
 
+    /*! \fn void set_y(int y)
+        \brief Set the property's Y coordinate location.
+        \param y Integer representing this property's location.
+    */
     void set_y(int y);
+
+    /*! \fn int get_y()
+        \brief Get the property's Y coordinate location.
+        \return Integer representing this property's location.
+    */
     int get_y();
 
 	/*! \fn void cleanup()

@@ -35,6 +35,7 @@
     \brief Menu class for providing a simple GUI
 
     This header provides a means for rapidly building a simple gui out of database entries.
+    \see MonopolyMenuEntry
 */
 class MonopolyMenu {
 

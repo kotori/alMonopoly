@@ -29,7 +29,6 @@
     \brief Player class
     This class is used to build up a player.
 */
-
 class MonopolyPlayer {
 public:
 
@@ -55,38 +54,137 @@ public:
     */
     void set_passedGo(bool passedGo);
 
+    /*! \fn int get_id()
+        \brief Get the player's ID.
+        \return Integer representing this player's ID.
+    */
     int get_id();
+
+    /*! \fn void set_id(int id)
+        \brief Set the player's ID.
+        \param id Integer representing this player's ID.
+    */
     void set_id(int id);
 
+    /*! \fn int get_money()
+        \brief Get the player's money value.
+        \return Integer representing this player's cash.
+    */
     int get_money();
+
+    /*! \fn int set_money()
+        \brief Set the player's money value.
+        \param money Integer representing this player's cash.
+    */
     void set_money(int money);
 
+    /*! \fn int get_score()
+        \brief Get the player's score.
+        \return Integer representing this player's score
+    */
     int get_score();
+
+    /*! \fn void set_score(int score)
+        \brief Set the player's score.
+        \param score Integer representing this player's score.
+    */
     void set_score(int score);
 
+    /*! \fn int get_location()
+        \brief Get the player's current location represented as a single integer.
+        \return Integer representing this player's location.
+    */
     int get_location();
+
+    /*! \fn void set_location(int location)
+        \brief Set the player's current location represented as a single integer.
+        \param location Integer representing this player's location.
+    */
     void set_location(int location);
 
+    /*! \fn float get_x()
+        \brief Get the player's current location represented as an X coordinate.
+        \return Float number representing this player's location.
+    */
     float get_x();
+
+    /*! \fn void set_x(float x)
+        \brief Set the player's current location represented as an X coordinate.
+        \param x Float number representing this player's location.
+    */
     void set_x(float x);
 
+    /*! \fn float get_y()
+        \brief Get the player's current location represented as an Y coordinate.
+        \return Float number representing this player's location.
+    */
     float get_y();
+
+    /*! \fn void set_y(float y)
+        \brief Set the player's current location represented as an Y coordinate.
+        \param y Float number representing this player's location.
+    */
     void set_y(float y);
 
+    /*! \fn int get_animationX()
+        \brief Get the X coordinate location of this player in the image tilesheet.
+        \return Integer X coordinate location.
+    */
     int get_animationX();
+
+    /*! \fn void set_animationX(int sourceX)
+        \brief Get the X coordinate location of this player in the image tilesheet.
+        \param sourceX Integer representing this player's location.
+    */
     void set_animationX(int sourceX);
 
+    /*! \fn int get_animationY()
+        \brief Get the Y coordinate location of this player in the image tilesheet.
+        \return Integer Y coordinate location.
+    */
     int get_animationY();
+
+    /*! \fn void set_animationY(int sourceY)
+        \brief Get the Y coordinate location of this player in the image tilesheet.
+        \param sourceY Integer representing this player's location.
+    */
     void set_animationY(int sourceY);
 
+    /*! \fn ALLEGRO_BITMAP* get_image()
+        \brief Get the Allegro bitmap representing this player's image.
+        \return ALLEGRO_BITMAP pointer.
+    */
     ALLEGRO_BITMAP* get_image();
+
+    /*! \fn void set_image(ALLEGRO_BITMAP *image)
+        \brief Set the Allegro bitmap representing this player's image.
+        \return image ALLEGRO_BITMAP pointer.
+    */
     void set_image(ALLEGRO_BITMAP *image);
 
+    /*! \fn Direction get_direction()
+        \brief Get the player's current direction.
+        \return Direction enumerator.
+    */
     Direction get_direction();
+
+    /*! \fn void set_direction(Direction dir)
+        \brief Set the player's current direction.
+        \return dir Direction enumerator.
+    */
     void set_direction(Direction dir);
 
-    void set_isMoving(bool moving);
+    /*! \fn bool get_isMoving()
+        \brief Get the flag for movement.
+        \return Boolean value representing movement. True if moving, false if still.
+    */
     bool get_isMoving();
+
+    /*! \fn void set_isMoving(bool moving)
+        \brief Get the flag for movement.
+        \return moving Boolean value representing movement. True if moving, false if still.
+    */
+    void set_isMoving(bool moving);
 
     /*! \fn void animationFrameLogic()
         \brief Perform any logic routines, such as updating the image to display from a tilesheet.
@@ -95,7 +193,7 @@ public:
 
     /*! \fn void move(Direction dir)
         \brief Move the player in the chosen direction.
-	\param dir This value represents which direction the player is facing. Pulled from the Direction enum in common.h
+		\param dir This value represents which direction the player is facing. Pulled from the Direction enum in common.h
     */
     void move(Direction dir);
 
@@ -105,7 +203,7 @@ public:
     void cleanup();
 
     /*! \fn void draw()
-        \brief Draw this player to the screen.
+		\brief Draw this player to the screen.
     */
     void draw();
 

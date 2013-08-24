@@ -27,6 +27,12 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 
+/*! \class MonopolyMenuEntry
+    \brief Menu entry class for building a gui.
+
+    This header provides a means for rapidly building a simple gui out of database entries.
+    \see MonopolyMenu
+*/
 class MonopolyMenuEntry {
 
 public:
