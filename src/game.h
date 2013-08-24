@@ -192,11 +192,12 @@ private:
     ALLEGRO_TIMER			*alFrameTimer;		/*!< Allegro Animation FPS timer. */
     ALLEGRO_DISPLAY_MODE	alDisplayData;		/*!< Allegro display data. */
     ALLEGRO_KEYBOARD_STATE 	alKeyState;			/*!< Current state of the keyboard. */
-    ALLEGRO_FONT			*fontCollection[3];	/*!< Collection of Allegro FONTs. */
+    ALLEGRO_FONT			*fontCollection[MAX_FONTS];	/*!< Collection of Allegro FONTs. */
 
     ALLEGRO_BITMAP 			*alBoardImage;	/*!< Allegro BITMAP representing the game board. */
+    ALLEGRO_BITMAP 			*alpieceImages[PLAYER_PIECES_COUNT];	/*!< Allegro BITMAP representing the game board. */
 
-    int playersTurn; 		/*!< Current player's turn. */
+    int playersTurn;	/*!< Current player's turn. */
     int numPlayers;		/*!< Number of players. */
 
     GameMode activeGameMode;	/*!< Tracks the active game mode. */

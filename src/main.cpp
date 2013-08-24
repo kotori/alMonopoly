@@ -31,12 +31,14 @@ int main(int argc, char **argv) {
 
     // Load Resources
     if(monopoly->loadResources()) {
+    	fprintf( stderr, "Failed loading the necessary resources!\nExiting Now!\n" );
         monopoly->halt();
         return -1;
     }
 
     // Run the game loop until the exit condition is met.
     if(monopoly->run()) {
+    	fprintf( stderr, "A fatal gameplay error has occurred!\nExiting Now!\n" );
         monopoly->halt();
         return -1;
     }

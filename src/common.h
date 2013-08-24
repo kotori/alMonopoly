@@ -70,6 +70,29 @@
 */
 #define DB_GROUP_TABLE		"sets"
 
+/*! \def DB_PIECES_TABLE
+    \brief Global containing the name of the player pieces table.
+*/
+#define DB_PIECES_TABLE		"pieces"
+
+/*! \def PLAYER_PIECES_COUNT
+    \brief Number of piece to load into memory.
+*/
+# define PLAYER_PIECES_COUNT 6
+
+/*! \enum PlayerPieces
+    \brief List of different game pieces a player can choose from.
+*/
+enum PlayerPiece {
+	PIECE_BOAT = 0,		/*!< The Battleship. */
+	PIECE_HAT = 1,		/*!< The Tophat. */
+	PIECE_DOG = 2,		/*!< The Dog. */
+	PIECE_THIMBLE = 3,	/*!< The Thimble. */
+	PIECE_IRON = 4,		/*!< The Iron. */
+	PIECE_CAR = 5		/*!< The Car. */
+};
+
+
 /*! \enum GameMode
     \brief List of possible game modes.
 */

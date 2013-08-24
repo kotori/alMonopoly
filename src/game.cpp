@@ -43,6 +43,11 @@ MonopolyGame::MonopolyGame() {
     	fontCollection[fCount] = NULL;
     }
 
+    // Nullify each player piece.
+    for(int ppCount = 0; ppCount < PLAYER_PIECES_COUNT; ppCount++) {
+    	alpieceImages[ppCount] = NULL;
+    }
+
     // Reset the camera position.
     alCamera.cameraPosition[Positions::X_POS] = 0;
     alCamera.cameraPosition[Positions::Y_POS] = 0;
@@ -604,6 +609,28 @@ int MonopolyGame::loadResources() {
         }
     }
 
+    // Now load the possible player pieces into memory.
+    //  The piece file locations are stored in the database.
+    for( int pieceCounter = 0; pieceCounter < PLAYER_PIECES_COUNT; pieceCounter++ ) {
+    	std::string tempQuery = "";
+    	std::string filepath = "";
+    	tempQuery = sqlConn.Format( "SELECT %s FROM %s WHERE %s = %i", "path", DB_PIECES_TABLE, "id", pieceCounter );
+    	if( !sqlConn.SelectStr( filepath, tempQuery.c_str() ) ) {
+    		// Load the bitmap from the filename from above.
+    		alpieceImages[pieceCounter] = al_load_bitmap( filepath.c_str() );
+    		if( !alpieceImages[pieceCounter] ) {
+    			fprintf( stderr, "Failed loading Bitmap: %s\n", filepath.c_str() );
+    			return -1;
+    		}
+    	}
+    	else {
+    		fprintf( stderr, "SQL QUERY ERROR: %s\n", tempQuery.c_str() );
+    		return -1;
+    	}
+
+
+    }
+
     // Finally we will pull the property list from the database.
     if( buildPropertyList() )
     {
@@ -814,6 +841,13 @@ void MonopolyGame::halt() {
     // Free the board image bitmap.
     if(alBoardImage) {
         al_destroy_bitmap(alBoardImage);
+    }
+
+    // Nullify each player piece.
+    for(int ppCount = 0; ppCount < PLAYER_PIECES_COUNT; ppCount++) {
+    	if(alpieceImages[ppCount]) {
+    		al_destroy_bitmap(alpieceImages[ppCount]);
+    	}
     }
 
     // Free the loaded fonts.

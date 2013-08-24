@@ -5,6 +5,23 @@
 
 
 -- Drop the table first to prevent conflicting data.
+DROP TABLE IF EXISTS `pieces`;
+
+-- Create pieces table for loading the piece images.
+CREATE TABLE `pieces` (
+    `id` INTEGER PRIMARY KEY,
+    `path` TEXT
+);
+
+-- Populate pieces table.
+INSERT INTO `pieces` VALUES (0, "boat.png");
+INSERT INTO `pieces` VALUES (1, "hat.png");
+INSERT INTO `pieces` VALUES (2, "dog.png");
+INSERT INTO `pieces` VALUES (3, "thimble.png");
+INSERT INTO `pieces` VALUES (4, "iron.png");
+INSERT INTO `pieces` VALUES (5, "car.png");
+
+-- Drop the table first to prevent conflicting data.
 DROP TABLE IF EXISTS `sets`;
 
 -- Create sets table for grouping colors.
@@ -106,6 +123,9 @@ INSERT INTO `landing` VALUES (NULL, "Park Place", 350, 200, 200, 175, 35, 175, 5
 INSERT INTO `landing` VALUES (NULL, "Luxury Tax", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0);
 INSERT INTO `landing` VALUES (NULL, "Boardwalk", 400, 200, 200, 200, 50, 200, 600, 1400, 1700, 2000, 4, 8);
 
+-- Print the contents of pieces
+.schema pieces
+SELECT * FROM `pieces`;
 
 -- Print the contents of sets
 .schema sets
