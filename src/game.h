@@ -195,7 +195,7 @@ private:
     ALLEGRO_FONT			*fontCollection[MAX_FONTS];	/*!< Collection of Allegro FONTs. */
 
     ALLEGRO_BITMAP 			*alBoardImage;	/*!< Allegro BITMAP representing the game board. */
-    ALLEGRO_BITMAP 			*alpieceImages[PLAYER_PIECES_COUNT];	/*!< Allegro BITMAP representing the game board. */
+    ALLEGRO_BITMAP 			*alpieceImages[PLAYER_PIECES_COUNT];	/*!< Allegro BITMAP representing the possible gameplay pieces. */
 
     int playersTurn;	/*!< Current player's turn. */
     int numPlayers;		/*!< Number of players. */

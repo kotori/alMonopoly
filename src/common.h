@@ -80,7 +80,7 @@
 */
 # define PLAYER_PIECES_COUNT 6
 
-/*! \enum PlayerPieces
+/*! \enum PlayerPiece
     \brief List of different game pieces a player can choose from.
 */
 enum PlayerPiece {
@@ -168,7 +168,8 @@ enum PropertyValue {
     VAL_2_HOUSE = 4,	/*!< Improved property, with 2 houses. */
     VAL_3_HOUSE = 5,	/*!< Improved property, with 3 houses. */
     VAL_4_HOUSE = 6,	/*!< Improved property, with 4 houses. */
-    VAL_1_HOTEL = 7		/*!< Improved property, with 1 hotel. */
+    VAL_1_HOTEL = 7,	/*!< Improved property, with 1 hotel. */
+    VAL_MORTGAGED = 8	/*!< Mortgaged property. */
 };
 
 #endif // COMMON_H
