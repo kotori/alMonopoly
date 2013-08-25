@@ -51,6 +51,8 @@ MonopolyGame::MonopolyGame() {
     // Reset the camera position.
     alCamera.cameraPosition[Positions::X_POS] = 0;
     alCamera.cameraPosition[Positions::Y_POS] = 0;
+
+    isActive = false;
 }
 
 MonopolyGame::~MonopolyGame() {
@@ -502,7 +504,7 @@ int* MonopolyGame::rollDice(size_t numOfDice, int sides) {
 }
 
 void MonopolyGame::handleDiceRoll(MonopolyPlayer &plyr) {
-	// Roll 2 six sided dice.
+	// Roll 2, six sided dice.
 	diceRoll = rollDice( NUM_DICE, NUM_SIDES_PER_DIE );
 
 	// If this is the player's first dice roll, reset the doubles counter.

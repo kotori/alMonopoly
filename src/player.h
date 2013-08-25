@@ -54,6 +54,18 @@ public:
     */
     void set_firstRoll(bool firstRoll);
 
+    /*! \fn bool get_isAlive()
+        \brief Get true or false based on if this is the player is still in the game.
+        \return True if this is capable of continue playing.
+    */
+    bool get_isAlive();
+
+    /*! \fn void set_isAlive(bool alive)
+        \brief Set true or false based on if this is the player is still in the game.
+        \param alive True if this is capable of continue playing.
+    */
+    void set_isAlive(bool alive);
+
     /*! \fn bool get_passedGo()
         \brief Get true or false based on if this player has just passed GO.
         \return True if the player passed GO, false if not.
@@ -229,6 +241,8 @@ public:
 private:
 
     bool _firstRollThisTurn; /*!< Flag for keeping track of die rolls. */
+
+    bool _isAlive; /*!< Flag for keeping track of player activity. */
 
     float _moveSpeed; /*!< Rate of movement. */
     bool _isMoving; /*!< Flag for handling movement. */
