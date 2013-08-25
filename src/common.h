@@ -80,6 +80,16 @@
 */
 # define PLAYER_PIECES_COUNT 6
 
+/*! \def NUM_DICE
+    \brief Number of dice to throw at a time.
+*/
+#define NUM_DICE 2
+
+/*! \def NUM_SIDES_PER_DIE
+    \brief Number of sides per die.
+*/
+#define NUM_SIDES_PER_DIE 6
+
 /*! \enum PlayerPiece
     \brief List of different game pieces a player can choose from.
 */

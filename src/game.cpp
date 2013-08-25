@@ -488,27 +488,32 @@ void MonopolyGame::reset() {
 }
 
 int* MonopolyGame::rollDice(size_t numOfDice, int sides) {
+	// Create a new integer array to fill with random integers.
 	int *ret = new int[numOfDice];
-	for(size_t a = 0; a < numOfDice; a++) {
+	// For the number of dice passed, generate a random number no greater than sides.
+	for(size_t dieCount = 0; dieCount < numOfDice; dieCount++) {
+		// Add +1 to the result to ensure a value above 0.
 		int ranNum = rand() % sides + 1;
-		ret[a]=ranNum;
+		// Copy the random number into the array to be returned.
+		ret[dieCount] = ranNum;
 	}
+	// Return the populated random integer array.
 	return ret;
 }
 
 void MonopolyGame::handleDiceRoll(MonopolyPlayer &plyr) {
+	// Roll 2 six sided dice.
+	diceRoll = rollDice( NUM_DICE, NUM_SIDES_PER_DIE );
 
-	int* randomNumbers = rollDice( 2, 6 );
-
+	// If this is the player's first dice roll, reset the doubles counter.
 	if( plyr.get_firstRoll() ) {
 		doublesRollCounter = 0;
 		plyr.set_firstRoll( false );
 	}
 
-	if( randomNumbers[0] == randomNumbers[1] ) {
-		// Increment doubles counter.
+	// If die 1 equals die 2, then increment the doubles counter.
+	if( diceRoll[0] == diceRoll[1] ) {
 		//  Need to ensure that when this player's turn ends, this counter is reset to 0.
-
 		doublesRollCounter++;
 	}
 }

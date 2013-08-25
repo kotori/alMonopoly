@@ -210,6 +210,7 @@ private:
     GameMode activeGameMode;	/*!< Tracks the active game mode. */
     TurnState turnState;		/*!< Tracks the current turn state. */
 
+    int* diceRoll; /*!< Store the last roll of the dice. */
     int doublesRollCounter; /*!< Keeps track the number of times a double was rolled. */
 
     bool exitGame;	/*!< Boolean flag for exiting the main loop. */

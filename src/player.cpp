@@ -26,6 +26,7 @@ MonopolyPlayer::MonopolyPlayer() {
 	_playerType = PlayerType::COMPUTER;
 	_moveSpeed = 5.0;
 	_isMoving = false;
+	_firstRollThisTurn = true;
 	_image = NULL;
 	_dir = DOWN;
 	_passedGo = false;
