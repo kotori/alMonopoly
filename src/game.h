@@ -78,12 +78,19 @@ public:
 	*/
     void halt();
 
-    /*! \fn int randomNum(int max)
-		\brief Generate a random number.
-		\param max Integer representing the ceiling for generation.
-		\return A random integer between 1 and \b max.
+    /*! \fn int* rollDice(size_t numOfDice, int sides)
+		\brief Generate an array of random numbers.
+		\param numOfDice Unsigned integer representing number of dice to simulate.
+		\param sides Integer representing the number of sides on each die.
+		\return A random integer between 1 and \b sides.
 	*/
-    int randomNum(int max);
+    int* rollDice(size_t numOfDice, int sides);
+
+    /*! \fn void handleDiceRoll(MonopolyPlayer &plyr)
+		\brief Simulate the rolling of dice.
+		\param plyr Player object referencing the actice player.
+	*/
+    void handleDiceRoll(MonopolyPlayer &plyr);
 
 private:
 

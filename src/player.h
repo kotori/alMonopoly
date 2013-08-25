@@ -42,6 +42,18 @@ public:
     */
     ~MonopolyPlayer();
 
+    /*! \fn bool get_firstRoll()
+        \brief Get true or false based on if this is the player's first roll this turn.
+        \return True if this is the player's first roll.
+    */
+    bool get_firstRoll();
+
+    /*! \fn void set_firstRoll(bool firstRoll)
+        \brief Set true or false based on if this is the player's first roll this turn.
+        \param firstRoll True if this is the player's first roll.
+    */
+    void set_firstRoll(bool firstRoll);
+
     /*! \fn bool get_passedGo()
         \brief Get true or false based on if this player has just passed GO.
         \return True if the player passed GO, false if not.
@@ -215,6 +227,8 @@ public:
     void draw(int x, int y);
 
 private:
+
+    bool _firstRollThisTurn; /*!< Flag for keeping track of die rolls. */
 
     float _moveSpeed; /*!< Rate of movement. */
     bool _isMoving; /*!< Flag for handling movement. */

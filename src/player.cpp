@@ -44,6 +44,14 @@ MonopolyPlayer::~MonopolyPlayer() {
     // Empty
 }
 
+bool MonopolyPlayer::get_firstRoll() {
+	return _firstRollThisTurn;
+}
+
+void MonopolyPlayer::set_firstRoll(bool firstRoll) {
+	_firstRollThisTurn = firstRoll;
+}
+
 void MonopolyPlayer::cleanup() {
 	if(_image) {
 		al_destroy_bitmap(_image);

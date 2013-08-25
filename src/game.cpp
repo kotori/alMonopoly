@@ -487,8 +487,30 @@ void MonopolyGame::reset() {
     }
 }
 
-int MonopolyGame::randomNum(int max) {
-    return rand() % max + 1;
+int* MonopolyGame::rollDice(size_t numOfDice, int sides) {
+	int *ret = new int[numOfDice];
+	for(size_t a = 0; a < numOfDice; a++) {
+		int ranNum = rand() % sides + 1;
+		ret[a]=ranNum;
+	}
+	return ret;
+}
+
+void MonopolyGame::handleDiceRoll(MonopolyPlayer &plyr) {
+
+	int* randomNumbers = rollDice( 2, 6 );
+
+	if( plyr.get_firstRoll() ) {
+		doublesRollCounter = 0;
+		plyr.set_firstRoll( false );
+	}
+
+	if( randomNumbers[0] == randomNumbers[1] ) {
+		// Increment doubles counter.
+		//  Need to ensure that when this player's turn ends, this counter is reset to 0.
+
+		doublesRollCounter++;
+	}
 }
 
 void MonopolyGame::drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ...) {
@@ -634,6 +656,7 @@ int MonopolyGame::loadResources() {
     		// Load the bitmap from the filename from above.
     		alpieceImages[pieceCounter] = al_load_bitmap( filepath.c_str() );
     		if( !alpieceImages[pieceCounter] ) {
+    			// TODO: CURRENTLY I HAVE NO PLACE HOLDER IMAGES, SO THE APPLICATION WILL FAIL HERE!
     			fprintf( stderr, "Failed loading Bitmap: %s\n", filepath.c_str() );
     			return -1;
     		}

@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
 
     // Initialize the Allegro routines
     if(monopoly->init()) {
+    	delete monopoly;
         return -1;
     }
 
@@ -33,6 +34,7 @@ int main(int argc, char **argv) {
     if(monopoly->loadResources()) {
     	fprintf( stderr, "Failed loading the necessary resources!\nExiting Now!\n" );
         monopoly->halt();
+        delete monopoly;
         return -1;
     }
 
@@ -40,6 +42,7 @@ int main(int argc, char **argv) {
     if(monopoly->run()) {
     	fprintf( stderr, "A fatal gameplay error has occurred!\nExiting Now!\n" );
         monopoly->halt();
+        delete monopoly;
         return -1;
     }
 
