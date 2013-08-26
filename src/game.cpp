@@ -839,31 +839,133 @@ int MonopolyGame::run() {
     return 0;
 }
 
+// NOT IMPLEMENTED YET.
 void MonopolyGame::handleMove() {
     //
 }
 
-void MonopolyGame::handleTurn() {
-	// Handle current state.
-	switch(turnState) {
-		case NULL_STATE:
+// NOT IMPLEMENTED YET.
+void MonopolyGame::handleState() {
+    switch( turnState ) {
+		/**************************
+		* 1. PRE_TURN
+		**************************/
+		case TurnState::PRE_TURN:
+			// Display pre-turn menu
+			// - Improve Property
+			// - Mortgage Property
+			// - Roll Dice (turnState = ROLL_PHASE)
+
+			// Handle the logic for this menu, this includes what menu entry is currently selected.
+			//menu[PRE_TURN].logic(); // Then in the drawing phase we call, menu[PRE_TURN].draw()
 			break;
-		case PRE_GAME:
-			// menu[PRE_GAME_MENU].doLogic();
+		/**************************
+		* 2. ROLL_PHASE
+		**************************/
+		case TurnState::ROLL_PHASE:
+			// If the player clicks the ROLL button:
+			// handleDiceRoll( playerList[currPlayer] );
 			break;
-		case PRE_TURN:
+		/**************************
+		* 3. MOVE_PHASE
+		**************************/
+		case TurnState::MOVE_PHASE:
+			/*
+			playerList[playersTurn].move( destination );
+			if( playerList[playersTurn].get_location() == destination ) {
+				turnState = TurnState::REACT_PHASE;
+			}
+			*/
 			break;
-		case ROLL_PHASE:
+		/**************************
+		* 4. REACT_PHASE
+		**************************/
+		case TurnState::REACT_PHASE:
+			/* This state is called when a player lands on a board space.
+			 *  If the property is owned, pay the appropriate rent.
+			 *  If unowned, present the title, and ask to purchase.
+			 *  Pay tax if required.
+			 *  If the player passed go, collect $200
+			 *  If a card is drawn, move phase may be called again, and then immediately set back to REACT_PHASE.
+			 */
 			break;
-		case MOVE_PHASE:
+		/**************************
+		* 5. POST_TURN
+		**************************/
+		case TurnState::POST_TURN:
+			// This is the turn's wrap-up phase. A player can mortgage properties, trade or end their turn.
 			break;
-		case REACT_PHASE:
-			break;
-		case POST_TURN:
-			break;
-		case TRADING:
+
+		default:
+			fprintf( stderr, "Invalid TurnState passed!\n" );
 			break;
 	}
+}
+
+// NOT IMPLEMENTED YET.
+void MonopolyGame::handleTurn() {
+    // If this is the player's first turn,
+	//  not the first turn of the game,
+	//  just the first pass for this set of turns.
+    if( firstTurn ) {
+        // Reset the firstTurn flag.
+        firstTurn = false;
+        // Ensure the turnState is reset to start from the beginning.
+        turnState = TurnState::PRE_TURN;
+    }
+
+	// Set this value to false. If this player can continue its turn,
+	//  then a true will be set below.
+    bool canPlay = false;
+    // First make sure the player we have selected can actually play.
+    //  If the player is broke, we will skip this one, and increment the list.
+    if( playerList[playersTurn].get_money() <= 0 && playerList[playersTurn].get_isAlive() == true ) {
+        // Cycle through each property. If the current player owns property, and has a zero balance, they
+        //  are still allowed to play as they can sell the property to get their balance above zero.
+        for( int pCount = 0; pCount > MAX_PROPERTIES; pCount++ ) {
+            // If a property is owned by the active player, set the flag for hasProperty to true.
+            if( propertyList[pCount].get_isOwned() == true &&
+            	propertyList[pCount].get_ownedBy() == playerList[playersTurn].get_id() ) {
+
+            	canPlay = true;
+            }
+        }
+        // If the active player has no property, this is the end of the turn, and end of the game for this player.
+        if( canPlay == false ) {
+			// Kill the active player.
+            playerList[playersTurn].set_isAlive( false );
+            fprintf( stderr, "Player: %i, is now out of the game!\n", playersTurn );
+            turnDone = true;
+        }
+    }
+
+    /*
+     * Now for as long as this player's turn is not flagged as being over, handle the current state.
+    */
+    if( turnDone == false && playerList[playersTurn].get_isAlive() == true ) {
+        handleState();
+    }
+	/*
+	 * This is executed if the player is not allowed to continue their turn or its the end of a turn.
+	*/
+    else {
+        // If the turnDone flag is true, increment to the next player in the list.
+        // This code will increment the active player's turn.
+        // If we increment the player counter, will it be larger than or equal to our max player's?
+        if( playersTurn + 1 >= NUM_PLAYERS ) {
+        	playersTurn = 0;
+        }
+        else {
+            // Increment the player counter.
+        	playersTurn++;
+            // Ensure that the first turn flag is reset.
+            firstTurn = true;
+            // Ensure that we reset the turnDone flag.
+            turnDone = false;
+            // Ensure that the player flag for first roll is also reset.
+            playerList[playersTurn].set_firstRoll( true );
+        }
+    }
 }
 
 void MonopolyGame::halt() {

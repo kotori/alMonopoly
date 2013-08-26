@@ -24,7 +24,7 @@ MonopolyPlayer::MonopolyPlayer() {
 	// Set some default values for our private member variables.
 	//  These will be set appropriately later.
 	_playerType = PlayerType::COMPUTER;
-        _isAlive = true;
+    _isAlive = true;
 	_moveSpeed = 5.0;
 	_isMoving = false;
 	_firstRollThisTurn = true;
@@ -52,6 +52,14 @@ bool MonopolyPlayer::get_firstRoll() {
 
 void MonopolyPlayer::set_firstRoll(bool firstRoll) {
 	_firstRollThisTurn = firstRoll;
+}
+
+bool MonopolyPlayer::get_isAlive() {
+	return _isAlive;
+}
+
+void MonopolyPlayer::set_isAlive(bool alive) {
+	_isAlive = alive;
 }
 
 void MonopolyPlayer::cleanup() {

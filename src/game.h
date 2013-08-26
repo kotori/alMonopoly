@@ -146,6 +146,13 @@ private:
      */
     void handleMove();
 
+    /*! \fn void handleState()
+        \brief Handle the states of the game.
+
+        This function manages the changing of game states.
+     */
+    void handleState();
+
     /*! \fn void reset()
         \brief Completely reset the game back to its initial values.
      */
@@ -206,6 +213,8 @@ private:
 
     int playersTurn;	/*!< Current player's turn. */
     int numPlayers;		/*!< Number of players. */
+    bool firstTurn;		/*!< Flag for signalling a player's first turn. */
+    bool turnDone;		/*!< Flag for signalling the end of the active player's turn. */
 
     GameMode activeGameMode;	/*!< Tracks the active game mode. */
     TurnState turnState;		/*!< Tracks the current turn state. */
