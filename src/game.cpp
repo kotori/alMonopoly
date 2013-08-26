@@ -894,6 +894,7 @@ void MonopolyGame::handleState() {
 		**************************/
 		case TurnState::POST_TURN:
 			// This is the turn's wrap-up phase. A player can mortgage properties, trade or end their turn.
+			turnDone = true; // debugging.
 			break;
 
 		default:
@@ -951,20 +952,30 @@ void MonopolyGame::handleTurn() {
     else {
         // If the turnDone flag is true, increment to the next player in the list.
         // This code will increment the active player's turn.
-        // If we increment the player counter, will it be larger than or equal to our max player's?
-        if( playersTurn + 1 >= NUM_PLAYERS ) {
-        	playersTurn = 0;
-        }
-        else {
-            // Increment the player counter.
-        	playersTurn++;
-            // Ensure that the first turn flag is reset.
-            firstTurn = true;
-            // Ensure that we reset the turnDone flag.
-            turnDone = false;
-            // Ensure that the player flag for first roll is also reset.
-            playerList[playersTurn].set_firstRoll( true );
-        }
+    	bool foundGoodPlayer = false;
+    	int nextPlayer = playersTurn++;
+
+    	while( foundGoodPlayer == false ) {
+    		// Make sure the next player isn't out of bounds.
+    		if( nextPlayer >= NUM_PLAYERS ) {
+    			nextPlayer = 0;
+    		}
+    		// If the next player in the list isn't alive, we will increment the counter.
+    		if( playerList[nextPlayer].get_isAlive() == false ) {
+    			nextPlayer++;
+    		}
+    		// If the next player in the list is alive, then they become the active player.
+    		else if( playerList[nextPlayer].get_isAlive() == true ) {
+    			playersTurn = nextPlayer;
+    			// Ensure that the first turn flag is reset.
+    			firstTurn = true;
+    			// Ensure that we reset the turnDone flag.
+    			turnDone = false;
+    			// Ensure that the player flag for first roll is also reset.
+    			playerList[playersTurn].set_firstRoll( true );
+    			foundGoodPlayer = true;
+    		}
+    	}
     }
 }
 
