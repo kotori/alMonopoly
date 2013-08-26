@@ -139,12 +139,15 @@ private:
      */
     void handleTurn();
 
-    /*! \fn void void handleMove()
+    /*! \fn handleMove(int location, int destX, int destY)
         \brief Handle moving a player's icon around the board.
+        \param location Integer id of the location destination.
+        \param destX Integer representing the X-axis coordinate of the destination.
+        \param destY Integer representing the Y-axis coordinate of the destination.
 
         This function will either be called in response to a dice roll or a card draw.
      */
-    void handleMove();
+    void handleMove(int location, int destX, int destY);
 
     /*! \fn void handleState()
         \brief Handle the states of the game.

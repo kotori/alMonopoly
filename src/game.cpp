@@ -840,11 +840,25 @@ int MonopolyGame::run() {
 }
 
 // NOT IMPLEMENTED YET.
-void MonopolyGame::handleMove() {
-    //
+void MonopolyGame::handleMove(int location, int destX, int destY) {
+
+	/* TODO: Perform actual movment routines, this will
+	 *  involve determining where the player is on the board
+	 *  in comparison to the location of the destination point.
+	 */
+
+
+	// If the player has arrived at the destination
+	//  then enter the reaction phase.
+	if( playerList[playersTurn].get_x() == destX &&
+		playerList[playersTurn].get_y() == destY ) {
+
+		turnState = TurnState::REACT_PHASE;
+	}
 }
 
 // NOT IMPLEMENTED YET.
+// TODO: Hook this function into the game loop.
 void MonopolyGame::handleState() {
     switch( turnState ) {
 		/**************************
@@ -870,12 +884,8 @@ void MonopolyGame::handleState() {
 		* 3. MOVE_PHASE
 		**************************/
 		case TurnState::MOVE_PHASE:
-			/*
-			playerList[playersTurn].move( destination );
-			if( playerList[playersTurn].get_location() == destination ) {
-				turnState = TurnState::REACT_PHASE;
-			}
-			*/
+			// int dest = findDestination(int diceResult);
+			// handleMove(int, int, int);
 			break;
 		/**************************
 		* 4. REACT_PHASE
