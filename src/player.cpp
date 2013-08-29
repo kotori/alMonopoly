@@ -40,6 +40,8 @@ MonopolyPlayer::MonopolyPlayer() {
 	_sourceX = 0;
 	_sourceY = 0;
 	_moveSpeed = 5;
+	_inJail = false;
+	_getOutOfJailCards = 0;
 }
 
 MonopolyPlayer::~MonopolyPlayer() {

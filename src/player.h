@@ -54,6 +54,30 @@ public:
     */
     void set_firstRoll(bool firstRoll);
 
+    /*! \fn bool get_inJail()
+        \brief Get true or false based on if this is player is in jail.
+    	\return True if this is the player is in jail.
+    */
+    bool get_inJail();
+
+    /*! \fn void set_inJail(bool convicted)
+        \brief Set true or false based on if this is player is in jail.
+        \param convicted True if this is the player is in jail.
+ 	*/
+    void set_inJail(bool convicted);
+
+    /*! \fn int get_jailCards()
+		\brief Get the number of get out of jail cards this player has.
+		\return Integer representing the number of get out of jail cards.
+    */
+    int get_jailCards();
+
+    /*! \fn void set_jailCards(int numCards)
+		\brief Set the number of get out of jail cards this player has.
+		\param numCards Integer representing the number of get out of jail cards.
+    */
+    void set_jailCards(int numCards);
+
     /*! \fn bool get_isAlive()
         \brief Get true or false based on if this is the player is still in the game.
         \return True if this is capable of continue playing.
@@ -241,6 +265,8 @@ public:
 private:
 
     bool _firstRollThisTurn; /*!< Flag for keeping track of die rolls. */
+    bool _inJail; /*!< Flag for handling being sent to jail. */
+    int _getOutOfJailCards; /*!< Counter for the number of get out of jail cards a player has. */
 
     bool _isAlive; /*!< Flag for keeping track of player activity. */
 

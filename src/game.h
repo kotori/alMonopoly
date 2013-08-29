@@ -139,15 +139,12 @@ private:
      */
     void handleTurn();
 
-    /*! \fn handleMove(int location, int destX, int destY)
+    /*! \fn handleMove()
         \brief Handle moving a player's icon around the board.
-        \param location Integer id of the location destination.
-        \param destX Integer representing the X-axis coordinate of the destination.
-        \param destY Integer representing the Y-axis coordinate of the destination.
 
         This function will either be called in response to a dice roll or a card draw.
      */
-    void handleMove(int location, int destX, int destY);
+    void handleMove();
 
     /*! \fn void handleState()
         \brief Handle the states of the game.
@@ -224,6 +221,9 @@ private:
 
     int* diceRoll; /*!< Store the last roll of the dice. */
     int doublesRollCounter; /*!< Keeps track the number of times a double was rolled. */
+
+    int moveDestination; /*!< Store the location of the player's next move. */
+    bool firstMovePass; /*!< Flag for singalling the start of movement. */
 
     bool exitGame;	/*!< Boolean flag for exiting the main loop. */
     bool redrawScreen;	/*!< Boolean flag for handling screen redraws. */

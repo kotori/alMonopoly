@@ -840,19 +840,38 @@ int MonopolyGame::run() {
 }
 
 // NOT IMPLEMENTED YET.
-void MonopolyGame::handleMove(int location, int destX, int destY) {
+void MonopolyGame::handleMove() {
+
+	// int pCurrX = playerList[playersTurn].get_x();
+	// int pCurrY = playerList[playersTurn].get_y();
+	int pLoc = playerList[playersTurn].get_location();
 
 	/* TODO: Perform actual movment routines, this will
 	 *  involve determining where the player is on the board
 	 *  in comparison to the location of the destination point.
 	 */
 
+	// Find direction.
+	if( pLoc > 0 && pLoc < 12 ) {
+		playerList[playersTurn].set_direction( Direction::LEFT );
+	}
+	else if( pLoc > 11 && pLoc < 21 ) {
+		playerList[playersTurn].set_direction( Direction::UP );
+	}
+	else if( pLoc > 20 && pLoc < 32 ) {
+		playerList[playersTurn].set_direction( Direction::RIGHT );
+	}
+	else if( pLoc > 31 && pLoc < 41 ) {
+		playerList[playersTurn].set_direction( Direction::DOWN );
+	}
+	else {
+		fprintf( stderr, "Invalid player location [%i] detected!\n", pLoc );
+	}
 
 	// If the player has arrived at the destination
 	//  then enter the reaction phase.
-	if( playerList[playersTurn].get_x() == destX &&
-		playerList[playersTurn].get_y() == destY ) {
-
+	if( pLoc == moveDestination && doublesRollCounter < 1 ) {
+		// We've reached our destination.
 		turnState = TurnState::REACT_PHASE;
 	}
 }
@@ -878,14 +897,15 @@ void MonopolyGame::handleState() {
 		**************************/
 		case TurnState::ROLL_PHASE:
 			// If the player clicks the ROLL button:
-			// handleDiceRoll( playerList[currPlayer] );
+			handleDiceRoll( playerList[playersTurn] );
+			firstMovePass = true;
 			break;
 		/**************************
 		* 3. MOVE_PHASE
 		**************************/
 		case TurnState::MOVE_PHASE:
 			// int dest = findDestination(int diceResult);
-			// handleMove(int, int, int);
+			handleMove();
 			break;
 		/**************************
 		* 4. REACT_PHASE

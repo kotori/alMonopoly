@@ -141,7 +141,7 @@ enum TurnState {
 	MOVE_PHASE = 4,	/*!< Movement phase, this is called in response to a dice roll or card event. */
 	REACT_PHASE = 5,/*!< Reaction phase, this is called in response to a movement or card event. */	
 	POST_TURN = 6,	/*!< Post turn state, this is called for any post-turn cleanup events. */
-	TRADING = 7	/*!< Trading state, this is called in response to a Player bid to trade. */
+	TRADING = 7,	/*!< Trading state, this is called in response to a Player bid to trade. */
 };
 
 /*! \enum Positions
