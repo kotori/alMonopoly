@@ -102,7 +102,6 @@ enum PlayerPiece {
 	PIECE_CAR = 5		/*!< The Car. */
 };
 
-
 /*! \enum GameMode
     \brief List of possible game modes.
 */
@@ -128,6 +127,17 @@ enum Direction {
     LEFT = 1,		/*!< Facing left. */
     RIGHT = 2,		/*!< Facing right. */
     UP = 3		/*!< Facing up. */
+};
+
+enum ReactionType {
+	NULL_REACTION = 0,
+	PAY_RENT = 1,
+	BUY_PROPERTY = 2,
+	CHANCE_CARD = 3,
+	COMMUNITY_CHEST_CARD = 4,
+	GOTO_JAIL = 5,
+	PAY_TAX = 6,
+	ROLL_DOUBLES = 7
 };
 
 /*! \enum TurnState

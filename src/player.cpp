@@ -56,6 +56,22 @@ void MonopolyPlayer::set_firstRoll(bool firstRoll) {
 	_firstRollThisTurn = firstRoll;
 }
 
+bool MonopolyPlayer::get_inJail() {
+	return _inJail;
+}
+
+void MonopolyPlayer::set_inJail(bool convicted) {
+	_inJail = convicted;
+}
+
+int MonopolyPlayer::get_jailCards() {
+	return _getOutOfJailCards;
+}
+
+void MonopolyPlayer::set_jailCards(int numCards) {
+	_getOutOfJailCards = numCards;
+}
+
 bool MonopolyPlayer::get_isAlive() {
 	return _isAlive;
 }

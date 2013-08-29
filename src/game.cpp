@@ -38,6 +38,8 @@ MonopolyGame::MonopolyGame() {
     alFrameTimer = NULL;
     alBoardImage = NULL;
 
+    currentReaction = ReactionType::NULL_REACTION;
+
     // Nullify each font in the font collection.
     for(int fCount = 0; fCount < MAX_FONTS; fCount++) {
     	fontCollection[fCount] = NULL;
@@ -799,6 +801,9 @@ int MonopolyGame::run() {
         {
             if( alEvent.timer.source == alTimer )
             {
+            	// This is the hook into the turn logic.
+            	handleTurn();
+
             	// We will update the camera position only if the timer has been triggered.
             	cameraUpdate( alCamera.cameraPosition, // X and Y location of the camera.
             		playerList[playersTurn].get_x(), // Player's x position.
@@ -849,7 +854,7 @@ void MonopolyGame::handleMove() {
 	 *  in comparison to the location of the destination point.
 	 */
 
-	// Find direction.
+	// Find direction based on player's current location.
 	if( pLoc > 0 && pLoc < 12 ) {
 		playerList[playersTurn].set_direction( Direction::LEFT );
 	}
@@ -868,66 +873,133 @@ void MonopolyGame::handleMove() {
 
 	// If the player has arrived at the destination
 	//  then enter the reaction phase.
-	if( pLoc == moveDestination && doublesRollCounter < 1 ) {
+	if( pLoc == moveDestination ) {
 		// We've reached our destination.
 		turnState = TurnState::REACT_PHASE;
+	}
+}
+
+int MonopolyGame::findCost(MonopolyProperty &prop) {
+	// Calculate the cost of landing on this location.
+	PropertyValue propVal = prop.get_propertyValue();
+	int cost = 0;
+	if( propVal == VAL_OWNED ) {
+		cost = prop.get_rent();
+	}
+	else if( propVal == VAL_OWNED_SET ) {
+		cost = prop.get_rent() * 2;
+	}
+	else if( propVal == VAL_1_HOUSE ) {
+		cost = prop.get_rent1House();
+	}
+	else if( propVal == VAL_2_HOUSE ) {
+		cost = prop.get_rent2House();
+	}
+	else if( propVal == VAL_3_HOUSE ) {
+		cost = prop.get_rent3House();
+	}
+	else if( propVal == VAL_4_HOUSE ) {
+		cost = prop.get_rent4House();
+	}
+	else if( propVal == VAL_1_HOTEL ) {
+		cost = prop.get_rentHotel();
+	}
+
+	return cost;
+}
+
+void MonopolyGame::handleReaction() {
+	/* This state is called when a player lands on a board space.
+	 *  If the property is owned, pay the appropriate rent.
+	 *  If unowned, present the title, and ask to purchase.
+	 *  Pay tax if required.
+	 *  If the player passed go, collect $200
+	 *  If a card is drawn, move phase may be called again, and then immediately set back to REACT_PHASE.
+	 */
+	int pLoc = playerList[playersTurn].get_location();
+
+	// First lets ensure our player hasn't rolled 3 doubles.
+	if( doublesRollCounter >= 3 ) {
+		doublesRollCounter = 0;
+		playerList[playersTurn].set_inJail( true );
+		turnState = TurnState::POST_TURN;
+	}
+	// Now check if the property the player is currently on is owned
+	//  but someone other than the current player and the propery is not mortgaged.
+	else if( propertyList[pLoc].get_isOwned() &&
+		propertyList[pLoc].get_ownedBy() != playersTurn &&
+		propertyList[pLoc].get_propertyValue() != PropertyValue::VAL_MORTGAGED ) {
+
+		int rentDue = findCost( propertyList[pLoc] );
+		if( playerList[playersTurn].get_money() < rentDue ) {
+			turnState = TurnState::POST_TURN;
+		}
+		else {
+
+			// Get the player's wallet size, and subtract the property value from it.
+			rentDue -= playerList[playersTurn].get_money();
+			playerList[playersTurn].set_money( rentDue );
+		}
+
+	}
+	else if( !propertyList[pLoc].get_isOwned() ) {
+		// Buy a free property.
 	}
 }
 
 // NOT IMPLEMENTED YET.
 // TODO: Hook this function into the game loop.
 void MonopolyGame::handleState() {
-    switch( turnState ) {
-		/**************************
-		* 1. PRE_TURN
-		**************************/
-		case TurnState::PRE_TURN:
-			// Display pre-turn menu
-			// - Improve Property
-			// - Mortgage Property
-			// - Roll Dice (turnState = ROLL_PHASE)
 
-			// Handle the logic for this menu, this includes what menu entry is currently selected.
-			//menu[PRE_TURN].logic(); // Then in the drawing phase we call, menu[PRE_TURN].draw()
-			break;
-		/**************************
-		* 2. ROLL_PHASE
-		**************************/
-		case TurnState::ROLL_PHASE:
-			// If the player clicks the ROLL button:
-			handleDiceRoll( playerList[playersTurn] );
-			firstMovePass = true;
-			break;
-		/**************************
-		* 3. MOVE_PHASE
-		**************************/
-		case TurnState::MOVE_PHASE:
-			// int dest = findDestination(int diceResult);
-			handleMove();
-			break;
-		/**************************
-		* 4. REACT_PHASE
-		**************************/
-		case TurnState::REACT_PHASE:
-			/* This state is called when a player lands on a board space.
-			 *  If the property is owned, pay the appropriate rent.
-			 *  If unowned, present the title, and ask to purchase.
-			 *  Pay tax if required.
-			 *  If the player passed go, collect $200
-			 *  If a card is drawn, move phase may be called again, and then immediately set back to REACT_PHASE.
-			 */
-			break;
-		/**************************
-		* 5. POST_TURN
-		**************************/
-		case TurnState::POST_TURN:
-			// This is the turn's wrap-up phase. A player can mortgage properties, trade or end their turn.
-			turnDone = true; // debugging.
-			break;
+	/*
+	 * Pre turn state.
+	 */
+	if( turnState == TurnState::PRE_TURN ) {
+		// Display pre-turn menu
+		// - Improve Property
+		// - Mortgage Property
+		// - Roll Dice (turnState = ROLL_PHASE)
 
-		default:
-			fprintf( stderr, "Invalid TurnState passed!\n" );
-			break;
+		// Handle the logic for this menu, this includes what menu entry is currently selected.
+		//menu[PRE_TURN].logic(); // Then in the drawing phase we call, menu[PRE_TURN].draw()
+	}
+	/*
+	 * Rolling the dice phase.
+	 */
+	else if( turnState == TurnState::ROLL_PHASE ) {
+		// If the player clicks the ROLL button:
+		handleDiceRoll( playerList[playersTurn] );
+		firstMovePass = true;
+	}
+	/*
+	 * Move the player's icon phase.
+	 */
+	else if( turnState == TurnState::MOVE_PHASE ) {
+		if( firstMovePass ) {
+			// Ensure our destination is within bounds.
+			if( moveDestination > MAX_PROPERTIES  ) {
+				moveDestination -= MAX_PROPERTIES;
+			}
+			firstMovePass = false;
+		}
+
+		handleMove();
+	}
+	/*
+	 * Reacting the the dice results phase.
+	 */
+	else if( turnState == TurnState::REACT_PHASE ) {
+		handleReaction();
+	}
+	/*
+	 * Wrapping up the turn.
+	 */
+	else if( turnState == TurnState::POST_TURN ) {
+		// This is the turn's wrap-up phase. A player can mortgage properties, trade or end their turn.
+		turnDone = true; // debugging.
+	}
+	else {
+		fprintf( stderr, "Invalid state encountered: %i\n", turnState );
 	}
 }
 
@@ -952,8 +1024,8 @@ void MonopolyGame::handleTurn() {
         // Cycle through each property. If the current player owns property, and has a zero balance, they
         //  are still allowed to play as they can sell the property to get their balance above zero.
         for( int pCount = 0; pCount > MAX_PROPERTIES; pCount++ ) {
-            // If a property is owned by the active player, set the flag for hasProperty to true.
-            if( propertyList[pCount].get_isOwned() == true &&
+            // If a property is owned by the active player, and is not flagged for mortgage.
+            if( propertyList[pCount].get_isMortgaged() == false &&
             	propertyList[pCount].get_ownedBy() == playerList[playersTurn].get_id() ) {
 
             	canPlay = true;
@@ -1001,6 +1073,7 @@ void MonopolyGame::handleTurn() {
     			turnDone = false;
     			// Ensure that the player flag for first roll is also reset.
     			playerList[playersTurn].set_firstRoll( true );
+    			playerList[playersTurn].set_isMoving( false );
     			foundGoodPlayer = true;
     		}
     	}

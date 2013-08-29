@@ -127,6 +127,8 @@ private:
     */
     bool purchaseProperty(MonopolyProperty &prop, MonopolyPlayer &plyr, int priceMod);
 
+    int findCost(MonopolyProperty &prop);
+
     /*! \fn void draw()
         \brief Redrawn the screen.
 
@@ -186,6 +188,11 @@ private:
      */
     void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
 
+    /*! \fn void handleReaction()
+        \brief Handle a reaction.
+     */
+    void handleReaction();
+
     Database sqlConn; /*!< SQLite3 connection. */
 
     /*! \fn int buildPropertyList()
@@ -218,6 +225,7 @@ private:
 
     GameMode activeGameMode;	/*!< Tracks the active game mode. */
     TurnState turnState;		/*!< Tracks the current turn state. */
+    ReactionType currentReaction; /*!< Tracks the current reaction state. */
 
     int* diceRoll; /*!< Store the last roll of the dice. */
     int doublesRollCounter; /*!< Keeps track the number of times a double was rolled. */
