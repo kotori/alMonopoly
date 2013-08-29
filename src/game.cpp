@@ -842,8 +842,6 @@ int MonopolyGame::run() {
 // NOT IMPLEMENTED YET.
 void MonopolyGame::handleMove() {
 
-	// int pCurrX = playerList[playersTurn].get_x();
-	// int pCurrY = playerList[playersTurn].get_y();
 	int pLoc = playerList[playersTurn].get_location();
 
 	/* TODO: Perform actual movment routines, this will
