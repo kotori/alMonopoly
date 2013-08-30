@@ -38,8 +38,6 @@ MonopolyGame::MonopolyGame() {
 	m_alFrameTimer = NULL;
 	m_alBoardImage = NULL;
 
-	m_currentReaction = ReactionType::NULL_REACTION;
-
     // Nullify each font in the font collection.
     for(int fCount = 0; fCount < MAX_FONTS; fCount++) {
     	m_fontCollection[fCount] = NULL;
@@ -50,15 +48,68 @@ MonopolyGame::MonopolyGame() {
     	m_alpieceImages[ppCount] = NULL;
     }
 
-    // Reset the camera position.
-    m_alCamera.cameraPosition[Positions::X_POS] = 0;
-    m_alCamera.cameraPosition[Positions::Y_POS] = 0;
-
-    m_isActive = false;
+    reset();
 }
 
 MonopolyGame::~MonopolyGame() {
     // Empty
+}
+
+// This should be called everytime the game is reset.
+void MonopolyGame::reset() {
+
+
+	fprintf( stderr, "Resetting Game.\n");
+
+    // Seed the random number generator.
+    srand( (unsigned)time( 0 ) );
+
+	// Reset the camera position.
+	m_alCamera.cameraPosition[Positions::X_POS] = 0;
+	m_alCamera.cameraPosition[Positions::Y_POS] = 0;
+
+	m_isActive = false;
+
+	m_playersTurn = 0;
+	m_numPlayers = NUM_PLAYERS;
+	m_firstTurn = true;
+	m_turnDone = false;
+	m_firstMovePass = true;
+
+	m_currentReaction = ReactionType::NULL_REACTION;
+	m_turnState = TurnState::NULL_STATE;
+
+	m_diceRoll = rollDice( NUM_DICE, 0 );
+
+	m_doublesRollCounter = 0;
+
+	m_moveDestination = 0;
+
+	m_exitGame = false;
+	m_redrawScreen = true;
+
+    // Reset each player attribute.
+    for( int pCount = 0; pCount < NUM_PLAYERS; pCount++ ) {
+    	m_playerList[pCount].set_location(0);
+    	m_playerList[pCount].set_score(0);
+
+        if( m_activeGameMode == GameMode::EASY ) {
+        	m_playerList[pCount].set_money( 3500 );
+        }
+        else if( m_activeGameMode == GameMode::NORMAL ) {
+        	m_playerList[pCount].set_money( 2500 );
+        }
+        else if( m_activeGameMode == GameMode::DIFFICULT ) {
+        	m_playerList[pCount].set_money( 1500 );
+        }
+    }
+
+    // Reset each property attribute.
+    for( int pCount = 0; pCount < MAX_PROPERTIES; pCount++ ) {
+    	m_propertyList[pCount].set_isMortgaged(false);
+    	m_propertyList[pCount].set_isOwned(false);
+    	m_propertyList[pCount].set_ownedBy(0);
+    }
 }
 
 void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int width, int height) {
@@ -460,44 +511,17 @@ int MonopolyGame::buildPropertyList() {
     return 0;
 }
 
-// This should be called everytime the game is reset.
-void MonopolyGame::reset() {
-
-	fprintf( stderr, "Resetting Game.\n");
-
-	m_playersTurn = 0;
-
-    // Reset each player attribute.
-    for( int pCount = 0; pCount < NUM_PLAYERS; pCount++ ) {
-    	m_playerList[pCount].set_location(0);
-    	m_playerList[pCount].set_score(0);
-
-        if( m_activeGameMode == GameMode::EASY ) {
-        	m_playerList[pCount].set_money( 3500 );
-        }
-        else if( m_activeGameMode == GameMode::NORMAL ) {
-        	m_playerList[pCount].set_money( 2500 );
-        }
-        else if( m_activeGameMode == GameMode::DIFFICULT ) {
-        	m_playerList[pCount].set_money( 1500 );
-        }
-    }
-
-    // Reset each property attribute.
-    for(int pCount = 0; pCount < MAX_PROPERTIES; pCount++) {
-    	m_propertyList[pCount].set_isMortgaged(false);
-    	m_propertyList[pCount].set_isOwned(false);
-    	m_propertyList[pCount].set_ownedBy(0);
-    }
-}
-
 int* MonopolyGame::rollDice(size_t numOfDice, int sides) {
 	// Create a new integer array to fill with random integers.
 	int *ret = new int[numOfDice];
+
 	// For the number of dice passed, generate a random number no greater than sides.
 	for(size_t dieCount = 0; dieCount < numOfDice; dieCount++) {
 		// Add +1 to the result to ensure a value above 0.
-		int ranNum = rand() % sides + 1;
+		int floor = 0, range = (sides - floor);
+		int ranNum = floor + int((range * rand()) / (RAND_MAX + 1.0));
+
+		//int ranNum = int((rand() % sides) + 1);
 		// Copy the random number into the array to be returned.
 		ret[dieCount] = ranNum;
 	}
@@ -692,9 +716,6 @@ int MonopolyGame::init() {
 
     // First set the main loop exit condition to false.
 	m_exitGame = false;
-
-    // Seed the random number generator.
-    srand((unsigned)time(0));
 
     m_activeGameMode = GameMode::EASY;
     m_turnState = TurnState::NULL_STATE;
