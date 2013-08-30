@@ -82,6 +82,7 @@ void MonopolyPlayer::set_isAlive(bool alive) {
 
 void MonopolyPlayer::cleanup() {
 	if(m_image) {
+		m_image = NULL;
 		al_destroy_bitmap(m_image);
 	}
 }

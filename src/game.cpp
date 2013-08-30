@@ -59,9 +59,6 @@ MonopolyGame::~MonopolyGame() {
 // This should be called everytime the game is reset.
 void MonopolyGame::reset() {
 
-
-	fprintf( stderr, "Resetting Game.\n");
-
     // Seed the random number generator.
     srand( (unsigned)time( 0 ) );
 
@@ -527,8 +524,6 @@ int* MonopolyGame::rollDice(size_t numOfDice, int sides) {
 		// Add +1 to the result to ensure a value above 0.
 		int floor = 0, range = (sides - floor);
 		int ranNum = floor + int((range * rand()) / (RAND_MAX + 1.0));
-
-		//int ranNum = int((rand() % sides) + 1);
 		// Copy the random number into the array to be returned.
 		ret[dieCount] = ranNum;
 	}
@@ -664,25 +659,42 @@ int MonopolyGame::loadResources() {
     al_append_path_component( path, "etc" );
     al_change_directory( al_path_cstr( path, '/' ) );  // change the working directory
 
+    //
     // Load the board's bitmap
+    //
     al_set_path_filename(path, "board.jpg");
-    m_alBoardImage = al_load_bitmap( al_path_cstr(path, '/') );
-    if( !m_alBoardImage ) {
-        fprintf( stderr, "[ERROR] Failed loading board bitmap: %s\n", al_path_cstr(path, '/') );
-        return -1;
+    if( !fileExists( al_path_cstr(path, '/') ) ) {
+       	fprintf( stderr, "[ERROR] Cannot find bitmap: %s\n", al_path_cstr(path, '/') );
+       	return -1;
+    }
+    else {
+    	m_alBoardImage = al_load_bitmap( al_path_cstr(path, '/') );
+    	if( !m_alBoardImage ) {
+    		fprintf( stderr, "[ERROR] Failed loading board bitmap: %s\n", al_path_cstr(path, '/') );
+    		return -1;
+    	}
     }
 
+    //
     // Load the font set.
-    al_set_path_filename(path, "DejaVuSans.ttf");
+    //
+    al_set_path_filename(path, "Emblem.ttf");
     // Start building the fonts from 24pt.
     int initialSize = 24;
-    for( int fontCounter = 0; fontCounter < MAX_FONTS; fontCounter++ ) {
-    	m_fontCollection[fontCounter] = al_load_font( al_path_cstr(path, '/'), initialSize, 0 );
-        initialSize += 10;
-        if( !m_fontCollection[fontCounter] ) {
-            fprintf( stderr, "[ERROR] Failed loading font: %s size: %i\n", al_path_cstr(path, '/'), initialSize );
-            return -1;
-        }
+    if( !fileExists( al_path_cstr(path, '/') ) ) {
+    	fprintf( stderr, "[ERROR] Cannot find font file: %s\n", al_path_cstr(path, '/') );
+    	return -1;
+    }
+    else
+    {
+    	for( int fontCounter = 0; fontCounter < MAX_FONTS; fontCounter++ ) {
+    		m_fontCollection[fontCounter] = al_load_font( al_path_cstr(path, '/'), initialSize, 0 );
+    		initialSize += 10;
+    		if( !m_fontCollection[fontCounter] ) {
+    			fprintf( stderr, "[ERROR] Failed loading font: %s size: %i\n", al_path_cstr(path, '/'), initialSize );
+    			return -1;
+    		}
+    	}
     }
 
     // Now load the possible player pieces into memory.
@@ -693,6 +705,7 @@ int MonopolyGame::loadResources() {
     	tempQuery = m_sqlConn.Format( "SELECT %s FROM %s WHERE %s = %i", "path", DB_PIECES_TABLE, "id", pieceCounter );
 
     	if( !m_sqlConn.SelectStr( sFileName, tempQuery.c_str() ) ) {
+    		// Append the filename to the resource path.
     		al_set_path_filename( path, sFileName.c_str() );
         	if( !fileExists( al_path_cstr(path, '/') ) ) {
         		fprintf( stderr, "[ERROR] Cannot find bitmap: %s\n", al_path_cstr(path, '/') );
@@ -712,13 +725,20 @@ int MonopolyGame::loadResources() {
     		fprintf( stderr, "[ERROR] Error processing SQL statement: %s\n", tempQuery.c_str() );
     		return -1;
     	}
+    }
 
-
+    // Load the player's images.
+    for( int plCount = 0; plCount < NUM_PLAYERS; plCount++ ) {
+    	int* randomPlayerSel = rollDice( 1, PLAYER_PIECES_COUNT );
+    	m_playerList[plCount].set_image( m_alpieceImages[randomPlayerSel[0]] );
+    	al_set_path_filename(path, "Emblem.ttf");
     }
 
     al_destroy_path( path );
 
+    //
     // Finally we will pull the property list from the database.
+    //
     if( buildPropertyList() )
     {
         fprintf( stderr, "Failure building Property List, Please ensure the database is available!\n" );
@@ -1034,6 +1054,7 @@ void MonopolyGame::handleState() {
 	else if( m_turnState == TurnState::POST_TURN ) {
 		// This is the turn's wrap-up phase. A player can mortgage properties, trade or end their turn.
 		m_turnDone = true; // debugging.
+		m_doublesRollCounter = 0;
 	}
 	else {
 		fprintf( stderr, "Invalid state encountered: %i\n", m_turnState );
