@@ -24,11 +24,11 @@
 #include "entry.h"
 
 MonopolyMenuEntry::MonopolyMenuEntry() {
-	_isSelected = false;
-    _id = 0;
-    _text = "";
-    _x = 0.0;
-    _y = 0.0;
+	m_isSelected = false;
+    m_id = 0;
+    m_text = "";
+    m_x = 0.0;
+    m_y = 0.0;
 }
 
 MonopolyMenuEntry::~MonopolyMenuEntry() {
@@ -36,23 +36,23 @@ MonopolyMenuEntry::~MonopolyMenuEntry() {
 }
 
 void MonopolyMenuEntry::set_text(std::string text) {
-    _text = text;
+    m_text = text;
 }
 
 std::string MonopolyMenuEntry::get_text() {
-    return _text;
+    return m_text;
 }
 
 void MonopolyMenuEntry::draw(ALLEGRO_FONT *f) {
-    if(_isSelected) {
+    if( m_isSelected ) {
         // If this entry is selected, print the highlighted text.
-        al_draw_text( f, al_map_rgb(0, 0, 0), _x + 2, _y+2, 0, _text.c_str() );
-        al_draw_text( f, al_map_rgb(250, 0, 0), _x, _y, 0, _text.c_str() );
+        al_draw_text( f, al_map_rgb(0, 0, 0), m_x + 2, m_y+2, 0, m_text.c_str() );
+        al_draw_text( f, al_map_rgb(250, 0, 0), m_x, m_y, 0, m_text.c_str() );
     }
     else {
         // If the entry is not selected, print standard text.
-        al_draw_text( f, al_map_rgb(0, 0, 0), _x + 2, _y+2, 0, _text.c_str() );
-        al_draw_text( f, al_map_rgb(255, 255, 255), _x, _y, 0, _text.c_str() );
+        al_draw_text( f, al_map_rgb(0, 0, 0), m_x + 2, m_y+2, 0, m_text.c_str() );
+        al_draw_text( f, al_map_rgb(255, 255, 255), m_x, m_y, 0, m_text.c_str() );
     }
 }
 

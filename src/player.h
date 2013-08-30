@@ -264,28 +264,28 @@ public:
 
 private:
 
-    bool _firstRollThisTurn; /*!< Flag for keeping track of die rolls. */
-    bool _inJail; /*!< Flag for handling being sent to jail. */
-    int _getOutOfJailCards; /*!< Counter for the number of get out of jail cards a player has. */
+    bool m_firstRollThisTurn; /*!< Flag for keeping track of die rolls. */
+    bool m_inJail; /*!< Flag for handling being sent to jail. */
+    int m_getOutOfJailCards; /*!< Counter for the number of get out of jail cards a player has. */
 
-    bool _isAlive; /*!< Flag for keeping track of player activity. */
+    bool m_isAlive; /*!< Flag for keeping track of player activity. */
 
-    float _moveSpeed; /*!< Rate of movement. */
-    bool _isMoving; /*!< Flag for handling movement. */
+    float m_moveSpeed; /*!< Rate of movement. */
+    bool m_isMoving; /*!< Flag for handling movement. */
 
-    ALLEGRO_BITMAP *_image; /*!< Bitmap tilesheet image representing the player. */
-    Direction _dir;	/*!< Represents the direction this player is facing. */
-    bool _passedGo; /*!< Flag for handling if this player has completed 1 pass around the board. */
-    int _id;		/*!< Player's unique ID. */
-    int _money;		/*!< Player's accumulated money. */
-    int _score;		/*!< Player's score. */
-    int _location;	/*!< Player's current location on the gameboard. */
-    float _x;		/*!< Player's x-axis location. */
-    float _y;		/*!< Player's y-axis location. */
-    int _sourceX;	/*!< Player's x-axis location in the animation map. */
-    int _sourceY;	/*!< Player's y-axis location in the animation map. */
+    ALLEGRO_BITMAP *m_image; /*!< Bitmap tilesheet image representing the player. */
+    Direction m_dir;	/*!< Represents the direction this player is facing. */
+    bool m_passedGo; /*!< Flag for handling if this player has completed 1 pass around the board. */
+    int m_id;		/*!< Player's unique ID. */
+    int m_money;		/*!< Player's accumulated money. */
+    int m_score;		/*!< Player's score. */
+    int m_location;	/*!< Player's current location on the gameboard. */
+    float m_x;		/*!< Player's x-axis location. */
+    float m_y;		/*!< Player's y-axis location. */
+    int m_sourceX;	/*!< Player's x-axis location in the animation map. */
+    int m_sourceY;	/*!< Player's y-axis location in the animation map. */
 
-    PlayerType _playerType; /*!< Represents if this player is played by the CPU. */
+    PlayerType m_playerType; /*!< Represents if this player is played by the CPU. */
 };
 
 #endif // PLAYER_H

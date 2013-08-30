@@ -95,12 +95,12 @@ public:
 
 private:
 
-    Database sqlConn; /*!< SQLite3 database connection handle. */
-    int _id; /*!< Menu's unique ID. */				
-    int _selection; /*!< Menu entry that is currently selected. */
-    int _entryCount; /*!< Number of entries in this menu. */
-    ALLEGRO_FONT *_fontFile; /*!< Font to use when drawing this menu. */
-    std::vector <MonopolyMenuEntry> _entries; /*!< Group of entries that make us this menu. */
+    Database m_sqlConn; /*!< SQLite3 database connection handle. */
+    int m_id; /*!< Menu's unique ID. */
+    int m_selection; /*!< Menu entry that is currently selected. */
+    int m_entryCount; /*!< Number of entries in this menu. */
+    ALLEGRO_FONT *m_fontFile; /*!< Font to use when drawing this menu. */
+    std::vector <MonopolyMenuEntry> m_entries; /*!< Group of entries that make us this menu. */
 };
 
 #endif // MENU_H

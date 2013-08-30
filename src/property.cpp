@@ -21,35 +21,35 @@
 #include "property.h"
 
 MonopolyProperty::MonopolyProperty() {
-    _owned = false;
-    _image = NULL;
+	m_owned = false;
+    m_image = NULL;
 }
 
 // This class construct with override will allow you to build up an entire property via the constructor.
 //  The only additional command will be set_image().
 MonopolyProperty::MonopolyProperty(std::string name, int id, int purchasePrice, int mortgageValue, int pricePerHouse, int pricePerHotel, int rental, int rent1House, int rent2House, int rent3House, int rent4House, int rentHotel) {
 
-    _image = NULL;
-    _owned = false;
-    _isMortgaged = false;
-    _ownedBy = 0;
-    _group = 0;
-    _groupName = "";
+    m_image = NULL;
+    m_owned = false;
+    m_isMortgaged = false;
+    m_ownedBy = 0;
+    m_group = 0;
+    m_groupName = "";
 
-    _valueOfProperty = PropertyValue::VAL_NULL;
+    m_valueOfProperty = PropertyValue::VAL_NULL;
 
-    _name = name;
-    _id = id;
-    _purchasePrice = purchasePrice;
-    _mortgagePrice = mortgageValue;
-    _pricePerHouse = pricePerHouse;
-    _pricePerHotel = pricePerHotel;
-    _rent = rental;
-    _rent1House = rent1House;
-    _rent2House = rent2House;
-    _rent3House = rent3House;
-    _rent4House = rent4House;
-    _rentHotel = rentHotel;
+    m_name = name;
+    m_id = id;
+    m_purchasePrice = purchasePrice;
+    m_mortgagePrice = mortgageValue;
+    m_pricePerHouse = pricePerHouse;
+    m_pricePerHotel = pricePerHotel;
+    m_rent = rental;
+    m_rent1House = rent1House;
+    m_rent2House = rent2House;
+    m_rent3House = rent3House;
+    m_rent4House = rent4House;
+    m_rentHotel = rentHotel;
 }
 
 MonopolyProperty::~MonopolyProperty() {
@@ -57,184 +57,184 @@ MonopolyProperty::~MonopolyProperty() {
 }
 
 void MonopolyProperty::cleanup() {
-    if(_image) {
-        al_destroy_bitmap(_image);
+    if(m_image) {
+        al_destroy_bitmap(m_image);
     }
 }
 
 void MonopolyProperty::set_isOwned(bool owned) {
-    _owned = owned;
+    m_owned = owned;
 }
 
 bool MonopolyProperty::get_isOwned() {
-    return _owned;
+    return m_owned;
 }
 
 void MonopolyProperty::set_ownedBy(int ownedBy) {
-	_ownedBy = ownedBy;
+	m_ownedBy = ownedBy;
 }
 
 int MonopolyProperty::get_ownedBy() {
-	return _ownedBy;
+	return m_ownedBy;
 }
 
 void MonopolyProperty::set_isMortgaged(bool isMortgaged) {
-	_isMortgaged = isMortgaged;
+	m_isMortgaged = isMortgaged;
 }
 
 bool MonopolyProperty::get_isMortgaged() {
-	return _isMortgaged;
+	return m_isMortgaged;
 }
 
 void MonopolyProperty::set_group(int group) {
-	_group = group;
+	m_group = group;
 }
 
 int MonopolyProperty::get_group() {
-	return _group;
+	return m_group;
 }
 
 void MonopolyProperty::set_groupName(std::string groupName) {
-	_groupName = groupName;
+	m_groupName = groupName;
 }
 
 std::string MonopolyProperty::get_groupName() {
-	return _groupName;
+	return m_groupName;
 }
 
 
 void MonopolyProperty::set_propertyValue(PropertyValue newValue) {
-	_valueOfProperty = newValue;
+	m_valueOfProperty = newValue;
 }
 
 PropertyValue MonopolyProperty::get_propertyValue() {
-	return _valueOfProperty;
+	return m_valueOfProperty;
 }
 
 void MonopolyProperty::set_propertyType(PropertyType newType) {
-    _typeOfProperty = newType;
+    m_typeOfProperty = newType;
 }
 
 PropertyType MonopolyProperty::get_propertyType() {
-    return _typeOfProperty;
+    return m_typeOfProperty;
 }
 
 void MonopolyProperty::set_id(int id) {
-    _id = id;
+    m_id = id;
 }
 
 int MonopolyProperty::get_id() {
-    return _id;
+    return m_id;
 }
 
 void MonopolyProperty::set_name(std::string name) {
-    _name = name;
+    m_name = name;
 }
 
 std::string MonopolyProperty::get_name() {
-    return _name;
+    return m_name;
 }
 
 void MonopolyProperty::set_purchasePrice(int money) {
-    _purchasePrice = money;
+    m_purchasePrice = money;
 }
 
 int MonopolyProperty::get_purchasePrice() {
-    return _purchasePrice;
+    return m_purchasePrice;
 }
 
 void MonopolyProperty::set_mortgagePrice(int money) {
-    _mortgagePrice = money;
+    m_mortgagePrice = money;
 }
 
 int MonopolyProperty::get_mortgagePrice() {
-    return _mortgagePrice;
+    return m_mortgagePrice;
 }
 
 void MonopolyProperty::set_pricePerHouse(int money) {
-    _pricePerHouse = money;
+    m_pricePerHouse = money;
 }
 
 int MonopolyProperty::get_pricePerHouse() {
-    return _pricePerHouse;
+    return m_pricePerHouse;
 }
 
 void MonopolyProperty::set_pricePerHotel(int money) {
-    _pricePerHotel = money;
+    m_pricePerHotel = money;
 }
 
 int MonopolyProperty::get_pricePerHotel() {
-    return _pricePerHotel;
+    return m_pricePerHotel;
 }
 
 void MonopolyProperty::set_image(ALLEGRO_BITMAP *image) {
-    _image = image;
+    m_image = image;
 }
 
 ALLEGRO_BITMAP* MonopolyProperty::get_image() {
-    return _image;
+    return m_image;
 }
 
 void MonopolyProperty::set_rent(int money) {
-    _rent = money;
+    m_rent = money;
 }
 
 int MonopolyProperty::get_rent() {
-    return _rent;
+    return m_rent;
 }
 
 void MonopolyProperty::set_rent1House(int money) {
-    _rent1House = money;
+    m_rent1House = money;
 }
 
 int MonopolyProperty::get_rent1House() {
-    return _rent1House;
+    return m_rent1House;
 }
 
 void MonopolyProperty::set_rent2House(int money) {
-    _rent2House = money;
+    m_rent2House = money;
 }
 
 int MonopolyProperty::get_rent2House() {
-    return _rent2House;
+    return m_rent2House;
 }
 
 void MonopolyProperty::set_rent3House(int money) {
-    _rent3House = money;
+    m_rent3House = money;
 }
 
 int MonopolyProperty::get_rent3House() {
-    return _rent3House;
+    return m_rent3House;
 }
 
 void MonopolyProperty::set_rent4House(int money) {
-    _rent4House = money;
+    m_rent4House = money;
 }
 
 int MonopolyProperty::get_rent4House() {
-    return _rent4House;
+    return m_rent4House;
 }
 
 void MonopolyProperty::set_rentHotel(int money) {
-    _rentHotel = money;
+    m_rentHotel = money;
 }
 
 int MonopolyProperty::get_rentHotel() {
-    return _rentHotel;
+    return m_rentHotel;
 }
 
 void MonopolyProperty::set_x(int x) {
-    _x = x;
+    m_x = x;
 }
 
 int MonopolyProperty::get_x() {
-    return _x;
+    return m_x;
 }
 
 void MonopolyProperty::set_y(int y) {
-    _y = y;
+    m_y = y;
 }
 
 int MonopolyProperty::get_y() {
-    return _y;
+    return m_y;
 }

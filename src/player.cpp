@@ -23,25 +23,25 @@
 MonopolyPlayer::MonopolyPlayer() {
 	// Set some default values for our private member variables.
 	//  These will be set appropriately later.
-	_playerType = PlayerType::COMPUTER;
-    _isAlive = true;
-	_moveSpeed = 5.0;
-	_isMoving = false;
-	_firstRollThisTurn = true;
-	_image = NULL;
-	_dir = DOWN;
-	_passedGo = false;
-	_id = 0;
-	_money = 0;
-	_score = 0;
-	_location = 0;
-	_x = 0;
-	_y = 0;
-	_sourceX = 0;
-	_sourceY = 0;
-	_moveSpeed = 5;
-	_inJail = false;
-	_getOutOfJailCards = 0;
+	m_playerType = PlayerType::COMPUTER;
+    m_isAlive = true;
+	m_moveSpeed = 5.0;
+	m_isMoving = false;
+	m_firstRollThisTurn = true;
+	m_image = NULL;
+	m_dir = DOWN;
+	m_passedGo = false;
+	m_id = 0;
+	m_money = 0;
+	m_score = 0;
+	m_location = 0;
+	m_x = 0;
+	m_y = 0;
+	m_sourceX = 0;
+	m_sourceY = 0;
+	m_moveSpeed = 5;
+	m_inJail = false;
+	m_getOutOfJailCards = 0;
 }
 
 MonopolyPlayer::~MonopolyPlayer() {
@@ -49,179 +49,178 @@ MonopolyPlayer::~MonopolyPlayer() {
 }
 
 bool MonopolyPlayer::get_firstRoll() {
-	return _firstRollThisTurn;
+	return m_firstRollThisTurn;
 }
 
 void MonopolyPlayer::set_firstRoll(bool firstRoll) {
-	_firstRollThisTurn = firstRoll;
+	m_firstRollThisTurn = firstRoll;
 }
 
 bool MonopolyPlayer::get_inJail() {
-	return _inJail;
+	return m_inJail;
 }
 
 void MonopolyPlayer::set_inJail(bool convicted) {
-	_inJail = convicted;
+	m_inJail = convicted;
 }
 
 int MonopolyPlayer::get_jailCards() {
-	return _getOutOfJailCards;
+	return m_getOutOfJailCards;
 }
 
 void MonopolyPlayer::set_jailCards(int numCards) {
-	_getOutOfJailCards = numCards;
+	m_getOutOfJailCards = numCards;
 }
 
 bool MonopolyPlayer::get_isAlive() {
-	return _isAlive;
+	return m_isAlive;
 }
 
 void MonopolyPlayer::set_isAlive(bool alive) {
-	_isAlive = alive;
+	m_isAlive = alive;
 }
 
 void MonopolyPlayer::cleanup() {
-	if(_image) {
-		al_destroy_bitmap(_image);
+	if(m_image) {
+		al_destroy_bitmap(m_image);
 	}
 }
 
 bool MonopolyPlayer::get_passedGo() {
-    return _passedGo;
+    return m_passedGo;
 }
 
 void MonopolyPlayer::set_passedGo(bool passedGo) {
-    _passedGo = passedGo;
+    m_passedGo = passedGo;
 }
 
 int MonopolyPlayer::get_id() {
-    return _id;
+    return m_id;
 }
 
 void MonopolyPlayer::set_id(int id) {
-    _id = id;
+    m_id = id;
 }
 
 int MonopolyPlayer::get_money() {
-    return _money;
+    return m_money;
 }
 
 void MonopolyPlayer::set_money(int money) {
-    _money = money;
+    m_money = money;
 }
 
 int MonopolyPlayer::get_score() {
-    return _score;
+    return m_score;
 }
 
 void MonopolyPlayer::set_score(int score) {
-    _score = score;
+    m_score = score;
 }
 
 int MonopolyPlayer::get_location() {
-    return _location;
+    return m_location;
 }
 
 void MonopolyPlayer::set_location(int location) {
-    _location = location;
+    m_location = location;
 }
 
 float MonopolyPlayer::get_x() {
-    return _x;
+    return m_x;
 }
 
 void MonopolyPlayer::set_x(float x) {
-    _x = x;
+    m_x = x;
 }
 
 float MonopolyPlayer::get_y() {
-    return _y;
+    return m_y;
 }
 
 void MonopolyPlayer::set_y(float y) {
-    _y = y;
+    m_y = y;
 }
 
 int MonopolyPlayer::get_animationX() {
-    return _sourceX;
+    return m_sourceX;
 }
 
 void MonopolyPlayer::set_animationX(int sourceX) {
-    _sourceX = sourceX;
+    m_sourceX = sourceX;
 }
 
 int MonopolyPlayer::get_animationY() {
-    return _sourceY;
+    return m_sourceY;
 }
 
 void MonopolyPlayer::set_animationY(int sourceY) {
-    _sourceY = sourceY;
+    m_sourceY = sourceY;
 }
 
 ALLEGRO_BITMAP* MonopolyPlayer::get_image() {
-    return _image;
+    return m_image;
 }
 
 void MonopolyPlayer::set_image(ALLEGRO_BITMAP *image) {
-    _image = image;
+    m_image = image;
 }
 
 Direction MonopolyPlayer::get_direction() {
-    return _dir;
+    return m_dir;
 }
 
 void MonopolyPlayer::set_direction(Direction dir) {
-    _dir = dir;
+    m_dir = dir;
 }
 
 bool MonopolyPlayer::get_isMoving() {
-    return _isMoving;
+    return m_isMoving;
 }
 
 void MonopolyPlayer::set_isMoving(bool moving) {
-    _isMoving = moving;
+    m_isMoving = moving;
 }
 
 void MonopolyPlayer::animationLogic() {
 	// If the player is moving, then increment the x value to the next frame.
-	if(_isMoving)
-		_sourceX += al_get_bitmap_width(_image) / 3;
+	if(m_isMoving)
+		m_sourceX += al_get_bitmap_width(m_image) / 3;
 	else
-		_sourceX = 32;
+		m_sourceX = 32;
 
 	// Ensure the x value isn't outside the width of the image.
 	//  If it is, reset it to 0.
-	if(_sourceX >= al_get_bitmap_width(_image))
-		_sourceX = 0;
+	if(m_sourceX >= al_get_bitmap_width(m_image))
+		m_sourceX = 0;
 
 	// The y value is based upon the direction of the player.
-	_sourceY = _dir;
+	m_sourceY = m_dir;
 }
 
 void MonopolyPlayer::move(Direction dir) {
-    _dir = dir;
-    switch(_dir) {
-    case DOWN:
-        _y += _moveSpeed;
+    switch(dir) {
+    case Direction::DOWN:
+        m_y += m_moveSpeed;
         break;
-    case UP:
-        _y -= _moveSpeed;
+    case Direction::UP:
+        m_y -= m_moveSpeed;
         break;
-    case RIGHT:
-        _x += _moveSpeed;
+    case Direction::RIGHT:
+        m_x += m_moveSpeed;
         break;
-    case LEFT:
-        _x -= _moveSpeed;
+    case Direction::LEFT:
+        m_x -= m_moveSpeed;
         break;
     }
 }
 
 void MonopolyPlayer::draw() {
 	// Create an allegro bitmap reprenting our player's image on the animation index.
-	ALLEGRO_BITMAP *subBitmap = al_create_sub_bitmap( _image, _sourceX, _sourceY * 32, 32, 32 );
-	al_draw_bitmap( subBitmap, _x, _y, 0 );
+	ALLEGRO_BITMAP *subBitmap = al_create_sub_bitmap( m_image, m_sourceX, m_sourceY * 32, 32, 32 );
+	al_draw_bitmap( subBitmap, m_x, m_y, 0 );
 }
 
 void MonopolyPlayer::draw(int x, int y) {
-	al_draw_bitmap( _image, x, y, 0 );
+	al_draw_bitmap( m_image, x, y, 0 );
 }

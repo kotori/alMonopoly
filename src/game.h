@@ -100,7 +100,7 @@ private:
     struct alCamera {
     	float cameraPosition[2]; /*!< X/Y axis position of the camera. */
     	ALLEGRO_TRANSFORM alCameraTransform; /*!< Allegro5 transform flag. */
-    }alCamera; /*!< Camera instance. */
+    }m_alCamera; /*!< Camera instance. */
 
     /*! \fn bool mortgageProperty(MonopolyProperty &prop, MonopolyPlayer &plyr)
         \brief Routine for handling the mortgaging of a property.
@@ -193,7 +193,7 @@ private:
      */
     void handleReaction();
 
-    Database sqlConn; /*!< SQLite3 connection. */
+    Database m_sqlConn; /*!< SQLite3 connection. */
 
     /*! \fn int buildPropertyList()
         \brief Build the property list.
@@ -203,39 +203,39 @@ private:
      */
     int buildPropertyList();
 
-    MonopolyProperty propertyList[MAX_PROPERTIES]; /*!< Maximum number of properties. */
+    MonopolyProperty m_propertyList[MAX_PROPERTIES]; /*!< Maximum number of properties. */
 
-    MonopolyPlayer playerList[NUM_PLAYERS];		/*!< Group of player objects. */
+    MonopolyPlayer m_playerList[NUM_PLAYERS];		/*!< Group of player objects. */
 
-    ALLEGRO_DISPLAY			*alDisplayDevice;	/*!< Allegro display device. */
-    ALLEGRO_EVENT_QUEUE		*alEventQueue;		/*!< Allegro event queue. */
-    ALLEGRO_TIMER			*alTimer;			/*!< Allegro FPS timer. */
-    ALLEGRO_TIMER			*alFrameTimer;		/*!< Allegro Animation FPS timer. */
-    ALLEGRO_DISPLAY_MODE	alDisplayData;		/*!< Allegro display data. */
-    ALLEGRO_KEYBOARD_STATE 	alKeyState;			/*!< Current state of the keyboard. */
-    ALLEGRO_FONT			*fontCollection[MAX_FONTS];	/*!< Collection of Allegro FONTs. */
+    ALLEGRO_DISPLAY			*m_alDisplayDevice;	/*!< Allegro display device. */
+    ALLEGRO_EVENT_QUEUE		*m_alEventQueue;	/*!< Allegro event queue. */
+    ALLEGRO_TIMER			*m_alTimer;			/*!< Allegro FPS timer. */
+    ALLEGRO_TIMER			*m_alFrameTimer;	/*!< Allegro Animation FPS timer. */
+    ALLEGRO_DISPLAY_MODE	m_alDisplayData;	/*!< Allegro display data. */
+    ALLEGRO_KEYBOARD_STATE 	m_alKeyState;		/*!< Current state of the keyboard. */
+    ALLEGRO_FONT			*m_fontCollection[MAX_FONTS];	/*!< Collection of Allegro FONTs. */
 
-    ALLEGRO_BITMAP 			*alBoardImage;	/*!< Allegro BITMAP representing the game board. */
-    ALLEGRO_BITMAP 			*alpieceImages[PLAYER_PIECES_COUNT];	/*!< Allegro BITMAP representing the possible gameplay pieces. */
+    ALLEGRO_BITMAP 			*m_alBoardImage;	/*!< Allegro BITMAP representing the game board. */
+    ALLEGRO_BITMAP 			*m_alpieceImages[PLAYER_PIECES_COUNT];	/*!< Allegro BITMAP representing the possible gameplay pieces. */
 
-    int playersTurn;	/*!< Current player's turn. */
-    int numPlayers;		/*!< Number of players. */
-    bool firstTurn;		/*!< Flag for signalling a player's first turn. */
-    bool turnDone;		/*!< Flag for signalling the end of the active player's turn. */
+    int m_playersTurn;	/*!< Current player's turn. */
+    int m_numPlayers;	/*!< Number of players. */
+    bool m_firstTurn;	/*!< Flag for signalling a player's first turn. */
+    bool m_turnDone;	/*!< Flag for signalling the end of the active player's turn. */
 
-    GameMode activeGameMode;	/*!< Tracks the active game mode. */
-    TurnState turnState;		/*!< Tracks the current turn state. */
-    ReactionType currentReaction; /*!< Tracks the current reaction state. */
+    GameMode m_activeGameMode;	/*!< Tracks the active game mode. */
+    TurnState m_turnState;		/*!< Tracks the current turn state. */
+    ReactionType m_currentReaction; /*!< Tracks the current reaction state. */
 
-    int* diceRoll; /*!< Store the last roll of the dice. */
-    int doublesRollCounter; /*!< Keeps track the number of times a double was rolled. */
+    int* m_diceRoll; /*!< Store the last roll of the dice. */
+    int m_doublesRollCounter; /*!< Keeps track the number of times a double was rolled. */
 
-    int moveDestination; /*!< Store the location of the player's next move. */
-    bool firstMovePass; /*!< Flag for singalling the start of movement. */
+    int m_moveDestination; /*!< Store the location of the player's next move. */
+    bool m_firstMovePass; /*!< Flag for singalling the start of movement. */
 
-    bool exitGame;	/*!< Boolean flag for exiting the main loop. */
-    bool redrawScreen;	/*!< Boolean flag for handling screen redraws. */
-    bool isActive;	/*!< Boolean flag for handling animation renders. */
+    bool m_exitGame;	/*!< Boolean flag for exiting the main loop. */
+    bool m_redrawScreen;	/*!< Boolean flag for handling screen redraws. */
+    bool m_isActive;	/*!< Boolean flag for handling animation renders. */
 };
 
 #endif // GAME_H

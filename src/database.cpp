@@ -39,18 +39,18 @@ std::string DEFAULT_LOC = "etc/database.db";
 
 void Database::Common()
 {
-    is_open_ = false;
+    m_isOpen = false;
 }
 
 Database::Database()
 {
-    db_loc_ = DEFAULT_LOC.c_str();
+    m_dbLoc = DEFAULT_LOC.c_str();
     Common();
 }
 
 Database::Database(std::string loc)
 {
-    db_loc_ = loc;
+    m_dbLoc = loc;
     Common();
 }
 
@@ -65,29 +65,29 @@ bool Database::Open()
     al_change_directory(pathstr);
     al_destroy_path(path);
 
-    int err = sqlite3_open_v2(db_loc_.c_str(), &db_, SQLITE_OPEN_READWRITE, NULL );
+    int err = sqlite3_open_v2(m_dbLoc.c_str(), &m_db, SQLITE_OPEN_READWRITE, NULL );
     if(err != SQLITE_OK)
     {
         // Return true if an error occurred.
-        fprintf(stderr, "Failure opening database: %s \n", sqlite3_errmsg(db_) );
-        //std::cout << "Can't open database: " << sqlite3_errmsg(db_) << "\n";
-        sqlite3_close(db_);
+        fprintf(stderr, "Failure opening database: %s \n", sqlite3_errmsg(m_db) );
+        //std::cout << "Can't open database: " << sqlite3_errmsg(m_db) << "\n";
+        sqlite3_close(m_db);
         return true;
     }
     else
     {
         // Return false if database opened properly.
-        is_open_ = true;
+        m_isOpen = true;
         return false;
     }
 }
 
 void Database::Close()
 {
-    if(is_open_)
+    if(m_isOpen)
     {
-        sqlite3_close(db_);
-        is_open_ = false;
+        sqlite3_close(m_db);
+        m_isOpen = false;
     }
 }
 
@@ -112,10 +112,10 @@ bool Database::SelectStr(std::string &refVal, const char *sql, ...)
     va_end(argList);
 
     // Prepare the SQL statement via the sqlite3_prepare function.
-    rc = sqlite3_prepare(db_, tmp, strlen(tmp), &stmt, &tail);
+    rc = sqlite3_prepare(m_db, tmp, strlen(tmp), &stmt, &tail);
     if(rc != SQLITE_OK)
     {
-        std::cout << "Error Processing SQL Statement: " << sqlite3_errmsg(db_) << "\n";
+        std::cout << "Error Processing SQL Statement: " << sqlite3_errmsg(m_db) << "\n";
         return true;
     }
 
@@ -150,10 +150,10 @@ bool Database::SelectInt(int &refVal, const char *sql, ...)
     va_end(argList);
 
     // Prepare the SQL statement via the sqlite3_prepare function.
-    rc = sqlite3_prepare(db_, tmp, strlen(tmp), &stmt, &tail);
+    rc = sqlite3_prepare(m_db, tmp, strlen(tmp), &stmt, &tail);
     if(rc != SQLITE_OK)
     {
-        std::cout << "Error Processing SQL Statement: " << sqlite3_errmsg(db_) << "\n";
+        std::cout << "Error Processing SQL Statement: " << sqlite3_errmsg(m_db) << "\n";
         return true;
     }
 
@@ -188,10 +188,10 @@ bool Database::SelectChar(char *refVal, const char *sql, ...)
     va_end(argList);
 
     // Prepare the SQL statement via the sqlite3_prepare function.
-    rc = sqlite3_prepare(db_, tmp, strlen(tmp), &stmt, &tail);
+    rc = sqlite3_prepare(m_db, tmp, strlen(tmp), &stmt, &tail);
     if(rc != SQLITE_OK)
     {
-        std::cout << "Error Processing SQL Statement: " << sqlite3_errmsg(db_) << "\n";
+        std::cout << "Error Processing SQL Statement: " << sqlite3_errmsg(m_db) << "\n";
         return true;
     }
 
@@ -224,7 +224,7 @@ bool Database::Exec(const char *sql, ...)
     va_end(ap);
 
     // Database functionality goes here.
-    int rc = sqlite3_exec(db_, tmp, NULL, NULL, &err);
+    int rc = sqlite3_exec(m_db, tmp, NULL, NULL, &err);
     if(rc != SQLITE_OK)
     {
         if(err != NULL)

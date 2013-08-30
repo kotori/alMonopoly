@@ -135,11 +135,9 @@ private:
     */
     bool Open();
 
-    bool is_open_;			/*!< Database is open flag, true if open, false if closed. */
-    bool log_enabled_;		/*!< Logging flag, true if enabled, false is disabled. */
-    std::string db_loc_;	/*!< Internal variable for storing the location of the db. */
-    sqlite3 *db_;			/*!< SQLite3 database connection handle. */
-    sqlite3_stmt *stmt_;	/*!< SQLite3 statement handle. */
+    bool m_isOpen;			/*!< Database is open flag, true if open, false if closed. */
+    std::string m_dbLoc;	/*!< Internal variable for storing the location of the db. */
+    sqlite3 *m_db;			/*!< SQLite3 database connection handle. */
 };
 
 #endif // DATABASE_H

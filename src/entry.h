@@ -66,11 +66,11 @@ public:
 
 private:
 
-    std::string _text;	/*!< std::string value representing this entries text. */
-    int _id;		/*!< This entry's unique ID code. */
-    float _x;		/*!< X position of this entry. */
-    float _y;		/*!< Y position of this entry. */
-    bool _isSelected;	/*!< Selection flag. */
+    std::string m_text;	/*!< std::string value representing this entries text. */
+    int m_id;		/*!< This entry's unique ID code. */
+    float m_x;		/*!< X position of this entry. */
+    float m_y;		/*!< Y position of this entry. */
+    bool m_isSelected;	/*!< Selection flag. */
 };
 
 #endif // ENTRY_H

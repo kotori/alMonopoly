@@ -60,13 +60,13 @@ public:
 	*/
     bool get_isOwned();
 
-	/*! \fn void set_ownedBy(int ownedBy)
+	/*! \fn void setm_ownedBy(int ownedBy)
         \brief Set the ownership id for this property.
         \param ownedBy Integer representing a player object. \see MonopolyPlayer::get_id()
 	*/
     void set_ownedBy(int ownedBy);
 
-	/*! \fn int get_ownedBy()
+	/*! \fn int getm_ownedBy()
         \brief Get the ownership id for this property.
         \return Integer representing a player object.
 	*/
@@ -322,28 +322,28 @@ public:
 
 private:
 
-    bool _owned;                        /*!< Property's ownership flag, false if not owned. */
-    int _ownedBy;						/*!< Property's player owner id. */
-    int _group;							/*!< Property's color group. */
-    std::string _groupName;				/*!< Property's color group name. */
-    bool _isMortgaged;					/*!< Property's mortgaged flag. */
-    PropertyValue _valueOfProperty;		/*!< Property's current value. */
-    PropertyType _typeOfProperty;		/*!< Property's type. \see PropertyType. */
-    int _id;                            /*!< Property's unique ID code. */
-    std::string _name;                  /*!< Property's name as a std::string. */
-    int _purchasePrice;                 /*!< Property's initial purchase price. */
-    int _mortgagePrice;                 /*!< Property's mortgage value. */
-    int _pricePerHouse;                 /*!< Price to put 1 house on this property. */
-    int _pricePerHotel;                 /*!< Price to put 1 hotel on this property. */
-    ALLEGRO_BITMAP *_image;             /*!< Image representing this property. */
-    int _rent;                          /*!< Unimproved lot rental price. */
-    int _rent1House;                    /*!< Rental price for 1 house. */
-    int _rent2House;                    /*!< Rental price for 2 houses. */
-    int _rent3House;                    /*!< Rental price for 3 houses. */
-    int _rent4House;                    /*!< Rental price for 4 houses. */
-    int _rentHotel;                     /*!< Rental price for 1 hotel. */
-    int _x;								/*!< Property's x-axis location. */
-    int _y;								/*!< Property's y-axis location. */
+    bool m_owned;                       /*!< Property's ownership flag, false if not owned. */
+    int m_ownedBy;						/*!< Property's player owner id. */
+    int m_group;						/*!< Property's color group. */
+    std::string m_groupName;			/*!< Property's color group name. */
+    bool m_isMortgaged;					/*!< Property's mortgaged flag. */
+    PropertyValue m_valueOfProperty;	/*!< Property's current value. */
+    PropertyType m_typeOfProperty;		/*!< Property's type. \see PropertyType. */
+    int m_id;                           /*!< Property's unique ID code. */
+    std::string m_name;                 /*!< Property's name as a std::string. */
+    int m_purchasePrice;                /*!< Property's initial purchase price. */
+    int m_mortgagePrice;                /*!< Property's mortgage value. */
+    int m_pricePerHouse;                /*!< Price to put 1 house on this property. */
+    int m_pricePerHotel;                /*!< Price to put 1 hotel on this property. */
+    ALLEGRO_BITMAP *m_image;            /*!< Image representing this property. */
+    int m_rent;                         /*!< Unimproved lot rental price. */
+    int m_rent1House;                   /*!< Rental price for 1 house. */
+    int m_rent2House;                   /*!< Rental price for 2 houses. */
+    int m_rent3House;                   /*!< Rental price for 3 houses. */
+    int m_rent4House;                   /*!< Rental price for 4 houses. */
+    int m_rentHotel;                    /*!< Rental price for 1 hotel. */
+    int m_x;							/*!< Property's x-axis location. */
+    int m_y;							/*!< Property's y-axis location. */
 };
 
 #endif // PROPERTY_H
