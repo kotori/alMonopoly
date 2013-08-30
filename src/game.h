@@ -203,6 +203,13 @@ private:
      */
     int buildPropertyList();
 
+    /*! \fn bool fileExists(const char *filename)
+        \brief Check for the existance of a file.
+        \param filename Const char string representing a filename.
+        \return True if the file exists.
+     */
+    bool fileExists(const char *filename);
+
     MonopolyProperty m_propertyList[MAX_PROPERTIES]; /*!< Maximum number of properties. */
 
     MonopolyPlayer m_playerList[NUM_PLAYERS];		/*!< Group of player objects. */

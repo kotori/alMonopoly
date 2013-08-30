@@ -16,6 +16,7 @@
 */
 
 #include <iostream>
+#include <fstream>
 #include <ctime>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -110,6 +111,12 @@ void MonopolyGame::reset() {
     	m_propertyList[pCount].set_isOwned(false);
     	m_propertyList[pCount].set_ownedBy(0);
     }
+}
+
+bool MonopolyGame::fileExists(const char *filename)
+{
+	std::ifstream ifile( filename );
+	return ifile;
 }
 
 void MonopolyGame::cameraUpdate(float *cameraPosition, float x, float y, int width, int height) {
@@ -656,25 +663,24 @@ int MonopolyGame::loadResources() {
     ALLEGRO_PATH *path = al_get_standard_path( ALLEGRO_RESOURCES_PATH );
     al_append_path_component( path, "etc" );
     al_change_directory( al_path_cstr( path, '/' ) );  // change the working directory
-    al_destroy_path( path );
 
     // Load the board's bitmap
-    std::string sFileName = "board.jpg";
-    m_alBoardImage = al_load_bitmap( sFileName.c_str() );
+    al_set_path_filename(path, "board.jpg");
+    m_alBoardImage = al_load_bitmap( al_path_cstr(path, '/') );
     if( !m_alBoardImage ) {
-        fprintf( stderr, "Failed loading Board Bitmap: %s\n", sFileName.c_str() );
+        fprintf( stderr, "[ERROR] Failed loading board bitmap: %s\n", al_path_cstr(path, '/') );
         return -1;
     }
 
     // Load the font set.
-    sFileName = "DejaVuSans.ttf";
+    al_set_path_filename(path, "DejaVuSans.ttf");
     // Start building the fonts from 24pt.
     int initialSize = 24;
     for( int fontCounter = 0; fontCounter < MAX_FONTS; fontCounter++ ) {
-    	m_fontCollection[fontCounter] = al_load_font( sFileName.c_str(), initialSize, 0 );
+    	m_fontCollection[fontCounter] = al_load_font( al_path_cstr(path, '/'), initialSize, 0 );
         initialSize += 10;
         if( !m_fontCollection[fontCounter] ) {
-            fprintf( stderr, "Failed loading Font: %s\n", sFileName.c_str() );
+            fprintf( stderr, "[ERROR] Failed loading font: %s size: %i\n", al_path_cstr(path, '/'), initialSize );
             return -1;
         }
     }
@@ -683,24 +689,34 @@ int MonopolyGame::loadResources() {
     //  The piece file locations are stored in the database.
     for( int pieceCounter = 0; pieceCounter < PLAYER_PIECES_COUNT; pieceCounter++ ) {
     	std::string tempQuery = "";
-    	std::string filepath = "";
+    	std::string sFileName = "";
     	tempQuery = m_sqlConn.Format( "SELECT %s FROM %s WHERE %s = %i", "path", DB_PIECES_TABLE, "id", pieceCounter );
-    	if( !m_sqlConn.SelectStr( filepath, tempQuery.c_str() ) ) {
-    		// Load the bitmap from the filename from above.
-    		m_alpieceImages[pieceCounter] = al_load_bitmap( filepath.c_str() );
+
+    	if( !m_sqlConn.SelectStr( sFileName, tempQuery.c_str() ) ) {
+    		al_set_path_filename( path, sFileName.c_str() );
+        	if( !fileExists( al_path_cstr(path, '/') ) ) {
+        		fprintf( stderr, "[ERROR] Cannot find bitmap: %s\n", al_path_cstr(path, '/') );
+        		return -1;
+        	}
+        	else {
+        		// Load the bitmap from the filename from above.
+        		m_alpieceImages[pieceCounter] = al_load_bitmap( al_path_cstr(path, '/') );
+        	}
     		if( !m_alpieceImages[pieceCounter] ) {
     			// TODO: CURRENTLY I HAVE NO PLACE HOLDER IMAGES, SO THE APPLICATION WILL FAIL HERE!
-    			fprintf( stderr, "Failed loading Bitmap: %s\n", filepath.c_str() );
+    			fprintf( stderr, "[ERROR] Failed loading bitmap: %s\n", al_path_cstr(path, '/') );
     			return -1;
     		}
     	}
     	else {
-    		fprintf( stderr, "SQL QUERY ERROR: %s\n", tempQuery.c_str() );
+    		fprintf( stderr, "[ERROR] Error processing SQL statement: %s\n", tempQuery.c_str() );
     		return -1;
     	}
 
 
     }
+
+    al_destroy_path( path );
 
     // Finally we will pull the property list from the database.
     if( buildPropertyList() )
@@ -713,12 +729,6 @@ int MonopolyGame::loadResources() {
 }
 
 int MonopolyGame::init() {
-
-    // First set the main loop exit condition to false.
-	m_exitGame = false;
-
-    m_activeGameMode = GameMode::EASY;
-    m_turnState = TurnState::NULL_STATE;
 
     // Now begin initializing the Allegro library.
     if(!al_init()) {
@@ -787,12 +797,10 @@ int MonopolyGame::init() {
 
 int MonopolyGame::run() {
 
-	// Reset the game's run data.
-	reset();
-
     // Start the timer's so that revisions are properly drawn.
     al_start_timer( m_alTimer );
     al_start_timer( m_alFrameTimer );
+
     fprintf(stderr, "Current turnstate: %i\n", m_turnState );
 
 	// Perform the first display update.
@@ -903,26 +911,34 @@ void MonopolyGame::handleMove() {
 int MonopolyGame::findCost(MonopolyProperty &prop) {
 	// Calculate the cost of landing on this location.
 	PropertyValue propVal = prop.get_propertyValue();
+	// Zero the initial cost.
 	int cost = 0;
-	if( propVal == VAL_OWNED ) {
+	if( propVal == PropertyValue::VAL_OWNED ) {
+		// Set the cost of rent on this property without the full set.
 		cost = prop.get_rent();
 	}
-	else if( propVal == VAL_OWNED_SET ) {
+	else if( propVal == PropertyValue::VAL_OWNED_SET ) {
+		// Set the cost of rent on this property in a full set.
 		cost = prop.get_rent() * 2;
 	}
-	else if( propVal == VAL_1_HOUSE ) {
+	else if( propVal == PropertyValue::VAL_1_HOUSE ) {
+		// Set the cost of rent on this property with one house on it.
 		cost = prop.get_rent1House();
 	}
-	else if( propVal == VAL_2_HOUSE ) {
+	else if( propVal == PropertyValue::VAL_2_HOUSE ) {
+		// Set the cost of rent on this property with two houses on it.
 		cost = prop.get_rent2House();
 	}
-	else if( propVal == VAL_3_HOUSE ) {
+	else if( propVal == PropertyValue::VAL_3_HOUSE ) {
+		// Set the cost of rent on this property with three houses on it.
 		cost = prop.get_rent3House();
 	}
-	else if( propVal == VAL_4_HOUSE ) {
+	else if( propVal == PropertyValue::VAL_4_HOUSE ) {
+		// Set the cost of rent on this property with four houses on it.
 		cost = prop.get_rent4House();
 	}
-	else if( propVal == VAL_1_HOTEL ) {
+	else if( propVal == PropertyValue::VAL_1_HOTEL ) {
+		// Set the cost of rent on this property with one hotel on it.
 		cost = prop.get_rentHotel();
 	}
 
