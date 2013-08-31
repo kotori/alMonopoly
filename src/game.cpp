@@ -38,6 +38,7 @@ MonopolyGame::MonopolyGame() {
 	m_alTimer = NULL;
 	m_alFrameTimer = NULL;
 	m_alBoardImage = NULL;
+	m_activeGameMode = GameMode::EASY;
 
     // Nullify each font in the font collection.
     for(int fCount = 0; fCount < MAX_FONTS; fCount++) {
@@ -48,8 +49,6 @@ MonopolyGame::MonopolyGame() {
     for(int ppCount = 0; ppCount < PLAYER_PIECES_COUNT; ppCount++) {
     	m_alpieceImages[ppCount] = NULL;
     }
-
-    reset();
 }
 
 MonopolyGame::~MonopolyGame() {
@@ -559,7 +558,7 @@ void MonopolyGame::drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ..
 
 	// First print the shadow, which is slightly off-centered.
 	int offset = 2;
-	al_draw_text(
+	al_draw_textf(
 		m_fontCollection[0],
 		al_map_rgb( 0, 0, 0 ),
 		x + offset,
@@ -568,7 +567,7 @@ void MonopolyGame::drawText(ALLEGRO_COLOR col, int x, int y, const char *msg, ..
 		buffer );
 
 	// Finally we print the foreground text.
-	al_draw_text(
+	al_draw_textf(
 		m_fontCollection[0],
 		col,
 		x,
@@ -611,6 +610,7 @@ void MonopolyGame::draw() {
 	// Based upon the current turnstate we will display different things.
 	switch(m_turnState) {
 		case NULL_STATE:
+		case PRE_TURN:
 			drawTextCen( al_map_rgb( 255, 0, 0 ), WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, "MONOPOLY!" );
 			break;
 		case PRE_GAME:
@@ -620,7 +620,6 @@ void MonopolyGame::draw() {
 			// Later a logic portion will need to be added as well.
 			// menu[PRE_GAME_MENU].doLogic();
 			break;
-		case PRE_TURN:
 		case ROLL_PHASE:
 		case MOVE_PHASE:
 		case REACT_PHASE:
@@ -646,6 +645,9 @@ void MonopolyGame::draw() {
 	drawText( al_map_rgb( 0, 200, 240 ), 0, 32, "Current Player: %i", m_playersTurn );
 	drawText( al_map_rgb( 0, 200, 240 ), 0, 64, "Current Player's Money: $%i", m_playerList[m_playersTurn].get_money() );
 
+	// Print FPS - This is currently not working quite right.
+	drawText( al_map_rgb( 0, 200, 240 ), 0, 96, "FPS: %.2f", m_currFps );
+
 	// Next, we flip the display to make the changes visible,
 	//  and clear the background before we print again.
 	al_flip_display();
@@ -653,6 +655,8 @@ void MonopolyGame::draw() {
 }
 
 int MonopolyGame::loadResources() {
+
+	reset();
 
     // Normalize the paths.
     ALLEGRO_PATH *path = al_get_standard_path( ALLEGRO_RESOURCES_PATH );
@@ -727,11 +731,11 @@ int MonopolyGame::loadResources() {
     	}
     }
 
-    // Load the player's images.
+    // Assign random pieces to each player.
     for( int plCount = 0; plCount < NUM_PLAYERS; plCount++ ) {
     	int* randomPlayerSel = rollDice( 1, PLAYER_PIECES_COUNT );
     	m_playerList[plCount].set_image( m_alpieceImages[randomPlayerSel[0]] );
-    	al_set_path_filename(path, "Emblem.ttf");
+
     }
 
     al_destroy_path( path );
@@ -826,11 +830,31 @@ int MonopolyGame::run() {
 	// Perform the first display update.
     al_flip_display();
 
+    m_oldFps = 0.0;
+    m_currFps = 0.0;
+    m_framesDone = 0.0;
+
     while( !m_exitGame )
     {
         ALLEGRO_EVENT alEvent;
         al_wait_for_event( m_alEventQueue, &alEvent );
         al_get_keyboard_state( &m_alKeyState );
+
+/*
+        double gameTime = al_get_time();
+        double delta = gameTime - m_oldFps;
+        double m_currFps = 1 / ( delta );
+        m_oldFps = gameTime;
+*/
+        // Framerate calculation.
+        double gameTime = al_get_time();
+        if( gameTime - m_oldFps >= 1.0 ) {
+        	m_currFps = m_framesDone / ( gameTime - m_oldFps );
+        	m_framesDone = 0;
+        	m_oldFps = gameTime;
+        }
+        m_framesDone++;
+
 
         // If the user clicks the window's 'close (X)' button.
         if( alEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE )
@@ -844,7 +868,6 @@ int MonopolyGame::run() {
         	// Exit the game.
         	m_exitGame = true;
         }
-
         // Process any timed events that have been triggered.
         else if( alEvent.type == ALLEGRO_EVENT_TIMER )
         {

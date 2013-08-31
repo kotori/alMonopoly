@@ -243,6 +243,11 @@ private:
     bool m_exitGame;	/*!< Boolean flag for exiting the main loop. */
     bool m_redrawScreen;	/*!< Boolean flag for handling screen redraws. */
     bool m_isActive;	/*!< Boolean flag for handling animation renders. */
+
+    int m_framesDone;
+    double m_oldFps;
+    double m_currFps;
+
 };
 
 #endif // GAME_H

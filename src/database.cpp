@@ -59,7 +59,6 @@ Database::~Database() { }
 bool Database::Open()
 {
     // This should ensure the correct path is used to load the database.
-    //  Without this line, if you aren't in the bin directory, a seg fault would be thrown.
     ALLEGRO_PATH* path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);
     const char* pathstr = al_path_cstr(path , ALLEGRO_NATIVE_PATH_SEP);
     al_change_directory(pathstr);

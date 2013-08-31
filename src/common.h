@@ -38,7 +38,7 @@
 /*! \def MAX_FPS
     \brief Global containing the maximum number of frames per second.
 */
-#define MAX_FPS		60.0
+#define MAX_FPS		75.0
 
 /*! \def MAX_FRAME_FPS
     \brief Global containing the maximum number of frames per second for animations.

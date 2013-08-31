@@ -49,8 +49,6 @@ int main(int argc, char **argv) {
     // Cleanup when we are done.
     monopoly->halt();
 
-    delete monopoly;
-
     return 0;
 }
 
