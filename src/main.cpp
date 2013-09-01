@@ -49,6 +49,8 @@ int main(int argc, char **argv) {
     // Cleanup when we are done.
     monopoly->halt();
 
+    fprintf( stderr, "Exiting Normally.\n" );
+
     return 0;
 }
 

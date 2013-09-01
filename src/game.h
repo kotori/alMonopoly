@@ -28,6 +28,7 @@
 #include <iostream>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_audio.h>
 
 #include "common.h"
 #include "database.h"
@@ -211,10 +212,16 @@ private:
      */
     bool fileExists(const char *filename);
 
-    /*! \fn  void calcFramerate()
+    /*! \fn void calcFramerate()
         \brief Fill the variables for calculating fps.
      */
     void calcFramerate();
+
+    /*! \fn void playSfx( SoundFX id )
+        \brief Play the sound effect from the passed id.
+        \param id Integer representing a sample to play.
+     */
+    void playSfx( SoundFX id );
 
     MonopolyProperty m_propertyList[MAX_PROPERTIES]; /*!< Maximum number of properties. */
 
@@ -230,6 +237,8 @@ private:
 
     ALLEGRO_BITMAP 			*m_alBoardImage;	/*!< Allegro BITMAP representing the game board. */
     ALLEGRO_BITMAP 			*m_alpieceImages[PLAYER_PIECES_COUNT];	/*!< Allegro BITMAP representing the possible gameplay pieces. */
+
+    ALLEGRO_SAMPLE			*m_sfx[MAX_NUM_SAMPLES]; /*!< Game's sound effects. */
 
     int m_playersTurn;	/*!< Current player's turn. */
     int m_numPlayers;	/*!< Number of players. */

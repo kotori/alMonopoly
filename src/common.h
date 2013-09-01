@@ -90,6 +90,21 @@
 */
 #define NUM_SIDES_PER_DIE 6
 
+/*! \def MAX_NUM_SAMPLES
+    \brief Number of entries in the SoundFX enumeration.
+*/
+#define MAX_NUM_SAMPLES 4
+
+/*! \enum SoundFX
+    \brief List of different sound effects.
+*/
+enum SoundFX {
+	SFX_DICE_ROLL = 0,
+	SFX_MOVE = 1,
+	SFX_CHING_CHING = 2,
+	SFX_END_GAME = 3
+};
+
 /*! \enum PlayerPiece
     \brief List of different game pieces a player can choose from.
 */

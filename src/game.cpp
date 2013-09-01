@@ -26,6 +26,7 @@
 #include <allegro5/allegro_acodec.h>
 
 #include "common.h"
+#include "error.h"
 #include "database.h"
 #include "property.h"
 #include "player.h"
@@ -48,6 +49,11 @@ MonopolyGame::MonopolyGame() {
     // Nullify each player piece.
     for( int ppCount = 0; ppCount < PLAYER_PIECES_COUNT; ppCount++ ) {
     	m_alpieceImages[ppCount] = NULL;
+    }
+
+    // Nullify the samples.
+    for( int sfxCount = 0; sfxCount < MAX_NUM_SAMPLES; sfxCount++ ) {
+    	m_sfx[sfxCount] = NULL;
     }
 }
 
@@ -107,6 +113,10 @@ void MonopolyGame::reset() {
     	m_propertyList[pCount].set_isOwned( false );
     	m_propertyList[pCount].set_ownedBy( 0 );
     }
+}
+
+void MonopolyGame::playSfx( SoundFX id ) {
+	al_play_sample( m_sfx[id], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0 );
 }
 
 bool MonopolyGame::fileExists(const char *filename)
@@ -779,6 +789,8 @@ int MonopolyGame::init() {
     }
 
     al_init_image_addon(); // Initialize the image addon.
+    al_install_audio();
+    al_init_acodec_addon();
 
     al_init_font_addon(); // Initialize the font addon.
     al_init_ttf_addon(); // Initialize the ttf (True Type Font) addon.
@@ -797,6 +809,14 @@ int MonopolyGame::init() {
     m_alEventQueue = al_create_event_queue();
     if(!m_alEventQueue) {
         fprintf(stderr, "Failed to create Event Queue!\n");
+        al_destroy_display(m_alDisplayDevice);
+        al_destroy_timer(m_alTimer);
+        al_destroy_timer(m_alFrameTimer);
+        return -1;
+    }
+
+    if( !al_reserve_samples( MAX_NUM_SAMPLES ) ) {
+        fprintf(stderr, "Failed to reserve the required sound instances!\n");
         al_destroy_display(m_alDisplayDevice);
         al_destroy_timer(m_alTimer);
         al_destroy_timer(m_alFrameTimer);
@@ -1176,6 +1196,13 @@ void MonopolyGame::halt() {
     // Free the display device.
     if(m_alDisplayDevice) {
         al_destroy_display(m_alDisplayDevice);
+    }
+
+    // Free the game's sound effects.
+    for( int sfxCount = 0; sfxCount < MAX_NUM_SAMPLES; sfxCount++ ) {
+    	if( m_sfx[sfxCount] ) {
+    		al_destroy_sample( m_sfx[sfxCount] );
+    	}
     }
 
     // Free the board image bitmap.
