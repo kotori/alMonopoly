@@ -41,12 +41,12 @@ MonopolyGame::MonopolyGame() {
 	m_activeGameMode = GameMode::EASY;
 
     // Nullify each font in the font collection.
-    for(int fCount = 0; fCount < MAX_FONTS; fCount++) {
+    for( int fCount = 0; fCount < MAX_FONTS; fCount++ ) {
     	m_fontCollection[fCount] = NULL;
     }
 
     // Nullify each player piece.
-    for(int ppCount = 0; ppCount < PLAYER_PIECES_COUNT; ppCount++) {
+    for( int ppCount = 0; ppCount < PLAYER_PIECES_COUNT; ppCount++ ) {
     	m_alpieceImages[ppCount] = NULL;
     }
 }
@@ -103,9 +103,9 @@ void MonopolyGame::reset() {
 
     // Reset each property attribute.
     for( int pCount = 0; pCount < MAX_PROPERTIES; pCount++ ) {
-    	m_propertyList[pCount].set_isMortgaged(false);
-    	m_propertyList[pCount].set_isOwned(false);
-    	m_propertyList[pCount].set_ownedBy(0);
+    	m_propertyList[pCount].set_isMortgaged( false );
+    	m_propertyList[pCount].set_isOwned( false );
+    	m_propertyList[pCount].set_ownedBy( 0 );
     }
 }
 
@@ -666,7 +666,7 @@ int MonopolyGame::loadResources() {
     //
     // Load the board's bitmap
     //
-    al_set_path_filename(path, "board.jpg");
+    al_set_path_filename(path, "board.png");
     if( !fileExists( al_path_cstr(path, '/') ) ) {
        	fprintf( stderr, "[ERROR] Cannot find bitmap: %s\n", al_path_cstr(path, '/') );
        	return -1;
@@ -834,15 +834,17 @@ int MonopolyGame::run() {
     al_start_timer( m_alTimer );
     al_start_timer( m_alFrameTimer );
 
-    fprintf(stderr, "Current turnstate: %i\n", m_turnState );
-
 	// Perform the first display update.
     al_flip_display();
 
+    // Zero the FPS counters.
     m_oldFps = 0.0;
     m_currFps = 0.0;
     m_framesDone = 0.0;
 
+    al_flush_event_queue( m_alEventQueue );
+
+    // Run until the exit flag is thrown.
     while( !m_exitGame )
     {
         ALLEGRO_EVENT alEvent;
@@ -886,8 +888,6 @@ int MonopolyGame::run() {
 					}
 				}
             }
-            // Since the screen has been updated, we want to flag the screen to be redrawn.
-            m_redrawScreen = true;
 
             // Do some camera transform magic.
             al_identity_transform( &m_alCamera.alCameraTransform );
@@ -899,14 +899,19 @@ int MonopolyGame::run() {
 
             // Push the camera's changes.
             al_use_transform( &m_alCamera.alCameraTransform );
+
+            // Since the screen has been updated, we want to flag the screen to be redrawn.
+            m_redrawScreen = true;
         }
 
+         //if( m_redrawScreen ) {
         if( m_redrawScreen && al_is_event_queue_empty( m_alEventQueue ) ) {
-        	calcFramerate();
         	m_redrawScreen = false;
+        	m_framesDone++;
             draw();
-            m_framesDone++;
         }
+        calcFramerate();
+
     }
     return 0;
 }

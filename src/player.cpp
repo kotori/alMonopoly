@@ -37,6 +37,8 @@ MonopolyPlayer::MonopolyPlayer() {
 	m_location = 0;
 	m_x = 0;
 	m_y = 0;
+    m_height = 0;
+    m_width = 0;
 	m_sourceX = 0;
 	m_sourceY = 0;
 	m_moveSpeed = 5;
@@ -137,6 +139,22 @@ void MonopolyPlayer::set_x(float x) {
 
 float MonopolyPlayer::get_y() {
     return m_y;
+}
+
+int MonopolyPlayer::get_width() {
+	return m_width;
+}
+
+void MonopolyPlayer::set_width(int width) {
+	m_width = width;
+}
+
+int MonopolyPlayer::get_height() {
+	return m_height;
+}
+
+void MonopolyPlayer::set_height(int height) {
+	m_height = height;
 }
 
 void MonopolyPlayer::set_y(float y) {

@@ -168,6 +168,30 @@ public:
     */
     float get_y();
 
+    /*! \fn int get_width()
+        \brief Get the player's image width.
+        \return Integer representing this player's width.
+    */
+    int get_width();
+
+    /*! \fn void set_width(int width)
+        \brief Set the player's image width.
+        \param width Integer representing this player's width.
+    */
+    void set_width(int width);
+
+    /*! \fn int get_height()
+        \brief Get the player's image height.
+        \return Integer representing this player's height.
+    */
+    int get_height();
+
+    /*! \fn void set_height(int height)
+        \brief Set the player's image height.
+        \param height Integer representing this player's width.
+    */
+    void set_height(int height);
+
     /*! \fn void set_y(float y)
         \brief Set the player's current location represented as an Y coordinate.
         \param y Float number representing this player's location.
@@ -282,6 +306,8 @@ private:
     int m_location;	/*!< Player's current location on the gameboard. */
     float m_x;		/*!< Player's x-axis location. */
     float m_y;		/*!< Player's y-axis location. */
+    int m_height;	/*!< Player's image height. */
+    int m_width;	/*!< Player's image width. */
     int m_sourceX;	/*!< Player's x-axis location in the animation map. */
     int m_sourceY;	/*!< Player's y-axis location in the animation map. */
 
