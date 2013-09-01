@@ -99,6 +99,7 @@ private:
      */
     struct alCamera {
     	float cameraPosition[2]; /*!< X/Y axis position of the camera. */
+    	float fade; /*!< Fading value. */
     	ALLEGRO_TRANSFORM alCameraTransform; /*!< Allegro5 transform flag. */
     }m_alCamera; /*!< Camera instance. */
 
