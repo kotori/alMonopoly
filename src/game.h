@@ -210,6 +210,11 @@ private:
      */
     bool fileExists(const char *filename);
 
+    /*! \fn  void calcFramerate()
+        \brief Fill the variables for calculating fps.
+     */
+    void calcFramerate();
+
     MonopolyProperty m_propertyList[MAX_PROPERTIES]; /*!< Maximum number of properties. */
 
     MonopolyPlayer m_playerList[NUM_PLAYERS];		/*!< Group of player objects. */

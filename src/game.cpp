@@ -819,6 +819,15 @@ int MonopolyGame::init() {
     return 0;
 }
 
+void MonopolyGame::calcFramerate() {
+	double gameTime = al_get_time();
+	if( gameTime - m_oldFps >= 1.0 ) {
+	 	m_currFps = m_framesDone / ( gameTime - m_oldFps );
+	   	m_framesDone = 0;
+	   	m_oldFps = gameTime;
+	}
+}
+
 int MonopolyGame::run() {
 
     // Start the timer's so that revisions are properly drawn.
@@ -839,22 +848,6 @@ int MonopolyGame::run() {
         ALLEGRO_EVENT alEvent;
         al_wait_for_event( m_alEventQueue, &alEvent );
         al_get_keyboard_state( &m_alKeyState );
-
-/*
-        double gameTime = al_get_time();
-        double delta = gameTime - m_oldFps;
-        double m_currFps = 1 / ( delta );
-        m_oldFps = gameTime;
-*/
-        // Framerate calculation.
-        double gameTime = al_get_time();
-        if( gameTime - m_oldFps >= 1.0 ) {
-        	m_currFps = m_framesDone / ( gameTime - m_oldFps );
-        	m_framesDone = 0;
-        	m_oldFps = gameTime;
-        }
-        m_framesDone++;
-
 
         // If the user clicks the window's 'close (X)' button.
         if( alEvent.type == ALLEGRO_EVENT_DISPLAY_CLOSE )
@@ -908,9 +901,11 @@ int MonopolyGame::run() {
             al_use_transform( &m_alCamera.alCameraTransform );
         }
 
-        if( m_redrawScreen ) {
+        if( m_redrawScreen && al_is_event_queue_empty( m_alEventQueue ) ) {
+        	calcFramerate();
         	m_redrawScreen = false;
             draw();
+            m_framesDone++;
         }
     }
     return 0;
