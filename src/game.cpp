@@ -119,8 +119,7 @@ void MonopolyGame::playSfx( SoundFX id ) {
 	al_play_sample( m_sfx[id], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0 );
 }
 
-bool MonopolyGame::fileExists(const char *filename)
-{
+bool MonopolyGame::fileExists(const char *filename) {
 	std::ifstream ifile( filename );
 	return ifile;
 }

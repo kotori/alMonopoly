@@ -286,6 +286,12 @@ public:
      */
     void draw(int x, int y);
 
+    /*! \fn bool isColliding( MonopolyPlayer &target )
+       	\brief Check if this player is colliding this the passed target.
+       	\param target Reference to a MonopolyPlayer object.
+     */
+    bool isColliding( MonopolyPlayer &target );
+
 private:
 
     bool m_firstRollThisTurn; /*!< Flag for keeping track of die rolls. */

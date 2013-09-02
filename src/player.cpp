@@ -201,6 +201,17 @@ void MonopolyPlayer::set_isMoving(bool moving) {
     m_isMoving = moving;
 }
 
+bool MonopolyPlayer::isColliding( MonopolyPlayer &target ) {
+	if (( this->m_x > target.get_x() + target.get_width() - 1 ) || // Am i on the right side of target.
+		( this->m_y > target.get_y() + target.get_height() - 1 ) || // Am i under the target.
+	    ( target.get_x() > this->m_x + this->width - 1 ) || // Is the target on the right side of me.
+	    ( target.get_y() > this->m_y + this->height - 1 ))   // Is the target under me.
+	    {
+	        return false;
+	    }
+	    return true; // Collision!
+}
+
 void MonopolyPlayer::animationLogic() {
 	// If the player is moving, then increment the x value to the next frame.
 	if(m_isMoving)
