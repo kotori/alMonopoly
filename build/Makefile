@@ -1,6 +1,6 @@
 # !IMPORTANT!
 # Source file names, must include them all.
-Sources=database.cpp entry.cpp menu.cpp property.cpp player.cpp game.cpp main.cpp
+Sources=error.cpp database.cpp entry.cpp menu.cpp property.cpp player.cpp game.cpp main.cpp
 
 # Final executable name
 Executable=monopoly
